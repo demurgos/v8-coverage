@@ -1,0 +1,59 @@
+{
+  "scriptId": "1",
+  "url": "/lib.js",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 0,
+          "endOffset": 329,
+          "count": 4
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 1,
+          "endOffset": 327,
+          "count": 4
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "lib",
+      "ranges": [
+        {
+          "startOffset": 79,
+          "endOffset": 324,
+          "count": 4
+        },
+        {
+          "startOffset": 110,
+          "endOffset": 212,
+          "count": 2
+        },
+        {
+          "startOffset": 123,
+          "endOffset": 208,
+          "count": 1
+        },
+        {
+          "startOffset": 212,
+          "endOffset": 322,
+          "count": 2
+        },
+        {
+          "startOffset": 231,
+          "endOffset": 318,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    }
+  ]
+}

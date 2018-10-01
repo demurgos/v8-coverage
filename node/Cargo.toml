@@ -1,0 +1,18 @@
+[package]
+name = "v8-coverage-node"
+version = "0.0.1"
+authors = ["Charles Samborski <demurgos@demurgos.net>"]
+license = "MIT"
+build = "build.rs"
+
+[lib]
+path = "./src/lib/native/index.rs"
+name = "v8_coverage_node"
+crate-type = ["dylib"]
+
+[build-dependencies]
+neon-build = "^0.2.0"
+
+[dependencies]
+neon = "^0.2.0"
+v8-coverage = { path = '../rs' }

@@ -1,0 +1,3469 @@
+[
+  {
+    "name": "merges two simple trees",
+    "status": "run",
+    "inputs": [
+      {
+        "result": [
+          {
+            "scriptId": "1",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 1
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "1",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 2
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "expected": {
+      "result": [
+        {
+          "scriptId": "1",
+          "url": "/lib.js",
+          "functions": [
+            {
+              "functionName": "test",
+              "isBlockCoverage": true,
+              "ranges": [
+                {
+                  "startOffset": 0,
+                  "endOffset": 9,
+                  "count": 3
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "merges three simple trees",
+    "status": "run",
+    "inputs": [
+      {
+        "result": [
+          {
+            "scriptId": "1",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 1
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "1",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 2
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "1",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 3
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "expected": {
+      "result": [
+        {
+          "scriptId": "1",
+          "url": "/lib.js",
+          "functions": [
+            {
+              "functionName": "test",
+              "isBlockCoverage": true,
+              "ranges": [
+                {
+                  "startOffset": 0,
+                  "endOffset": 9,
+                  "count": 6
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "merges two trees with a matching child in their center",
+    "status": "run",
+    "inputs": [
+      {
+        "result": [
+          {
+            "scriptId": "1",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 1
+                  },
+                  {
+                    "startOffset": 2,
+                    "endOffset": 7,
+                    "count": 2
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "1",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 4
+                  },
+                  {
+                    "startOffset": 2,
+                    "endOffset": 7,
+                    "count": 5
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "expected": {
+      "result": [
+        {
+          "scriptId": "1",
+          "url": "/lib.js",
+          "functions": [
+            {
+              "functionName": "test",
+              "isBlockCoverage": true,
+              "ranges": [
+                {
+                  "startOffset": 0,
+                  "endOffset": 9,
+                  "count": 5
+                },
+                {
+                  "startOffset": 2,
+                  "endOffset": 7,
+                  "count": 7
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "merges two trees with a matching child at their start",
+    "status": "run",
+    "inputs": [
+      {
+        "result": [
+          {
+            "scriptId": "1",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 1
+                  },
+                  {
+                    "startOffset": 0,
+                    "endOffset": 5,
+                    "count": 2
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "1",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 4
+                  },
+                  {
+                    "startOffset": 0,
+                    "endOffset": 5,
+                    "count": 5
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "expected": {
+      "result": [
+        {
+          "scriptId": "1",
+          "url": "/lib.js",
+          "functions": [
+            {
+              "functionName": "test",
+              "isBlockCoverage": true,
+              "ranges": [
+                {
+                  "startOffset": 0,
+                  "endOffset": 9,
+                  "count": 5
+                },
+                {
+                  "startOffset": 0,
+                  "endOffset": 5,
+                  "count": 7
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "merges two trees with a matching child at their end",
+    "status": "run",
+    "inputs": [
+      {
+        "result": [
+          {
+            "scriptId": "1",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 1
+                  },
+                  {
+                    "startOffset": 4,
+                    "endOffset": 9,
+                    "count": 2
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "1",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 4
+                  },
+                  {
+                    "startOffset": 4,
+                    "endOffset": 9,
+                    "count": 5
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "expected": {
+      "result": [
+        {
+          "scriptId": "1",
+          "url": "/lib.js",
+          "functions": [
+            {
+              "functionName": "test",
+              "isBlockCoverage": true,
+              "ranges": [
+                {
+                  "startOffset": 0,
+                  "endOffset": 9,
+                  "count": 5
+                },
+                {
+                  "startOffset": 4,
+                  "endOffset": 9,
+                  "count": 7
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "merges two trees with non-overlapping children (before/after) (permutation 0)",
+    "status": "run",
+    "inputs": [
+      {
+        "result": [
+          {
+            "scriptId": "1",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 1
+                  },
+                  {
+                    "startOffset": 0,
+                    "endOffset": 4,
+                    "count": 2
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "1",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 4
+                  },
+                  {
+                    "startOffset": 5,
+                    "endOffset": 9,
+                    "count": 6
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "expected": {
+      "result": [
+        {
+          "scriptId": "1",
+          "url": "/lib.js",
+          "functions": [
+            {
+              "functionName": "test",
+              "isBlockCoverage": true,
+              "ranges": [
+                {
+                  "startOffset": 0,
+                  "endOffset": 9,
+                  "count": 5
+                },
+                {
+                  "startOffset": 0,
+                  "endOffset": 4,
+                  "count": 6
+                },
+                {
+                  "startOffset": 5,
+                  "endOffset": 9,
+                  "count": 7
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "merges two trees with non-overlapping children (before/after) (permutation 1)",
+    "status": "run",
+    "inputs": [
+      {
+        "result": [
+          {
+            "scriptId": "1",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 4
+                  },
+                  {
+                    "startOffset": 5,
+                    "endOffset": 9,
+                    "count": 6
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "1",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 1
+                  },
+                  {
+                    "startOffset": 0,
+                    "endOffset": 4,
+                    "count": 2
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "expected": {
+      "result": [
+        {
+          "scriptId": "1",
+          "url": "/lib.js",
+          "functions": [
+            {
+              "functionName": "test",
+              "isBlockCoverage": true,
+              "ranges": [
+                {
+                  "startOffset": 0,
+                  "endOffset": 9,
+                  "count": 5
+                },
+                {
+                  "startOffset": 0,
+                  "endOffset": 4,
+                  "count": 6
+                },
+                {
+                  "startOffset": 5,
+                  "endOffset": 9,
+                  "count": 7
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "merges two trees with non-overlapping children (after/before)",
+    "status": "run",
+    "inputs": [
+      {
+        "result": [
+          {
+            "scriptId": "1",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 1
+                  },
+                  {
+                    "startOffset": 5,
+                    "endOffset": 9,
+                    "count": 6
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "1",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 4
+                  },
+                  {
+                    "startOffset": 0,
+                    "endOffset": 4,
+                    "count": 2
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "expected": {
+      "result": [
+        {
+          "scriptId": "1",
+          "url": "/lib.js",
+          "functions": [
+            {
+              "functionName": "test",
+              "isBlockCoverage": true,
+              "ranges": [
+                {
+                  "startOffset": 0,
+                  "endOffset": 9,
+                  "count": 5
+                },
+                {
+                  "startOffset": 0,
+                  "endOffset": 4,
+                  "count": 3
+                },
+                {
+                  "startOffset": 5,
+                  "endOffset": 9,
+                  "count": 10
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "merges two trees with non-overlapping touching children (before/after)",
+    "status": "run",
+    "inputs": [
+      {
+        "result": [
+          {
+            "scriptId": "1",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 1
+                  },
+                  {
+                    "startOffset": 0,
+                    "endOffset": 4,
+                    "count": 2
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "1",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 4
+                  },
+                  {
+                    "startOffset": 4,
+                    "endOffset": 8,
+                    "count": 6
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "expected": {
+      "result": [
+        {
+          "scriptId": "1",
+          "url": "/lib.js",
+          "functions": [
+            {
+              "functionName": "test",
+              "isBlockCoverage": true,
+              "ranges": [
+                {
+                  "startOffset": 0,
+                  "endOffset": 9,
+                  "count": 5
+                },
+                {
+                  "startOffset": 0,
+                  "endOffset": 4,
+                  "count": 6
+                },
+                {
+                  "startOffset": 4,
+                  "endOffset": 8,
+                  "count": 7
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "merges two trees with non-overlapping touching children (after/before)",
+    "status": "run",
+    "inputs": [
+      {
+        "result": [
+          {
+            "scriptId": "1",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 1
+                  },
+                  {
+                    "startOffset": 4,
+                    "endOffset": 8,
+                    "count": 6
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "1",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 4
+                  },
+                  {
+                    "startOffset": 0,
+                    "endOffset": 4,
+                    "count": 2
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "expected": {
+      "result": [
+        {
+          "scriptId": "1",
+          "url": "/lib.js",
+          "functions": [
+            {
+              "functionName": "test",
+              "isBlockCoverage": true,
+              "ranges": [
+                {
+                  "startOffset": 0,
+                  "endOffset": 9,
+                  "count": 5
+                },
+                {
+                  "startOffset": 0,
+                  "endOffset": 4,
+                  "count": 3
+                },
+                {
+                  "startOffset": 4,
+                  "endOffset": 8,
+                  "count": 10
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "merges two trees with partially overlapping children (before/after)",
+    "status": "run",
+    "inputs": [
+      {
+        "result": [
+          {
+            "scriptId": "1",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 1
+                  },
+                  {
+                    "startOffset": 1,
+                    "endOffset": 5,
+                    "count": 2
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "1",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 4
+                  },
+                  {
+                    "startOffset": 3,
+                    "endOffset": 8,
+                    "count": 6
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "expected": {
+      "result": [
+        {
+          "scriptId": "1",
+          "url": "/lib.js",
+          "functions": [
+            {
+              "functionName": "test",
+              "isBlockCoverage": true,
+              "ranges": [
+                {
+                  "startOffset": 0,
+                  "endOffset": 9,
+                  "count": 5
+                },
+                {
+                  "startOffset": 1,
+                  "endOffset": 5,
+                  "count": 6
+                },
+                {
+                  "startOffset": 3,
+                  "endOffset": 5,
+                  "count": 8
+                },
+                {
+                  "startOffset": 5,
+                  "endOffset": 8,
+                  "count": 7
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "merges two trees with partially overlapping children (after/before)",
+    "status": "run",
+    "inputs": [
+      {
+        "result": [
+          {
+            "scriptId": "1",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 1
+                  },
+                  {
+                    "startOffset": 3,
+                    "endOffset": 8,
+                    "count": 6
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "1",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 4
+                  },
+                  {
+                    "startOffset": 1,
+                    "endOffset": 5,
+                    "count": 2
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "expected": {
+      "result": [
+        {
+          "scriptId": "1",
+          "url": "/lib.js",
+          "functions": [
+            {
+              "functionName": "test",
+              "isBlockCoverage": true,
+              "ranges": [
+                {
+                  "startOffset": 0,
+                  "endOffset": 9,
+                  "count": 5
+                },
+                {
+                  "startOffset": 1,
+                  "endOffset": 5,
+                  "count": 3
+                },
+                {
+                  "startOffset": 3,
+                  "endOffset": 5,
+                  "count": 8
+                },
+                {
+                  "startOffset": 5,
+                  "endOffset": 8,
+                  "count": 10
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "merges three trees with partially overlapping children (a/a/b)",
+    "status": "run",
+    "inputs": [
+      {
+        "result": [
+          {
+            "scriptId": "1",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 1
+                  },
+                  {
+                    "startOffset": 1,
+                    "endOffset": 5,
+                    "count": 2
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "1",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 3
+                  },
+                  {
+                    "startOffset": 1,
+                    "endOffset": 5,
+                    "count": 5
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "1",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 4
+                  },
+                  {
+                    "startOffset": 3,
+                    "endOffset": 8,
+                    "count": 6
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "expected": {
+      "result": [
+        {
+          "scriptId": "1",
+          "url": "/lib.js",
+          "functions": [
+            {
+              "functionName": "test",
+              "isBlockCoverage": true,
+              "ranges": [
+                {
+                  "startOffset": 0,
+                  "endOffset": 9,
+                  "count": 8
+                },
+                {
+                  "startOffset": 1,
+                  "endOffset": 5,
+                  "count": 11
+                },
+                {
+                  "startOffset": 3,
+                  "endOffset": 5,
+                  "count": 13
+                },
+                {
+                  "startOffset": 5,
+                  "endOffset": 8,
+                  "count": 10
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "merges three trees with partially overlapping children (a/b/a)",
+    "status": "run",
+    "inputs": [
+      {
+        "result": [
+          {
+            "scriptId": "1",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 1
+                  },
+                  {
+                    "startOffset": 1,
+                    "endOffset": 5,
+                    "count": 2
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "1",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 4
+                  },
+                  {
+                    "startOffset": 3,
+                    "endOffset": 8,
+                    "count": 6
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "1",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 3
+                  },
+                  {
+                    "startOffset": 1,
+                    "endOffset": 5,
+                    "count": 5
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "expected": {
+      "result": [
+        {
+          "scriptId": "1",
+          "url": "/lib.js",
+          "functions": [
+            {
+              "functionName": "test",
+              "isBlockCoverage": true,
+              "ranges": [
+                {
+                  "startOffset": 0,
+                  "endOffset": 9,
+                  "count": 8
+                },
+                {
+                  "startOffset": 1,
+                  "endOffset": 5,
+                  "count": 11
+                },
+                {
+                  "startOffset": 3,
+                  "endOffset": 5,
+                  "count": 13
+                },
+                {
+                  "startOffset": 5,
+                  "endOffset": 8,
+                  "count": 10
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "merges three trees with partially overlapping children (b/a/a)",
+    "status": "run",
+    "inputs": [
+      {
+        "result": [
+          {
+            "scriptId": "1",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 4
+                  },
+                  {
+                    "startOffset": 3,
+                    "endOffset": 8,
+                    "count": 6
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "1",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 1
+                  },
+                  {
+                    "startOffset": 1,
+                    "endOffset": 5,
+                    "count": 2
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "1",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 3
+                  },
+                  {
+                    "startOffset": 1,
+                    "endOffset": 5,
+                    "count": 5
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "expected": {
+      "result": [
+        {
+          "scriptId": "1",
+          "url": "/lib.js",
+          "functions": [
+            {
+              "functionName": "test",
+              "isBlockCoverage": true,
+              "ranges": [
+                {
+                  "startOffset": 0,
+                  "endOffset": 9,
+                  "count": 8
+                },
+                {
+                  "startOffset": 1,
+                  "endOffset": 5,
+                  "count": 11
+                },
+                {
+                  "startOffset": 3,
+                  "endOffset": 5,
+                  "count": 13
+                },
+                {
+                  "startOffset": 5,
+                  "endOffset": 8,
+                  "count": 10
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "merges three trees with partially overlapping children (a/b/b)",
+    "status": "run",
+    "inputs": [
+      {
+        "result": [
+          {
+            "scriptId": "1",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 1
+                  },
+                  {
+                    "startOffset": 1,
+                    "endOffset": 5,
+                    "count": 2
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "1",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 3
+                  },
+                  {
+                    "startOffset": 3,
+                    "endOffset": 8,
+                    "count": 5
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "1",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 4
+                  },
+                  {
+                    "startOffset": 3,
+                    "endOffset": 8,
+                    "count": 6
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "expected": {
+      "result": [
+        {
+          "scriptId": "1",
+          "url": "/lib.js",
+          "functions": [
+            {
+              "functionName": "test",
+              "isBlockCoverage": true,
+              "ranges": [
+                {
+                  "startOffset": 0,
+                  "endOffset": 9,
+                  "count": 8
+                },
+                {
+                  "startOffset": 1,
+                  "endOffset": 5,
+                  "count": 9
+                },
+                {
+                  "startOffset": 3,
+                  "endOffset": 5,
+                  "count": 13
+                },
+                {
+                  "startOffset": 5,
+                  "endOffset": 8,
+                  "count": 12
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "merges three trees with partially overlapping children (b/a/b)",
+    "status": "run",
+    "inputs": [
+      {
+        "result": [
+          {
+            "scriptId": "1",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 4
+                  },
+                  {
+                    "startOffset": 3,
+                    "endOffset": 8,
+                    "count": 6
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "1",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 1
+                  },
+                  {
+                    "startOffset": 1,
+                    "endOffset": 5,
+                    "count": 2
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "1",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 3
+                  },
+                  {
+                    "startOffset": 3,
+                    "endOffset": 8,
+                    "count": 5
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "expected": {
+      "result": [
+        {
+          "scriptId": "1",
+          "url": "/lib.js",
+          "functions": [
+            {
+              "functionName": "test",
+              "isBlockCoverage": true,
+              "ranges": [
+                {
+                  "startOffset": 0,
+                  "endOffset": 9,
+                  "count": 8
+                },
+                {
+                  "startOffset": 1,
+                  "endOffset": 5,
+                  "count": 9
+                },
+                {
+                  "startOffset": 3,
+                  "endOffset": 5,
+                  "count": 13
+                },
+                {
+                  "startOffset": 5,
+                  "endOffset": 8,
+                  "count": 12
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "merges three trees with partially overlapping children (b/b/a)",
+    "status": "run",
+    "inputs": [
+      {
+        "result": [
+          {
+            "scriptId": "1",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 1
+                  },
+                  {
+                    "startOffset": 1,
+                    "endOffset": 5,
+                    "count": 2
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "1",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 4
+                  },
+                  {
+                    "startOffset": 3,
+                    "endOffset": 8,
+                    "count": 6
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "1",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 3
+                  },
+                  {
+                    "startOffset": 3,
+                    "endOffset": 8,
+                    "count": 5
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "expected": {
+      "result": [
+        {
+          "scriptId": "1",
+          "url": "/lib.js",
+          "functions": [
+            {
+              "functionName": "test",
+              "isBlockCoverage": true,
+              "ranges": [
+                {
+                  "startOffset": 0,
+                  "endOffset": 9,
+                  "count": 8
+                },
+                {
+                  "startOffset": 1,
+                  "endOffset": 5,
+                  "count": 9
+                },
+                {
+                  "startOffset": 3,
+                  "endOffset": 5,
+                  "count": 13
+                },
+                {
+                  "startOffset": 5,
+                  "endOffset": 8,
+                  "count": 12
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "merges two trees with partially nested children (super/sub)",
+    "status": "run",
+    "inputs": [
+      {
+        "result": [
+          {
+            "scriptId": "1",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 1
+                  },
+                  {
+                    "startOffset": 1,
+                    "endOffset": 8,
+                    "count": 6
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "1",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 4
+                  },
+                  {
+                    "startOffset": 2,
+                    "endOffset": 6,
+                    "count": 2
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "expected": {
+      "result": [
+        {
+          "scriptId": "1",
+          "url": "/lib.js",
+          "functions": [
+            {
+              "functionName": "test",
+              "isBlockCoverage": true,
+              "ranges": [
+                {
+                  "startOffset": 0,
+                  "endOffset": 9,
+                  "count": 5
+                },
+                {
+                  "startOffset": 1,
+                  "endOffset": 8,
+                  "count": 10
+                },
+                {
+                  "startOffset": 2,
+                  "endOffset": 6,
+                  "count": 8
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "merges two trees with complementary children (not summing to the same count)",
+    "status": "run",
+    "inputs": [
+      {
+        "result": [
+          {
+            "scriptId": "1",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 1
+                  },
+                  {
+                    "startOffset": 1,
+                    "endOffset": 8,
+                    "count": 6
+                  },
+                  {
+                    "startOffset": 1,
+                    "endOffset": 5,
+                    "count": 3
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "1",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 4
+                  },
+                  {
+                    "startOffset": 1,
+                    "endOffset": 8,
+                    "count": 7
+                  },
+                  {
+                    "startOffset": 5,
+                    "endOffset": 8,
+                    "count": 3
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "expected": {
+      "result": [
+        {
+          "scriptId": "1",
+          "url": "/lib.js",
+          "functions": [
+            {
+              "functionName": "test",
+              "isBlockCoverage": true,
+              "ranges": [
+                {
+                  "startOffset": 0,
+                  "endOffset": 9,
+                  "count": 5
+                },
+                {
+                  "startOffset": 1,
+                  "endOffset": 8,
+                  "count": 13
+                },
+                {
+                  "startOffset": 1,
+                  "endOffset": 5,
+                  "count": 10
+                },
+                {
+                  "startOffset": 5,
+                  "endOffset": 8,
+                  "count": 9
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "merges two trees with complementary children (summing to the same count, same as parent)",
+    "status": "run",
+    "inputs": [
+      {
+        "result": [
+          {
+            "scriptId": "1",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 1
+                  },
+                  {
+                    "startOffset": 1,
+                    "endOffset": 8,
+                    "count": 6
+                  },
+                  {
+                    "startOffset": 1,
+                    "endOffset": 5,
+                    "count": 5
+                  },
+                  {
+                    "startOffset": 5,
+                    "endOffset": 8,
+                    "count": 7
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "1",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 4
+                  },
+                  {
+                    "startOffset": 1,
+                    "endOffset": 8,
+                    "count": 8
+                  },
+                  {
+                    "startOffset": 1,
+                    "endOffset": 5,
+                    "count": 9
+                  },
+                  {
+                    "startOffset": 5,
+                    "endOffset": 8,
+                    "count": 7
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "expected": {
+      "result": [
+        {
+          "scriptId": "1",
+          "url": "/lib.js",
+          "functions": [
+            {
+              "functionName": "test",
+              "isBlockCoverage": true,
+              "ranges": [
+                {
+                  "startOffset": 0,
+                  "endOffset": 9,
+                  "count": 5
+                },
+                {
+                  "startOffset": 1,
+                  "endOffset": 8,
+                  "count": 14
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "merges two trees with complementary children (summing to the same count, different from parent)",
+    "status": "run",
+    "inputs": [
+      {
+        "result": [
+          {
+            "scriptId": "1",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 1
+                  },
+                  {
+                    "startOffset": 1,
+                    "endOffset": 8,
+                    "count": 6
+                  },
+                  {
+                    "startOffset": 1,
+                    "endOffset": 5,
+                    "count": 3
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "1",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 4
+                  },
+                  {
+                    "startOffset": 1,
+                    "endOffset": 8,
+                    "count": 7
+                  },
+                  {
+                    "startOffset": 5,
+                    "endOffset": 8,
+                    "count": 4
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "expected": {
+      "result": [
+        {
+          "scriptId": "1",
+          "url": "/lib.js",
+          "functions": [
+            {
+              "functionName": "test",
+              "isBlockCoverage": true,
+              "ranges": [
+                {
+                  "startOffset": 0,
+                  "endOffset": 9,
+                  "count": 5
+                },
+                {
+                  "startOffset": 1,
+                  "endOffset": 8,
+                  "count": 10
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "merges a similar sliding chain: a+b",
+    "status": "run",
+    "inputs": [
+      {
+        "result": [
+          {
+            "scriptId": "1",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 7,
+                    "count": 10
+                  },
+                  {
+                    "startOffset": 0,
+                    "endOffset": 4,
+                    "count": 1
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "1",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 7,
+                    "count": 10
+                  },
+                  {
+                    "startOffset": 1,
+                    "endOffset": 5,
+                    "count": 1
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "expected": {
+      "result": [
+        {
+          "scriptId": "1",
+          "url": "/lib.js",
+          "functions": [
+            {
+              "functionName": "test",
+              "isBlockCoverage": true,
+              "ranges": [
+                {
+                  "startOffset": 0,
+                  "endOffset": 7,
+                  "count": 20
+                },
+                {
+                  "startOffset": 0,
+                  "endOffset": 5,
+                  "count": 11
+                },
+                {
+                  "startOffset": 1,
+                  "endOffset": 4,
+                  "count": 2
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "merges a similar sliding chain: b+a",
+    "status": "run",
+    "inputs": [
+      {
+        "result": [
+          {
+            "scriptId": "1",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 7,
+                    "count": 10
+                  },
+                  {
+                    "startOffset": 1,
+                    "endOffset": 5,
+                    "count": 1
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "1",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 7,
+                    "count": 10
+                  },
+                  {
+                    "startOffset": 0,
+                    "endOffset": 4,
+                    "count": 1
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "expected": {
+      "result": [
+        {
+          "scriptId": "1",
+          "url": "/lib.js",
+          "functions": [
+            {
+              "functionName": "test",
+              "isBlockCoverage": true,
+              "ranges": [
+                {
+                  "startOffset": 0,
+                  "endOffset": 7,
+                  "count": 20
+                },
+                {
+                  "startOffset": 0,
+                  "endOffset": 5,
+                  "count": 11
+                },
+                {
+                  "startOffset": 1,
+                  "endOffset": 4,
+                  "count": 2
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "merges a similar sliding chain: a+c",
+    "status": "run",
+    "inputs": [
+      {
+        "result": [
+          {
+            "scriptId": "1",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 7,
+                    "count": 10
+                  },
+                  {
+                    "startOffset": 0,
+                    "endOffset": 4,
+                    "count": 1
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "1",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 7,
+                    "count": 10
+                  },
+                  {
+                    "startOffset": 2,
+                    "endOffset": 6,
+                    "count": 1
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "expected": {
+      "result": [
+        {
+          "scriptId": "1",
+          "url": "/lib.js",
+          "functions": [
+            {
+              "functionName": "test",
+              "isBlockCoverage": true,
+              "ranges": [
+                {
+                  "startOffset": 0,
+                  "endOffset": 7,
+                  "count": 20
+                },
+                {
+                  "startOffset": 0,
+                  "endOffset": 6,
+                  "count": 11
+                },
+                {
+                  "startOffset": 2,
+                  "endOffset": 4,
+                  "count": 2
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "merges a similar sliding chain: b+c",
+    "status": "run",
+    "inputs": [
+      {
+        "result": [
+          {
+            "scriptId": "1",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 7,
+                    "count": 10
+                  },
+                  {
+                    "startOffset": 1,
+                    "endOffset": 5,
+                    "count": 1
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "1",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 7,
+                    "count": 10
+                  },
+                  {
+                    "startOffset": 2,
+                    "endOffset": 6,
+                    "count": 1
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "expected": {
+      "result": [
+        {
+          "scriptId": "1",
+          "url": "/lib.js",
+          "functions": [
+            {
+              "functionName": "test",
+              "isBlockCoverage": true,
+              "ranges": [
+                {
+                  "startOffset": 0,
+                  "endOffset": 7,
+                  "count": 20
+                },
+                {
+                  "startOffset": 1,
+                  "endOffset": 6,
+                  "count": 11
+                },
+                {
+                  "startOffset": 2,
+                  "endOffset": 5,
+                  "count": 2
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "merges a similar sliding chain: (a+b)+c",
+    "status": "run",
+    "inputs": [
+      {
+        "result": [
+          {
+            "scriptId": "1",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 7,
+                    "count": 20
+                  },
+                  {
+                    "startOffset": 0,
+                    "endOffset": 5,
+                    "count": 11
+                  },
+                  {
+                    "startOffset": 1,
+                    "endOffset": 4,
+                    "count": 2
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "1",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 7,
+                    "count": 10
+                  },
+                  {
+                    "startOffset": 2,
+                    "endOffset": 6,
+                    "count": 1
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "expected": {
+      "result": [
+        {
+          "scriptId": "1",
+          "url": "/lib.js",
+          "functions": [
+            {
+              "functionName": "test",
+              "isBlockCoverage": true,
+              "ranges": [
+                {
+                  "startOffset": 0,
+                  "endOffset": 7,
+                  "count": 30
+                },
+                {
+                  "startOffset": 0,
+                  "endOffset": 6,
+                  "count": 21
+                },
+                {
+                  "startOffset": 1,
+                  "endOffset": 5,
+                  "count": 12
+                },
+                {
+                  "startOffset": 2,
+                  "endOffset": 4,
+                  "count": 3
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "merges a similar sliding chain: (a+c)+b",
+    "status": "run",
+    "inputs": [
+      {
+        "result": [
+          {
+            "scriptId": "1",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 7,
+                    "count": 20
+                  },
+                  {
+                    "startOffset": 0,
+                    "endOffset": 6,
+                    "count": 11
+                  },
+                  {
+                    "startOffset": 2,
+                    "endOffset": 4,
+                    "count": 2
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "1",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 7,
+                    "count": 10
+                  },
+                  {
+                    "startOffset": 1,
+                    "endOffset": 5,
+                    "count": 1
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "expected": {
+      "result": [
+        {
+          "scriptId": "1",
+          "url": "/lib.js",
+          "functions": [
+            {
+              "functionName": "test",
+              "isBlockCoverage": true,
+              "ranges": [
+                {
+                  "startOffset": 0,
+                  "endOffset": 7,
+                  "count": 30
+                },
+                {
+                  "startOffset": 0,
+                  "endOffset": 6,
+                  "count": 21
+                },
+                {
+                  "startOffset": 1,
+                  "endOffset": 5,
+                  "count": 12
+                },
+                {
+                  "startOffset": 2,
+                  "endOffset": 4,
+                  "count": 3
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "merges a similar sliding chain: a+(b+c)",
+    "status": "run",
+    "inputs": [
+      {
+        "result": [
+          {
+            "scriptId": "1",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 7,
+                    "count": 10
+                  },
+                  {
+                    "startOffset": 0,
+                    "endOffset": 4,
+                    "count": 1
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "1",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 7,
+                    "count": 20
+                  },
+                  {
+                    "startOffset": 1,
+                    "endOffset": 6,
+                    "count": 11
+                  },
+                  {
+                    "startOffset": 2,
+                    "endOffset": 5,
+                    "count": 2
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "expected": {
+      "result": [
+        {
+          "scriptId": "1",
+          "url": "/lib.js",
+          "functions": [
+            {
+              "functionName": "test",
+              "isBlockCoverage": true,
+              "ranges": [
+                {
+                  "startOffset": 0,
+                  "endOffset": 7,
+                  "count": 30
+                },
+                {
+                  "startOffset": 0,
+                  "endOffset": 6,
+                  "count": 21
+                },
+                {
+                  "startOffset": 1,
+                  "endOffset": 5,
+                  "count": 12
+                },
+                {
+                  "startOffset": 2,
+                  "endOffset": 4,
+                  "count": 3
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "merges a similar sliding chain: a+b+c",
+    "status": "run",
+    "inputs": [
+      {
+        "result": [
+          {
+            "scriptId": "1",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 7,
+                    "count": 10
+                  },
+                  {
+                    "startOffset": 0,
+                    "endOffset": 4,
+                    "count": 1
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "1",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 7,
+                    "count": 10
+                  },
+                  {
+                    "startOffset": 1,
+                    "endOffset": 5,
+                    "count": 1
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "1",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 7,
+                    "count": 10
+                  },
+                  {
+                    "startOffset": 2,
+                    "endOffset": 6,
+                    "count": 1
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "expected": {
+      "result": [
+        {
+          "scriptId": "1",
+          "url": "/lib.js",
+          "functions": [
+            {
+              "functionName": "test",
+              "isBlockCoverage": true,
+              "ranges": [
+                {
+                  "startOffset": 0,
+                  "endOffset": 7,
+                  "count": 30
+                },
+                {
+                  "startOffset": 0,
+                  "endOffset": 6,
+                  "count": 21
+                },
+                {
+                  "startOffset": 1,
+                  "endOffset": 5,
+                  "count": 12
+                },
+                {
+                  "startOffset": 2,
+                  "endOffset": 4,
+                  "count": 3
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "merges a similar sliding chain: a+b+c+d",
+    "status": "run",
+    "inputs": [
+      {
+        "result": [
+          {
+            "scriptId": "1",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 7,
+                    "count": 10
+                  },
+                  {
+                    "startOffset": 0,
+                    "endOffset": 4,
+                    "count": 1
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "1",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 7,
+                    "count": 10
+                  },
+                  {
+                    "startOffset": 1,
+                    "endOffset": 5,
+                    "count": 1
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "1",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 7,
+                    "count": 10
+                  },
+                  {
+                    "startOffset": 2,
+                    "endOffset": 6,
+                    "count": 1
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "1",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 7,
+                    "count": 10
+                  },
+                  {
+                    "startOffset": 3,
+                    "endOffset": 7,
+                    "count": 1
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "expected": {
+      "result": [
+        {
+          "scriptId": "1",
+          "url": "/lib.js",
+          "functions": [
+            {
+              "functionName": "test",
+              "isBlockCoverage": true,
+              "ranges": [
+                {
+                  "startOffset": 0,
+                  "endOffset": 7,
+                  "count": 31
+                },
+                {
+                  "startOffset": 1,
+                  "endOffset": 6,
+                  "count": 22
+                },
+                {
+                  "startOffset": 2,
+                  "endOffset": 5,
+                  "count": 13
+                },
+                {
+                  "startOffset": 3,
+                  "endOffset": 4,
+                  "count": 4
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "merges a tagged sliding chain: a+b",
+    "status": "run",
+    "inputs": [
+      {
+        "result": [
+          {
+            "scriptId": "1",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 7,
+                    "count": 10
+                  },
+                  {
+                    "startOffset": 0,
+                    "endOffset": 4,
+                    "count": 1
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "1",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 7,
+                    "count": 20
+                  },
+                  {
+                    "startOffset": 1,
+                    "endOffset": 5,
+                    "count": 2
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "expected": {
+      "result": [
+        {
+          "scriptId": "1",
+          "url": "/lib.js",
+          "functions": [
+            {
+              "functionName": "test",
+              "isBlockCoverage": true,
+              "ranges": [
+                {
+                  "startOffset": 0,
+                  "endOffset": 7,
+                  "count": 30
+                },
+                {
+                  "startOffset": 0,
+                  "endOffset": 4,
+                  "count": 21
+                },
+                {
+                  "startOffset": 1,
+                  "endOffset": 4,
+                  "count": 3
+                },
+                {
+                  "startOffset": 4,
+                  "endOffset": 5,
+                  "count": 12
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "merges a tagged sliding chain: a+b",
+    "status": "run",
+    "inputs": [
+      {
+        "result": [
+          {
+            "scriptId": "1",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 7,
+                    "count": 20
+                  },
+                  {
+                    "startOffset": 1,
+                    "endOffset": 5,
+                    "count": 2
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "1",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 7,
+                    "count": 10
+                  },
+                  {
+                    "startOffset": 0,
+                    "endOffset": 4,
+                    "count": 1
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "expected": {
+      "result": [
+        {
+          "scriptId": "1",
+          "url": "/lib.js",
+          "functions": [
+            {
+              "functionName": "test",
+              "isBlockCoverage": true,
+              "ranges": [
+                {
+                  "startOffset": 0,
+                  "endOffset": 7,
+                  "count": 30
+                },
+                {
+                  "startOffset": 0,
+                  "endOffset": 4,
+                  "count": 21
+                },
+                {
+                  "startOffset": 1,
+                  "endOffset": 4,
+                  "count": 3
+                },
+                {
+                  "startOffset": 4,
+                  "endOffset": 5,
+                  "count": 12
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "merges three trees with a complex relation (chains, nesting)",
+    "status": "run",
+    "inputs": [
+      {
+        "result": [
+          {
+            "scriptId": "1",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 16,
+                    "count": 1
+                  },
+                  {
+                    "startOffset": 0,
+                    "endOffset": 4,
+                    "count": 6
+                  },
+                  {
+                    "startOffset": 1,
+                    "endOffset": 2,
+                    "count": 2
+                  },
+                  {
+                    "startOffset": 6,
+                    "endOffset": 7,
+                    "count": 4
+                  },
+                  {
+                    "startOffset": 10,
+                    "endOffset": 15,
+                    "count": 9
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "1",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 16,
+                    "count": 4
+                  },
+                  {
+                    "startOffset": 0,
+                    "endOffset": 1,
+                    "count": 2
+                  },
+                  {
+                    "startOffset": 5,
+                    "endOffset": 8,
+                    "count": 5
+                  },
+                  {
+                    "startOffset": 9,
+                    "endOffset": 12,
+                    "count": 3
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "1",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 16,
+                    "count": 10
+                  },
+                  {
+                    "startOffset": 3,
+                    "endOffset": 11,
+                    "count": 7
+                  },
+                  {
+                    "startOffset": 7,
+                    "endOffset": 8,
+                    "count": 3
+                  },
+                  {
+                    "startOffset": 13,
+                    "endOffset": 14,
+                    "count": 3
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "expected": {
+      "result": [
+        {
+          "scriptId": "1",
+          "url": "/lib.js",
+          "functions": [
+            {
+              "functionName": "test",
+              "isBlockCoverage": true,
+              "ranges": [
+                {
+                  "startOffset": 0,
+                  "endOffset": 16,
+                  "count": 15
+                },
+                {
+                  "startOffset": 0,
+                  "endOffset": 4,
+                  "count": 20
+                },
+                {
+                  "startOffset": 0,
+                  "endOffset": 1,
+                  "count": 18
+                },
+                {
+                  "startOffset": 1,
+                  "endOffset": 2,
+                  "count": 16
+                },
+                {
+                  "startOffset": 3,
+                  "endOffset": 4,
+                  "count": 17
+                },
+                {
+                  "startOffset": 4,
+                  "endOffset": 11,
+                  "count": 12
+                },
+                {
+                  "startOffset": 5,
+                  "endOffset": 8,
+                  "count": 13
+                },
+                {
+                  "startOffset": 6,
+                  "endOffset": 7,
+                  "count": 16
+                },
+                {
+                  "startOffset": 7,
+                  "endOffset": 8,
+                  "count": 9
+                },
+                {
+                  "startOffset": 9,
+                  "endOffset": 11,
+                  "count": 11
+                },
+                {
+                  "startOffset": 10,
+                  "endOffset": 11,
+                  "count": 19
+                },
+                {
+                  "startOffset": 11,
+                  "endOffset": 15,
+                  "count": 23
+                },
+                {
+                  "startOffset": 11,
+                  "endOffset": 12,
+                  "count": 22
+                },
+                {
+                  "startOffset": 13,
+                  "endOffset": 14,
+                  "count": 16
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+]
