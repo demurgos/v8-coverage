@@ -1,12 +1,13 @@
+import chai from "chai";
 import fs from "fs";
 import path from "path";
-import chai from "chai";
 import { mergeProcesses, ProcessCov } from "../lib";
 
 const REPO_ROOT: string = path.join(__dirname, "..", "..", "..", "..");
 const BENCHES_INPUT_DIR: string = path.join(REPO_ROOT, "benches");
 const BENCHES_DIR: string = path.join(REPO_ROOT, "test-data", "merge", "benches");
 const RANGES_DIR: string = path.join(REPO_ROOT, "test-data", "merge", "ranges");
+const BENCHES_TIMEOUT: number = 20000; // 20sec
 
 interface MergeRangeItem {
   name: string;
@@ -19,11 +20,13 @@ describe("merge", () => {
   describe("benches", () => {
     for (const bench of getBenches()) {
       const name: string = path.basename(bench);
-      it(name, async () => {
+      it(name, async function (this: Mocha.Context) {
+        this.timeout(BENCHES_TIMEOUT);
+
         const inputFileNames: string[] = await fs.promises.readdir(bench);
         const inputs: ProcessCov[] = [];
         for (const inputFileName of inputFileNames) {
-          const resolved: string = path.join(bench, name);
+          const resolved: string = path.join(bench, inputFileName);
           inputs.push(JSON.parse(await fs.promises.readFile(resolved, {encoding: "UTF-8"}) as string));
         }
         const expectedPath: string = path.join(BENCHES_DIR, `${name}.json`);
