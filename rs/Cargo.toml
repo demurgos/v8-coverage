@@ -1,0 +1,10 @@
+[package]
+name = "v8-coverage"
+version = "0.1.0"
+authors = ["Charles Samborski <demurgos@demurgos.net>"]
+
+[dependencies]
+rayon = "^1.0.2"
+serde = "^1.0.79"
+serde_derive = "^1.0.79"
+typed-arena = "^1.4.1"

@@ -1,0 +1,22 @@
+language: node_js
+
+node_js:
+- stable
+
+cache:
+  directories:
+  - "node_modules"
+  - "ts/node_modules"
+
+before_install:
+- export PATH="$(yarn bin):${PATH}"
+- yarn global add codecov
+
+before_script:
+- (cd ts && yarn install)
+
+script:
+- cd ts
+- npm test
+- cp coverage/lcov.info coverage.lcov
+- codecov

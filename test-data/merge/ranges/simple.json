@@ -1,0 +1,1312 @@
+[
+  {
+    "name": "No children",
+    "status": "run",
+    "inputs": [
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 10
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 20
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "expected": {
+      "result": [
+        {
+          "scriptId": "0",
+          "url": "/lib.js",
+          "functions": [
+            {
+              "functionName": "test",
+              "isBlockCoverage": true,
+              "ranges": [
+                {
+                  "startOffset": 0,
+                  "endOffset": 9,
+                  "count": 30
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "One child",
+    "status": "run",
+    "inputs": [
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 10
+                  },
+                  {
+                    "startOffset": 3,
+                    "endOffset": 6,
+                    "count": 1
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 20
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "expected": {
+      "result": [
+        {
+          "scriptId": "0",
+          "url": "/lib.js",
+          "functions": [
+            {
+              "functionName": "test",
+              "isBlockCoverage": true,
+              "ranges": [
+                {
+                  "startOffset": 0,
+                  "endOffset": 9,
+                  "count": 30
+                },
+                {
+                  "startOffset": 3,
+                  "endOffset": 6,
+                  "count": 21
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Equal",
+    "status": "run",
+    "inputs": [
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 10
+                  },
+                  {
+                    "startOffset": 3,
+                    "endOffset": 6,
+                    "count": 1
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 20
+                  },
+                  {
+                    "startOffset": 3,
+                    "endOffset": 6,
+                    "count": 2
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "expected": {
+      "result": [
+        {
+          "scriptId": "0",
+          "url": "/lib.js",
+          "functions": [
+            {
+              "functionName": "test",
+              "isBlockCoverage": true,
+              "ranges": [
+                {
+                  "startOffset": 0,
+                  "endOffset": 9,
+                  "count": 30
+                },
+                {
+                  "startOffset": 3,
+                  "endOffset": 6,
+                  "count": 3
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Disjoint (BeforeAdjacent)",
+    "status": "run",
+    "inputs": [
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 10
+                  },
+                  {
+                    "startOffset": 3,
+                    "endOffset": 6,
+                    "count": 1
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 20
+                  },
+                  {
+                    "startOffset": 1,
+                    "endOffset": 3,
+                    "count": 2
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "expected": {
+      "result": [
+        {
+          "scriptId": "0",
+          "url": "/lib.js",
+          "functions": [
+            {
+              "functionName": "test",
+              "isBlockCoverage": true,
+              "ranges": [
+                {
+                  "startOffset": 0,
+                  "endOffset": 9,
+                  "count": 30
+                },
+                {
+                  "startOffset": 1,
+                  "endOffset": 3,
+                  "count": 12
+                },
+                {
+                  "startOffset": 3,
+                  "endOffset": 6,
+                  "count": 21
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Disjoint (BeforeStrict)",
+    "status": "run",
+    "inputs": [
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 10
+                  },
+                  {
+                    "startOffset": 3,
+                    "endOffset": 6,
+                    "count": 1
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 20
+                  },
+                  {
+                    "startOffset": 1,
+                    "endOffset": 2,
+                    "count": 2
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "expected": {
+      "result": [
+        {
+          "scriptId": "0",
+          "url": "/lib.js",
+          "functions": [
+            {
+              "functionName": "test",
+              "isBlockCoverage": true,
+              "ranges": [
+                {
+                  "startOffset": 0,
+                  "endOffset": 9,
+                  "count": 30
+                },
+                {
+                  "startOffset": 1,
+                  "endOffset": 2,
+                  "count": 12
+                },
+                {
+                  "startOffset": 3,
+                  "endOffset": 6,
+                  "count": 21
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Disjoint (AfterAdjacent)",
+    "status": "run",
+    "inputs": [
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 10
+                  },
+                  {
+                    "startOffset": 3,
+                    "endOffset": 6,
+                    "count": 1
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 20
+                  },
+                  {
+                    "startOffset": 6,
+                    "endOffset": 8,
+                    "count": 2
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "expected": {
+      "result": [
+        {
+          "scriptId": "0",
+          "url": "/lib.js",
+          "functions": [
+            {
+              "functionName": "test",
+              "isBlockCoverage": true,
+              "ranges": [
+                {
+                  "startOffset": 0,
+                  "endOffset": 9,
+                  "count": 30
+                },
+                {
+                  "startOffset": 3,
+                  "endOffset": 6,
+                  "count": 21
+                },
+                {
+                  "startOffset": 6,
+                  "endOffset": 8,
+                  "count": 12
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Disjoint (AfterStrict)",
+    "status": "run",
+    "inputs": [
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 10
+                  },
+                  {
+                    "startOffset": 3,
+                    "endOffset": 6,
+                    "count": 1
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 20
+                  },
+                  {
+                    "startOffset": 7,
+                    "endOffset": 8,
+                    "count": 2
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "expected": {
+      "result": [
+        {
+          "scriptId": "0",
+          "url": "/lib.js",
+          "functions": [
+            {
+              "functionName": "test",
+              "isBlockCoverage": true,
+              "ranges": [
+                {
+                  "startOffset": 0,
+                  "endOffset": 9,
+                  "count": 30
+                },
+                {
+                  "startOffset": 3,
+                  "endOffset": 6,
+                  "count": 21
+                },
+                {
+                  "startOffset": 7,
+                  "endOffset": 8,
+                  "count": 12
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Nested (OverlapStrict)",
+    "status": "run",
+    "inputs": [
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 10
+                  },
+                  {
+                    "startOffset": 3,
+                    "endOffset": 6,
+                    "count": 1
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 20
+                  },
+                  {
+                    "startOffset": 1,
+                    "endOffset": 8,
+                    "count": 2
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "expected": {
+      "result": [
+        {
+          "scriptId": "0",
+          "url": "/lib.js",
+          "functions": [
+            {
+              "functionName": "test",
+              "isBlockCoverage": true,
+              "ranges": [
+                {
+                  "startOffset": 0,
+                  "endOffset": 9,
+                  "count": 30
+                },
+                {
+                  "startOffset": 1,
+                  "endOffset": 8,
+                  "count": 12
+                },
+                {
+                  "startOffset": 3,
+                  "endOffset": 6,
+                  "count": 3
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Nested (OverlapEqualEnd)",
+    "status": "run",
+    "inputs": [
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 10
+                  },
+                  {
+                    "startOffset": 3,
+                    "endOffset": 6,
+                    "count": 1
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 20
+                  },
+                  {
+                    "startOffset": 1,
+                    "endOffset": 6,
+                    "count": 2
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "expected": {
+      "result": [
+        {
+          "scriptId": "0",
+          "url": "/lib.js",
+          "functions": [
+            {
+              "functionName": "test",
+              "isBlockCoverage": true,
+              "ranges": [
+                {
+                  "startOffset": 0,
+                  "endOffset": 9,
+                  "count": 30
+                },
+                {
+                  "startOffset": 1,
+                  "endOffset": 6,
+                  "count": 12
+                },
+                {
+                  "startOffset": 3,
+                  "endOffset": 6,
+                  "count": 3
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Nested (OverlapEqualStart)",
+    "status": "run",
+    "inputs": [
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 10
+                  },
+                  {
+                    "startOffset": 3,
+                    "endOffset": 6,
+                    "count": 1
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 20
+                  },
+                  {
+                    "startOffset": 3,
+                    "endOffset": 8,
+                    "count": 2
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "expected": {
+      "result": [
+        {
+          "scriptId": "0",
+          "url": "/lib.js",
+          "functions": [
+            {
+              "functionName": "test",
+              "isBlockCoverage": true,
+              "ranges": [
+                {
+                  "startOffset": 0,
+                  "endOffset": 9,
+                  "count": 30
+                },
+                {
+                  "startOffset": 3,
+                  "endOffset": 8,
+                  "count": 12
+                },
+                {
+                  "startOffset": 3,
+                  "endOffset": 6,
+                  "count": 3
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Nested (ContainedEqualStart)",
+    "status": "run",
+    "inputs": [
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 10
+                  },
+                  {
+                    "startOffset": 3,
+                    "endOffset": 6,
+                    "count": 1
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 20
+                  },
+                  {
+                    "startOffset": 3,
+                    "endOffset": 5,
+                    "count": 2
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "expected": {
+      "result": [
+        {
+          "scriptId": "0",
+          "url": "/lib.js",
+          "functions": [
+            {
+              "functionName": "test",
+              "isBlockCoverage": true,
+              "ranges": [
+                {
+                  "startOffset": 0,
+                  "endOffset": 9,
+                  "count": 30
+                },
+                {
+                  "startOffset": 3,
+                  "endOffset": 6,
+                  "count": 21
+                },
+                {
+                  "startOffset": 3,
+                  "endOffset": 5,
+                  "count": 3
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Nested (ContainedEqualEnd)",
+    "status": "run",
+    "inputs": [
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 10
+                  },
+                  {
+                    "startOffset": 3,
+                    "endOffset": 6,
+                    "count": 1
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 20
+                  },
+                  {
+                    "startOffset": 4,
+                    "endOffset": 6,
+                    "count": 2
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "expected": {
+      "result": [
+        {
+          "scriptId": "0",
+          "url": "/lib.js",
+          "functions": [
+            {
+              "functionName": "test",
+              "isBlockCoverage": true,
+              "ranges": [
+                {
+                  "startOffset": 0,
+                  "endOffset": 9,
+                  "count": 30
+                },
+                {
+                  "startOffset": 3,
+                  "endOffset": 6,
+                  "count": 21
+                },
+                {
+                  "startOffset": 4,
+                  "endOffset": 6,
+                  "count": 3
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Nested (ContainedStrict)",
+    "status": "run",
+    "inputs": [
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 10
+                  },
+                  {
+                    "startOffset": 3,
+                    "endOffset": 6,
+                    "count": 1
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 20
+                  },
+                  {
+                    "startOffset": 4,
+                    "endOffset": 5,
+                    "count": 2
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "expected": {
+      "result": [
+        {
+          "scriptId": "0",
+          "url": "/lib.js",
+          "functions": [
+            {
+              "functionName": "test",
+              "isBlockCoverage": true,
+              "ranges": [
+                {
+                  "startOffset": 0,
+                  "endOffset": 9,
+                  "count": 30
+                },
+                {
+                  "startOffset": 3,
+                  "endOffset": 6,
+                  "count": 21
+                },
+                {
+                  "startOffset": 4,
+                  "endOffset": 5,
+                  "count": 3
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Partial overlap (PartialOverlapStart)",
+    "status": "run",
+    "inputs": [
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 10
+                  },
+                  {
+                    "startOffset": 3,
+                    "endOffset": 6,
+                    "count": 1
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 20
+                  },
+                  {
+                    "startOffset": 1,
+                    "endOffset": 5,
+                    "count": 2
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "expected": {
+      "result": [
+        {
+          "scriptId": "0",
+          "url": "/lib.js",
+          "functions": [
+            {
+              "functionName": "test",
+              "isBlockCoverage": true,
+              "ranges": [
+                {
+                  "startOffset": 0,
+                  "endOffset": 9,
+                  "count": 30
+                },
+                {
+                  "startOffset": 1,
+                  "endOffset": 5,
+                  "count": 12
+                },
+                {
+                  "startOffset": 3,
+                  "endOffset": 5,
+                  "count": 3
+                },
+                {
+                  "startOffset": 5,
+                  "endOffset": 6,
+                  "count": 21
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Partial overlap (PartialOverlapEnd)",
+    "status": "run",
+    "inputs": [
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 10
+                  },
+                  {
+                    "startOffset": 3,
+                    "endOffset": 6,
+                    "count": 1
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 20
+                  },
+                  {
+                    "startOffset": 4,
+                    "endOffset": 8,
+                    "count": 2
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "expected": {
+      "result": [
+        {
+          "scriptId": "0",
+          "url": "/lib.js",
+          "functions": [
+            {
+              "functionName": "test",
+              "isBlockCoverage": true,
+              "ranges": [
+                {
+                  "startOffset": 0,
+                  "endOffset": 9,
+                  "count": 30
+                },
+                {
+                  "startOffset": 3,
+                  "endOffset": 6,
+                  "count": 21
+                },
+                {
+                  "startOffset": 4,
+                  "endOffset": 6,
+                  "count": 3
+                },
+                {
+                  "startOffset": 6,
+                  "endOffset": 8,
+                  "count": 12
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+]

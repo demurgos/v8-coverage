@@ -1,0 +1,45 @@
+{
+  "name": "@c88/v8-coverage-node",
+  "version": "0.0.1",
+  "description": "Toolbox for V8 coverage files",
+  "private": false,
+  "main": "dist/lib/index.js",
+  "types": "dist/lib/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/demurgos/v8-coverage"
+  },
+  "scripts": {
+    "build": "gulp lib:build",
+    "prepare": "gulp tsconfig.json && gulp :tslint.json && gulp lib:dist",
+    "test": "gulp :lint && gulp test",
+    "prepublishOnly": "npm test",
+    "lint": "gulp :lint:fix"
+  },
+  "nyc": {
+    "include": [
+      "build/test/lib/**/*.js"
+    ]
+  },
+  "keywords": [
+    "error"
+  ],
+  "author": "Charles Samborski <demurgos@demurgos.net> (https://demurgos.net)",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/chai": "^4.1.6",
+    "@types/minimist": "^1.2.0",
+    "@types/mocha": "^5.2.5",
+    "@types/node": "^10.11.3",
+    "chai": "^4.2.0",
+    "codecov": "^3.1.0",
+    "gulp": "^4.0.0",
+    "gulp-cli": "^2.0.1",
+    "minimist": "^1.2.0",
+    "neon-cli": "^0.2.0",
+    "pre-commit": "^1.2.2",
+    "ts-node": "^7.0.1",
+    "turbo-gulp": "^0.17.1",
+    "typescript": "^3.1.1"
+  }
+}

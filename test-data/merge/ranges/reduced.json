@@ -1,0 +1,612 @@
+[
+  {
+    "name": "node@10.11.0: internal/errors.js#oneOf: reduced",
+    "status": "run",
+    "inputs": [
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 8,
+                    "count": 1811
+                  },
+                  {
+                    "startOffset": 1,
+                    "endOffset": 6,
+                    "count": 181
+                  },
+                  {
+                    "startOffset": 2,
+                    "endOffset": 4,
+                    "count": 180
+                  },
+                  {
+                    "startOffset": 4,
+                    "endOffset": 6,
+                    "count": 27
+                  },
+                  {
+                    "startOffset": 4,
+                    "endOffset": 5,
+                    "count": 3
+                  },
+                  {
+                    "startOffset": 5,
+                    "endOffset": 6,
+                    "count": 26
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 8,
+                    "count": 148
+                  },
+                  {
+                    "startOffset": 4,
+                    "endOffset": 7,
+                    "count": 0
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 8,
+                    "count": 3
+                  },
+                  {
+                    "startOffset": 3,
+                    "endOffset": 5,
+                    "count": 1
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "expected": {
+      "result": [
+        {
+          "scriptId": "0",
+          "url": "/lib.js",
+          "functions": [
+            {
+              "functionName": "test",
+              "isBlockCoverage": true,
+              "ranges": [
+                {
+                  "startOffset": 0,
+                  "endOffset": 8,
+                  "count": 1962
+                },
+                {
+                  "startOffset": 1,
+                  "endOffset": 6,
+                  "count": 332
+                },
+                {
+                  "startOffset": 2,
+                  "endOffset": 4,
+                  "count": 331
+                },
+                {
+                  "startOffset": 3,
+                  "endOffset": 4,
+                  "count": 329
+                },
+                {
+                  "startOffset": 4,
+                  "endOffset": 6,
+                  "count": 30
+                },
+                {
+                  "startOffset": 4,
+                  "endOffset": 5,
+                  "count": 4
+                },
+                {
+                  "startOffset": 5,
+                  "endOffset": 6,
+                  "count": 29
+                },
+                {
+                  "startOffset": 6,
+                  "endOffset": 7,
+                  "count": 1814
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "node@10.11.0: internal/errors.js#oneOf: reduced with hint",
+    "status": "run",
+    "inputs": [
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 8,
+                    "count": 1811
+                  },
+                  {
+                    "startOffset": 1,
+                    "endOffset": 6,
+                    "count": 181
+                  },
+                  {
+                    "startOffset": 2,
+                    "endOffset": 4,
+                    "count": 180
+                  },
+                  {
+                    "startOffset": 4,
+                    "endOffset": 6,
+                    "count": 27
+                  },
+                  {
+                    "startOffset": 4,
+                    "endOffset": 5,
+                    "count": 3
+                  },
+                  {
+                    "startOffset": 5,
+                    "endOffset": 6,
+                    "count": 26
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 8,
+                    "count": 148
+                  },
+                  {
+                    "startOffset": 4,
+                    "endOffset": 7,
+                    "count": 0
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 8,
+                    "count": 3
+                  },
+                  {
+                    "startOffset": 1,
+                    "endOffset": 6,
+                    "count": 3
+                  },
+                  {
+                    "startOffset": 3,
+                    "endOffset": 5,
+                    "count": 1
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "expected": {
+      "result": [
+        {
+          "scriptId": "0",
+          "url": "/lib.js",
+          "functions": [
+            {
+              "functionName": "test",
+              "isBlockCoverage": true,
+              "ranges": [
+                {
+                  "startOffset": 0,
+                  "endOffset": 8,
+                  "count": 1962
+                },
+                {
+                  "startOffset": 1,
+                  "endOffset": 6,
+                  "count": 332
+                },
+                {
+                  "startOffset": 2,
+                  "endOffset": 4,
+                  "count": 331
+                },
+                {
+                  "startOffset": 3,
+                  "endOffset": 4,
+                  "count": 329
+                },
+                {
+                  "startOffset": 4,
+                  "endOffset": 6,
+                  "count": 30
+                },
+                {
+                  "startOffset": 4,
+                  "endOffset": 5,
+                  "count": 4
+                },
+                {
+                  "startOffset": 5,
+                  "endOffset": 6,
+                  "count": 29
+                },
+                {
+                  "startOffset": 6,
+                  "endOffset": 7,
+                  "count": 1814
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "node@10.11.0: internal/errors.js#oneOf: minimal",
+    "status": "run",
+    "inputs": [
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 8,
+                    "count": 10
+                  },
+                  {
+                    "startOffset": 1,
+                    "endOffset": 6,
+                    "count": 1
+                  },
+                  {
+                    "startOffset": 2,
+                    "endOffset": 4,
+                    "count": 6
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 8,
+                    "count": 20
+                  },
+                  {
+                    "startOffset": 4,
+                    "endOffset": 7,
+                    "count": 2
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 8,
+                    "count": 40
+                  },
+                  {
+                    "startOffset": 3,
+                    "endOffset": 5,
+                    "count": 4
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "expected": {
+      "result": [
+        {
+          "scriptId": "0",
+          "url": "/lib.js",
+          "functions": [
+            {
+              "functionName": "test",
+              "isBlockCoverage": true,
+              "ranges": [
+                {
+                  "startOffset": 0,
+                  "endOffset": 8,
+                  "count": 70
+                },
+                {
+                  "startOffset": 1,
+                  "endOffset": 6,
+                  "count": 61
+                },
+                {
+                  "startOffset": 2,
+                  "endOffset": 4,
+                  "count": 66
+                },
+                {
+                  "startOffset": 3,
+                  "endOffset": 4,
+                  "count": 30
+                },
+                {
+                  "startOffset": 4,
+                  "endOffset": 6,
+                  "count": 43
+                },
+                {
+                  "startOffset": 4,
+                  "endOffset": 5,
+                  "count": 7
+                },
+                {
+                  "startOffset": 6,
+                  "endOffset": 7,
+                  "count": 52
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "node@10.11.0: internal/errors.js#oneOf: minimal with hint",
+    "status": "run",
+    "inputs": [
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 8,
+                    "count": 10
+                  },
+                  {
+                    "startOffset": 1,
+                    "endOffset": 6,
+                    "count": 1
+                  },
+                  {
+                    "startOffset": 2,
+                    "endOffset": 4,
+                    "count": 6
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 8,
+                    "count": 20
+                  },
+                  {
+                    "startOffset": 4,
+                    "endOffset": 7,
+                    "count": 2
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 8,
+                    "count": 40
+                  },
+                  {
+                    "startOffset": 1,
+                    "endOffset": 6,
+                    "count": 40
+                  },
+                  {
+                    "startOffset": 3,
+                    "endOffset": 5,
+                    "count": 4
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "expected": {
+      "result": [
+        {
+          "scriptId": "0",
+          "url": "/lib.js",
+          "functions": [
+            {
+              "functionName": "test",
+              "isBlockCoverage": true,
+              "ranges": [
+                {
+                  "startOffset": 0,
+                  "endOffset": 8,
+                  "count": 70
+                },
+                {
+                  "startOffset": 1,
+                  "endOffset": 6,
+                  "count": 61
+                },
+                {
+                  "startOffset": 2,
+                  "endOffset": 4,
+                  "count": 66
+                },
+                {
+                  "startOffset": 3,
+                  "endOffset": 4,
+                  "count": 30
+                },
+                {
+                  "startOffset": 4,
+                  "endOffset": 6,
+                  "count": 43
+                },
+                {
+                  "startOffset": 4,
+                  "endOffset": 5,
+                  "count": 7
+                },
+                {
+                  "startOffset": 6,
+                  "endOffset": 7,
+                  "count": 52
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+]
