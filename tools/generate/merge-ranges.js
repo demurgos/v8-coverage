@@ -2,11 +2,11 @@ const fs = require("fs");
 const fsExtra = require("fs-extra");
 const path = require("path");
 const replaceExt = require("replace-ext");
-const {parseFunctionRanges, parseOffsets, compareRanges} = require("../../ts");
+const {parseFunctionRanges, parseOffsets} = require("../../ts");
 
 const ROOT = path.join(__dirname, "..", "..");
 const SRC_DIR = path.join(ROOT, "test-data", "src", "ranges");
-const OUT_DIR = path.join(ROOT, "test-data", "ranges");
+const OUT_DIR = path.join(ROOT, "test-data", "merge", "ranges");
 
 async function generateMergeRanges() {
   for await (const sourceFile of getSourceFiles()) {
