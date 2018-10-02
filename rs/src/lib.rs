@@ -1,3 +1,6 @@
+#[macro_use]
+extern crate serde_derive;
+
 pub use coverage::*;
 pub use merge::*;
 

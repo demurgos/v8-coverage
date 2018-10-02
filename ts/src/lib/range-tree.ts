@@ -39,13 +39,12 @@ export class RangeTree {
       }
       let top: RangeTree;
       while (true) {
-        // assert: `top.length > 0`
         top = stack[stack.length - 1];
-        if (range.startOffset >= top.end) {
-          stack.pop();
-          top = stack[stack.length - 1];
-        } else {
+        // assert: `top !== undefined` (the ranges are sorted)
+        if (range.startOffset < top.end) {
           break;
+        } else {
+          stack.pop();
         }
       }
       top.children.push(node);

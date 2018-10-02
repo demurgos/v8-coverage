@@ -9,7 +9,7 @@ pub fn merge_processes(mut cx: FunctionContext) -> JsResult<JsValue> {
   let processes_js: Handle<JsArray> = cx.argument::<JsArray>(0)?;
   let processes: Vec<ProcessCov> = process_cov_vec_from_js(&mut cx, &processes_js)?;
 
-  match v8_coverage::merge_processes(processes) {
+  match v8_coverage::merge_processes(&processes) {
     None => Ok(JsUndefined::new().as_value(&mut cx)),
     Some(merged) => Ok(process_cov_to_js(&mut cx, &merged)?.as_value(&mut cx))
   }
@@ -19,7 +19,7 @@ pub fn merge_scripts(mut cx: FunctionContext) -> JsResult<JsValue> {
   let scripts_js: Handle<JsArray> = cx.argument::<JsArray>(0)?;
   let scripts: Vec<ScriptCov> = script_cov_vec_from_js(&mut cx, &scripts_js)?;
 
-  match v8_coverage::merge_scripts(scripts) {
+  match v8_coverage::merge_scripts(&scripts) {
     None => Ok(JsUndefined::new().as_value(&mut cx)),
     Some(merged) => Ok(script_cov_to_js(&mut cx, &merged)?.as_value(&mut cx))
   }
@@ -29,7 +29,7 @@ pub fn merge_functions(mut cx: FunctionContext) -> JsResult<JsValue> {
   let funcs_js: Handle<JsArray> = cx.argument::<JsArray>(0)?;
   let funcs: Vec<FunctionCov> = function_cov_vec_from_js(&mut cx, &funcs_js)?;
 
-  match v8_coverage::merge_functions(funcs) {
+  match v8_coverage::merge_functions(&funcs) {
     None => Ok(JsUndefined::new().as_value(&mut cx)),
     Some(merged) => Ok(function_cov_to_js(&mut cx, &merged)?.as_value(&mut cx))
   }
@@ -45,9 +45,9 @@ fn process_cov_vec_from_js<'a, C: Context<'a>>(cx: &mut C, processes: &Handle<'a
 
 fn process_cov_from_js<'a, C: Context<'a>>(cx: &mut C, process: &Handle<'a, JsValue>) -> NeonResult<ProcessCov> {
   let process: Handle<JsObject> = process.downcast::<JsObject>().or_throw(cx)?;
-  let scripts_js: Handle<JsArray> = process.get(cx, "scripts")?.downcast::<JsArray>().or_throw(cx)?;
-  let value: Vec<ScriptCov> = script_cov_vec_from_js(cx, &scripts_js)?;
-  Ok(ProcessCov { value })
+  let scripts_js: Handle<JsArray> = process.get(cx, "result")?.downcast::<JsArray>().or_throw(cx)?;
+  let result: Vec<ScriptCov> = script_cov_vec_from_js(cx, &scripts_js)?;
+  Ok(ProcessCov { result })
 }
 
 fn script_cov_vec_from_js<'a, C: Context<'a>>(cx: &mut C, scripts: &Handle<'a, JsArray>) -> NeonResult<Vec<ScriptCov>> {
@@ -102,8 +102,8 @@ fn range_cov_from_js<'a, C: Context<'a>>(cx: &mut C, range: &Handle<'a, JsValue>
 
 fn process_cov_to_js<'a, C: Context<'a>>(cx: &mut C, process: &ProcessCov) -> JsResult<'a, JsObject> {
   let result: Handle<JsObject> = cx.empty_object();
-  let scripts: Handle<JsArray> = script_cov_vec_to_js(cx, &process.value)?;
-  result.set(cx, "value", scripts)?;
+  let scripts: Handle<JsArray> = script_cov_vec_to_js(cx, &process.result)?;
+  result.set(cx, "result", scripts)?;
   Ok(result)
 }
 

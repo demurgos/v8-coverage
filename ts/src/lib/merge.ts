@@ -45,20 +45,20 @@ export function mergeScripts(scripts: ReadonlyArray<ScriptCov>): ScriptCov | und
     return scripts[0];
   }
   const first: ScriptCov = scripts[0];
-  const hashToFns: Map<string, FunctionCov[]> = new Map();
+  const rangeToFns: Map<string, FunctionCov[]> = new Map();
   for (const script of scripts) {
     for (const fn of script.functions) {
       const hash: string = hashFunction(fn);
-      let fns: FunctionCov[] | undefined = hashToFns.get(hash);
+      let fns: FunctionCov[] | undefined = rangeToFns.get(hash);
       if (fns === undefined) {
         fns = [];
-        hashToFns.set(hash, fns);
+        rangeToFns.set(hash, fns);
       }
       fns.push(fn);
     }
   }
   const functions: FunctionCov[] = [];
-  for (const fns of hashToFns.values()) {
+  for (const fns of rangeToFns.values()) {
     // assert: `fns.length > 0`
     functions.push(mergeFunctions(fns)!);
   }
