@@ -19,9 +19,6 @@
 # Node dependencies directory
 node_modules
 
-# Typings definitions
-typings
-
 ###############################################################################
 # Generated configuration files                                               #
 ###############################################################################
@@ -41,6 +38,7 @@ test-config.js
 *.tmp
 tmp/
 logs/
+.nyc_output/
 
 ###############################################################################
 # Other                                                                       #

@@ -187,14 +187,11 @@ function extendChildren(parentTrees: ReadonlyArray<RangeTree>): void {
     const startChildren: RangeTree[] = [];
     for (let parentIndex: number = 0; parentIndex < parentTrees.length; parentIndex++) {
       const childStack: RangeTree[] = childStacks[parentIndex];
-      let child: RangeTree | undefined = childStack[childStack.length - 1];
-      if (child !== undefined && child.end === event) {
-        childStack.pop();
-        child = childStack[childStack.length - 1];
-      }
+      const child: RangeTree | undefined = childStack[childStack.length - 1];
       if (child !== undefined && child.start === event) {
         startChildren.push(child);
         child.parentIndex = parentIndex;
+        childStack.pop();
       }
     }
 
@@ -211,9 +208,7 @@ function extendChildren(parentTrees: ReadonlyArray<RangeTree>): void {
       for (const startChild of startChildren) {
         if (nextEnd !== undefined && startChild.end > nextEnd) {
           const startRight: RangeTree = startChild.split(nextEnd);
-          const startChildStack: RangeTree[] = childStacks[startChild.parentIndex];
-          startChildStack[startChildStack.length - 1] = startRight;
-          startChildStack.push(startChild);
+          childStacks[startChild.parentIndex].push(startRight);
         }
         if (startChild.end > lateStart.end) {
           lateStart = startChild;
@@ -315,7 +310,7 @@ function compareNumbers(a: number, b: number): number {
  * Min heap of `RangeTree`, ordered by `end`.
  */
 class OpenTreeQueue {
-  private minHeap: RangeTree[];
+  private minHeap: number[];
   private max: RangeTree | undefined;
   private keys: Set<number>;
 
@@ -331,7 +326,7 @@ class OpenTreeQueue {
       return;
     }
     this.keys.add(end);
-    minHeapPush(this.minHeap, tree);
+    minHeapPush(this.minHeap, end);
     if (this.max === undefined || end > this.max.end) {
       this.max = tree;
     }
@@ -342,26 +337,24 @@ class OpenTreeQueue {
   }
 
   peekMin(): number | undefined {
-    const minTree: RangeTree | undefined = this.minHeap[0];
-    return minTree !== undefined ? minTree.end : undefined;
+    return this.minHeap[0];
   }
 
   peekNextMin(): number | undefined {
     if (this.minHeap.length > 2) {
-      const left: RangeTree = this.minHeap[1];
-      const right: RangeTree = this.minHeap[2];
-      return left.end < right.end ? left.end : right.end;
+      const leftKey: number = this.minHeap[1];
+      const rightKey: number = this.minHeap[2];
+      return leftKey < rightKey ? leftKey : rightKey;
     } else {
-      const nextMinTree: RangeTree | undefined = this.minHeap[1];
-      return nextMinTree !== undefined ? nextMinTree.end : undefined;
+      return this.minHeap[1];
     }
   }
 
   popMin(): void {
-    const result: RangeTree | undefined = minHeapPop(this.minHeap);
-    if (result !== undefined) {
-      this.keys.delete(result.end);
-      if (this.max !== undefined && result.end === this.max.end) {
+    const minKey: number | undefined = minHeapPop(this.minHeap);
+    if (minKey !== undefined) {
+      this.keys.delete(minKey);
+      if (this.minHeap.length === 0) {
         this.max = undefined;
       }
     }
@@ -369,61 +362,60 @@ class OpenTreeQueue {
 }
 
 /**
- * Inserts a range tree in a min-heap.
+ * Inserts a key to the binary min-heap.
  *
  * @param heap Binary min-heap
- * @param value Range tree to push
+ * @param key Key to push
  */
-function minHeapPush(heap: RangeTree[], value: RangeTree): void {
-  const key: number = value.end;
+function minHeapPush(heap: number[], key: number): void {
   let idx: number = heap.length;
-  heap.push(value);
+  heap.push(key);
   while (idx > 0) {
     const parentIdx: number = Math.floor((idx - 1) / 2);
-    const parent: RangeTree = heap[parentIdx];
-    if (parent.end <= key) {
+    const parentKey: number = heap[parentIdx];
+    if (parentKey <= key) {
       break;
     }
-    heap[parentIdx] = value;
-    heap[idx] = parent;
+    heap[parentIdx] = key;
+    heap[idx] = parentKey;
     idx = parentIdx;
   }
 }
 
-function minHeapPop(heap: RangeTree[]): RangeTree | undefined {
+function minHeapPop(heap: number[]): number | undefined {
   if (heap.length <= 1) {
     return heap.pop();
   }
   let idx: number = 0;
-  const value: RangeTree = heap[0];
+  const minKey: number = heap[0];
   const heapLen: number = heap.length;
   while (true) {
     const leftIdx: number = 2 * idx + 1;
     if (leftIdx >= heapLen) {
       break;
     }
-    const left: RangeTree = heap[leftIdx];
+    const leftKey: number = heap[leftIdx];
     const rightIdx: number = leftIdx + 1;
     if (rightIdx >= heapLen) {
-      heap[idx] = left;
-      heap[leftIdx] = value;
+      heap[idx] = leftKey;
+      heap[leftIdx] = minKey;
       idx = leftIdx;
       break;
     }
-    const right: RangeTree = heap[rightIdx];
-    if (left.end < right.end) {
-      heap[idx] = left;
-      heap[leftIdx] = value;
+    const rightKey: number = heap[rightIdx];
+    if (leftKey < rightKey) {
+      heap[idx] = leftKey;
+      heap[leftIdx] = minKey;
       idx = leftIdx;
     } else {
-      heap[idx] = right;
-      heap[rightIdx] = value;
+      heap[idx] = rightKey;
+      heap[rightIdx] = minKey;
       idx = rightIdx;
     }
   }
   if (idx !== heapLen - 1) {
     heap[idx] = heap[heapLen - 1];
-    heap[heapLen - 1] = value;
+    heap[heapLen - 1] = minKey;
   }
   return heap.pop();
 }
