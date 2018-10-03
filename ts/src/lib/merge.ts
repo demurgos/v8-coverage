@@ -184,36 +184,37 @@ function extendChildren(parentTrees: ReadonlyArray<RangeTree>): void {
   const inclusionTree: Map<RangeTree, Map<number, RangeTree[]>> = new Map();
 
   for (const event of events) {
+    // Next open tree to end (can end during the current event)
+    const nextOrCurEnd: number | undefined = openTrees.peekMin();
+    // Next open tree to end (but not during the current event)
+    const nextEnd: number | undefined = nextOrCurEnd === event ? openTrees.peekNextMin() : nextOrCurEnd;
+    // Starting tree to end the last
+    let lateStart: RangeTree | undefined;
+
     const startChildren: RangeTree[] = [];
     for (let parentIndex: number = 0; parentIndex < parentTrees.length; parentIndex++) {
       const childStack: RangeTree[] = childStacks[parentIndex];
-      const child: RangeTree | undefined = childStack[childStack.length - 1];
-      if (child !== undefined && child.start === event) {
-        startChildren.push(child);
-        child.parentIndex = parentIndex;
-        childStack.pop();
+      if (childStack.length === 0) {
+        continue;
+      }
+      const child: RangeTree = childStack[childStack.length - 1];
+      if (child.start !== event) {
+        continue;
+      }
+      childStack.pop();
+      startChildren.push(child);
+      child.parentIndex = parentIndex;
+      if (nextEnd !== undefined && child.end > nextEnd) {
+        childStack.push(child.split(nextEnd));
+      }
+      if (lateStart === undefined || child.end > lateStart.end) {
+        lateStart = child;
       }
     }
 
-    // Next open tree to end (can end during the current event)
-    const nextOrCurEnd: number | undefined = openTrees.peekMin();
-
-    if (startChildren.length > 0) {
-      // Next open tree to end (but not during the current event)
-      const nextEnd: number | undefined = nextOrCurEnd === event ? openTrees.peekNextMin() : nextOrCurEnd;
+    if (lateStart !== undefined) {
       // Open tree to end the last (can end during the current event)
       const lateOpen: RangeTree | undefined = openTrees.peekMax();
-      // Start tree to end the last
-      let lateStart: RangeTree = startChildren[0];
-      for (const startChild of startChildren) {
-        if (nextEnd !== undefined && startChild.end > nextEnd) {
-          const startRight: RangeTree = startChild.split(nextEnd);
-          childStacks[startChild.parentIndex].push(startRight);
-        }
-        if (startChild.end > lateStart.end) {
-          lateStart = startChild;
-        }
-      }
 
       for (const startChild of startChildren) {
         let superTree: RangeTree | undefined;
@@ -337,16 +338,14 @@ class OpenTreeQueue {
   }
 
   peekMin(): number | undefined {
-    return this.minHeap[0];
+    return this.minHeap.length > 0 ? this.minHeap[0] : undefined;
   }
 
   peekNextMin(): number | undefined {
     if (this.minHeap.length > 2) {
-      const leftKey: number = this.minHeap[1];
-      const rightKey: number = this.minHeap[2];
-      return leftKey < rightKey ? leftKey : rightKey;
+      return Math.min(this.minHeap[1], this.minHeap[2]);
     } else {
-      return this.minHeap[1];
+      return this.minHeap.length > 1 ? this.minHeap[1] : undefined;
     }
   }
 
@@ -384,7 +383,7 @@ function minHeapPush(heap: number[], key: number): void {
 
 function minHeapPop(heap: number[]): number | undefined {
   if (heap.length <= 1) {
-    return heap.pop();
+    return heap.length > 0 ? heap.pop() : undefined;
   }
   let idx: number = 0;
   const minKey: number = heap[0];

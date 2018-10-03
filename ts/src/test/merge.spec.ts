@@ -33,7 +33,10 @@ describe("merge", () => {
         const expectedPath: string = path.join(BENCHES_DIR, `${name}.json`);
         const expectedContent: string = await fs.promises.readFile(expectedPath, {encoding: "UTF-8"}) as string;
         const expected: ProcessCov = JSON.parse(expectedContent);
+        const startTime: number = Date.now();
         const actual: ProcessCov | undefined = mergeProcesses(inputs);
+        const endTime: number = Date.now();
+        console.error(`Time (${name}): ${(endTime - startTime) / 1000}`);
         chai.assert.deepEqual(actual, expected);
       });
     }
