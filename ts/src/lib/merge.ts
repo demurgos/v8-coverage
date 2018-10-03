@@ -187,11 +187,20 @@ function extendChildren(parentTrees: ReadonlyArray<RangeTree>): void {
     // Next open tree to end (can end during the current event)
     const nextOrCurEnd: number | undefined = openTrees.peekMin();
     // Next open tree to end (but not during the current event)
-    const nextEnd: number | undefined = nextOrCurEnd === event ? openTrees.peekNextMin() : nextOrCurEnd;
-    // Starting tree to end the last
-    let lateStart: RangeTree | undefined;
+    let nextEnd: number | undefined;
+    if (nextOrCurEnd === event) {
+      openTrees.popMin();
+      nextEnd = openTrees.peekMin();
+    } else {
+      nextEnd = nextOrCurEnd;
+    }
 
-    const startChildren: RangeTree[] = [];
+    // Starting tree to end the last
+    let maxStartingChild: RangeTree | undefined;
+    // Open tree to end the last
+    const lateOpen: RangeTree | undefined = openTrees.peekMax();
+
+    const startingChildren: [number, RangeTree][] = [];
     for (let parentIndex: number = 0; parentIndex < parentTrees.length; parentIndex++) {
       const childStack: RangeTree[] = childStacks[parentIndex];
       if (childStack.length === 0) {
@@ -202,50 +211,48 @@ function extendChildren(parentTrees: ReadonlyArray<RangeTree>): void {
         continue;
       }
       childStack.pop();
-      startChildren.push(child);
-      child.parentIndex = parentIndex;
-      if (nextEnd !== undefined && child.end > nextEnd) {
-        childStack.push(child.split(nextEnd));
-      }
-      if (lateStart === undefined || child.end > lateStart.end) {
-        lateStart = child;
+      if (lateOpen !== undefined) {
+        if (child.end > lateOpen.end) {
+          childStack.push(child.split(lateOpen.end));
+        }
+        let parentToNested: Map<number, RangeTree[]> | undefined = inclusionTree.get(lateOpen);
+        if (parentToNested === undefined) {
+          parentToNested = new Map();
+          inclusionTree.set(lateOpen, parentToNested);
+        }
+        let nested: RangeTree[] | undefined = parentToNested.get(parentIndex);
+        if (nested === undefined) {
+          nested = [];
+          parentToNested.set(parentIndex, nested);
+        }
+        nested.push(child);
+      } else {
+        startingChildren.push([parentIndex, child]);
+        if (maxStartingChild === undefined || child.end > maxStartingChild.end) {
+          maxStartingChild = child;
+        }
       }
     }
 
-    if (lateStart !== undefined) {
-      // Open tree to end the last (can end during the current event)
-      const lateOpen: RangeTree | undefined = openTrees.peekMax();
-
-      for (const startChild of startChildren) {
-        let superTree: RangeTree | undefined;
-        if (lateOpen !== undefined && startChild.end <= lateOpen.end) {
-          superTree = lateOpen;
-        } else if (startChild.end < lateStart.end) {
-          superTree = lateStart;
-        }
-        const parentIndex: number = startChild.parentIndex;
-        if (superTree !== undefined) {
-          let parentToNested: Map<number, RangeTree[]> | undefined = inclusionTree.get(superTree);
+    if (maxStartingChild !== undefined) {
+      for (const [parentIndex, child] of startingChildren) {
+        if (child.end < maxStartingChild.end) {
+          let parentToNested: Map<number, RangeTree[]> | undefined = inclusionTree.get(maxStartingChild);
           if (parentToNested === undefined) {
             parentToNested = new Map();
-            inclusionTree.set(superTree, parentToNested);
+            inclusionTree.set(maxStartingChild, parentToNested);
           }
           let nested: RangeTree[] | undefined = parentToNested.get(parentIndex);
           if (nested === undefined) {
             nested = [];
             parentToNested.set(parentIndex, nested);
           }
-          nested.push(startChild);
+          nested.push(child);
         } else {
-          flatChildren[parentIndex].push(startChild);
+          flatChildren[parentIndex].push(child);
         }
       }
-    }
-    if (nextOrCurEnd === event) {
-      openTrees.popMin();
-    }
-    for (const startChild of startChildren) {
-      openTrees.pushIfNew(startChild);
+      openTrees.pushIfNew(maxStartingChild);
     }
   }
   for (const [superTree, parentToNested] of inclusionTree) {

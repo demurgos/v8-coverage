@@ -38,6 +38,7 @@ describe("merge", () => {
         const endTime: number = Date.now();
         console.error(`Time (${name}): ${(endTime - startTime) / 1000}`);
         chai.assert.deepEqual(actual, expected);
+        console.error(`OK: ${name}`);
       });
     }
   });

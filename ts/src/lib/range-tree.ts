@@ -5,7 +5,7 @@ export class RangeTree {
   end: number;
   count: number;
   children: RangeTree[];
-  parentIndex: number;
+  private parentIndex: number;
   private lazyCount: number;
 
   constructor(
