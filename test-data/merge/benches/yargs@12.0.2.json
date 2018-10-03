@@ -7402,13 +7402,43 @@
             },
             {
               "startOffset": 3435,
-              "endOffset": 3428,
-              "count": 286
+              "endOffset": 3472,
+              "count": 269
             },
             {
               "startOffset": 3472,
-              "endOffset": 3428,
-              "count": 1596
+              "endOffset": 3609,
+              "count": 1579
+            },
+            {
+              "startOffset": 3472,
+              "endOffset": 3479,
+              "count": 0
+            },
+            {
+              "startOffset": 3479,
+              "endOffset": 3530,
+              "count": 568
+            },
+            {
+              "startOffset": 3530,
+              "endOffset": 3609,
+              "count": 0
+            },
+            {
+              "startOffset": 3609,
+              "endOffset": 3760,
+              "count": 664
+            },
+            {
+              "startOffset": 3727,
+              "endOffset": 3754,
+              "count": 2656
+            },
+            {
+              "startOffset": 3793,
+              "endOffset": 3821,
+              "count": 1371
             }
           ],
           "isBlockCoverage": true

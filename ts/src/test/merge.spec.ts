@@ -24,11 +24,12 @@ describe("merge", () => {
         this.timeout(BENCHES_TIMEOUT);
 
         const inputFileNames: string[] = await fs.promises.readdir(bench);
-        const inputs: ProcessCov[] = [];
+        const inputPromises: Promise<ProcessCov>[] = [];
         for (const inputFileName of inputFileNames) {
           const resolved: string = path.join(bench, inputFileName);
-          inputs.push(JSON.parse(await fs.promises.readFile(resolved, {encoding: "UTF-8"}) as string));
+          inputPromises.push(fs.promises.readFile(resolved).then(buffer => JSON.parse(buffer.toString("UTF-8"))));
         }
+        const inputs: ProcessCov[] = await Promise.all(inputPromises);
         const expectedPath: string = path.join(BENCHES_DIR, `${name}.json`);
         const expectedContent: string = await fs.promises.readFile(expectedPath, {encoding: "UTF-8"}) as string;
         const expected: ProcessCov = JSON.parse(expectedContent);

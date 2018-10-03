@@ -115,7 +115,7 @@ export class RangeTree {
    * @return RangeTree Right part
    */
   split(value: number): RangeTree {
-    let leftEnd: number = this.children.length;
+    let leftChildLen: number = this.children.length;
     let mid: RangeTree | undefined;
 
     // TODO(perf): Binary search (check overhead)
@@ -123,16 +123,16 @@ export class RangeTree {
       const child: RangeTree = this.children[i];
       if (child.start < value && value < child.end) {
         mid = child.split(value);
-        leftEnd = i + 1;
+        leftChildLen = i + 1;
         break;
       } else if (child.start >= value) {
-        leftEnd = i;
+        leftChildLen = i;
         break;
       }
     }
 
-    const rightLen: number = this.children.length - leftEnd;
-    const rightChildren: RangeTree[] = this.children.splice(leftEnd, rightLen);
+    const rightLen: number = this.children.length - leftChildLen;
+    const rightChildren: RangeTree[] = this.children.splice(leftChildLen, rightLen);
     if (mid !== undefined) {
       rightChildren.unshift(mid);
     }
