@@ -127,7 +127,7 @@ function mergeRangeTrees(trees: ReadonlyArray<RangeTree>): RangeTree | undefined
     count += tree.count;
   }
   const children: RangeTree[] = mergeRangeTreeChildren(trees);
-  return new RangeTree(first.start, first.end, count, children, 0, 0);
+  return new RangeTree(first.start, first.end, count, children, 0);
 }
 
 function mergeRangeTreeChildren(parentTrees: ReadonlyArray<RangeTree>): RangeTree[] {
@@ -257,7 +257,6 @@ function extendChildren(parentTrees: ReadonlyArray<RangeTree>): void {
         parentTrees[parentIndex].count,
         descendants,
         0,
-        parentIndex,
       );
       wrappedChildren[parentIndex].push(wrapper);
     }

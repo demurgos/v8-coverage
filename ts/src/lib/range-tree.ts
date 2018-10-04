@@ -5,7 +5,6 @@ export class RangeTree {
   end: number;
   count: number;
   children: RangeTree[];
-  private parentIndex: number;
   private lazyCount: number;
 
   constructor(
@@ -14,14 +13,12 @@ export class RangeTree {
     count: number,
     children: RangeTree[],
     lazyCount: number,
-    parentIndex: number,
   ) {
     this.start = start;
     this.end = end;
     this.count = count;
     this.children = children;
     this.lazyCount = lazyCount;
-    this.parentIndex = parentIndex;
   }
 
   /**
@@ -31,7 +28,7 @@ export class RangeTree {
     let root: RangeTree | undefined;
     const stack: RangeTree[] = [];
     for (const range of ranges) {
-      const node: RangeTree = new RangeTree(range.startOffset, range.endOffset, range.count, [], 0, 0);
+      const node: RangeTree = new RangeTree(range.startOffset, range.endOffset, range.count, [], 0);
       if (root === undefined) {
         root = node;
         stack.push(node);
@@ -142,7 +139,6 @@ export class RangeTree {
       this.count,
       rightChildren,
       this.lazyCount,
-      this.parentIndex,
     );
     this.end = value;
     return result;
