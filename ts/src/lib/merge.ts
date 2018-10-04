@@ -182,10 +182,26 @@ function extendChildren(parentTrees: ReadonlyArray<RangeTree>): void {
     wrappedChildren.push([]);
   }
 
-  const inclusionTree: Map<RangeTree, Map<number, RangeTree[]>> = new Map();
+  const parentToNested: Map<number, RangeTree[]> = new Map();
+
+  function finalizeWrapped() {
+    const superTree: RangeTree = openTree!;
+    for (const [parentIndex, nested] of parentToNested) {
+      const wrapper: RangeTree = new RangeTree(
+        superTree.start,
+        superTree.end,
+        parentTrees[parentIndex].count,
+        nested,
+        0,
+      );
+      wrappedChildren[parentIndex].push(wrapper);
+    }
+    parentToNested.clear();
+  }
 
   for (const event of events) {
     if (openTree !== undefined && openTree.end === event) {
+      finalizeWrapped();
       openTree = undefined;
     }
 
@@ -207,11 +223,6 @@ function extendChildren(parentTrees: ReadonlyArray<RangeTree>): void {
         if (child.end > openTree.end) {
           childStack.push(child.split(openTree.end));
         }
-        let parentToNested: Map<number, RangeTree[]> | undefined = inclusionTree.get(openTree);
-        if (parentToNested === undefined) {
-          parentToNested = new Map();
-          inclusionTree.set(openTree, parentToNested);
-        }
         let nested: RangeTree[] | undefined = parentToNested.get(parentIndex);
         if (nested === undefined) {
           nested = [];
@@ -229,11 +240,6 @@ function extendChildren(parentTrees: ReadonlyArray<RangeTree>): void {
     if (maxStartingChild !== undefined) {
       for (const [parentIndex, child] of startingChildren) {
         if (child.end < maxStartingChild.end) {
-          let parentToNested: Map<number, RangeTree[]> | undefined = inclusionTree.get(maxStartingChild);
-          if (parentToNested === undefined) {
-            parentToNested = new Map();
-            inclusionTree.set(maxStartingChild, parentToNested);
-          }
           let nested: RangeTree[] | undefined = parentToNested.get(parentIndex);
           if (nested === undefined) {
             nested = [];
@@ -247,18 +253,6 @@ function extendChildren(parentTrees: ReadonlyArray<RangeTree>): void {
       if (openTree === undefined || maxStartingChild.end > openTree.end) {
         openTree = maxStartingChild;
       }
-    }
-  }
-  for (const [superTree, parentToNested] of inclusionTree) {
-    for (const [parentIndex, descendants] of parentToNested) {
-      const wrapper: RangeTree = new RangeTree(
-        superTree.start,
-        superTree.end,
-        parentTrees[parentIndex].count,
-        descendants,
-        0,
-      );
-      wrappedChildren[parentIndex].push(wrapper);
     }
   }
   for (let parentIndex: number = 0; parentIndex < parentTrees.length; parentIndex++) {

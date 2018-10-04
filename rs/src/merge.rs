@@ -7,7 +7,6 @@ use std::cell::Ref;
 use std::cell::RefCell;
 use std::collections::BTreeSet;
 use std::collections::HashMap;
-use std::hash::Hash;
 use std::rc::Rc;
 
 pub fn merge_processes(processes: &Vec<ProcessCov>) -> Option<ProcessCov> {
@@ -125,13 +124,47 @@ fn merge_range_tree_children(trees: &Vec<RangeTreeRef>) -> Vec<RangeTreeRef> {
 
   let events: BTreeSet<usize> = get_child_events(trees);
 
-  let _inclusion_tree: HashMap<RefEquality<&RangeTree>, HashMap<usize, Vec<RangeTree>>> = HashMap::new();
+  let mut parent_to_nested: HashMap<usize, Vec<RangeTreeRef>> = HashMap::new();
 
   for event in events {
-    open_tree = open_tree.filter(|open_tree| open_tree.borrow().end != event);
+    open_tree = if let Some(open_tree) = open_tree {
+      if open_tree.borrow().end == event {
+        for (parent_idx, nested) in parent_to_nested {
+          wrapped_children[parent_idx].push(Rc::new(RefCell::new(RangeTree::new(
+            open_tree.borrow().start,
+            open_tree.borrow().end,
+            trees[parent_idx].borrow().count,
+            nested,
+          ))));
+        }
+        parent_to_nested = HashMap::new();
+        None
+      } else {
+        Some(open_tree)
+      }
+    } else {
+      None
+    };
 
     match open_tree {
-      Some(ref _open_tree) => {}
+      Some(ref open_tree) => {
+        let open_tree_end: usize = open_tree.borrow().end;
+        for (parent_idx, child_stack) in child_stacks.iter_mut().enumerate() {
+          let is_starting = match child_stack.last() {
+            Some(child) => child.borrow().start == event,
+            None => false,
+          };
+          if !is_starting {
+            continue;
+          }
+          let mut child = child_stack.pop().unwrap();
+          if child.borrow().end > open_tree_end {
+            child_stack.push(child.borrow_mut().split(open_tree_end))
+          }
+          let mut nested = parent_to_nested.entry(parent_idx).or_insert(Vec::new());
+          nested.push(child);
+        }
+      }
       None => {
         let mut starting_children: Vec<(usize, RangeTreeRef)> = Vec::new();
         let mut max_starting_child: Option<RangeTreeRef> = None;
@@ -164,7 +197,8 @@ fn merge_range_tree_children(trees: &Vec<RangeTreeRef>) -> Vec<RangeTreeRef> {
               flat_children[parent_idx].push(child);
               continue;
             }
-            // ...
+            let mut nested = parent_to_nested.entry(parent_idx).or_insert(Vec::new());
+            nested.push(child);
           }
           open_tree = Some(max_starting_child)
         }
@@ -192,6 +226,8 @@ fn merge_range_tree_children(trees: &Vec<RangeTreeRef>) -> Vec<RangeTreeRef> {
         } else {
           parent_counts += trees[parent_idx].borrow().count;
         }
+      } else {
+        parent_counts += trees[parent_idx].borrow().count;
       }
     }
     if let Some(merged) = merge_range_trees(&matching_trees) {
@@ -206,31 +242,14 @@ fn merge_range_tree_children(trees: &Vec<RangeTreeRef>) -> Vec<RangeTreeRef> {
   result
 }
 
-struct RefEquality<'a, T: 'a> (&'a T);
-
-impl<'a, T> ::std::hash::Hash for RefEquality<'a, T> {
-  fn hash<H>(&self, state: &mut H)
-    where
-      H: ::std::hash::Hasher,
-  {
-    (self.0 as *const T).hash(state)
-  }
-}
-
-impl<'a, 'b, T> PartialEq<RefEquality<'b, T>> for RefEquality<'a, T> {
-  fn eq(&self, other: &RefEquality<T>) -> bool {
-    self.0 as *const T == other.0 as *const T
-  }
-}
-
-impl<'a, T> Eq for RefEquality<'a, T> {}
-
 fn get_child_events(trees: &Vec<RangeTreeRef>) -> BTreeSet<usize> {
   let mut event_set: BTreeSet<usize> = BTreeSet::new();
   for tree in trees {
     for child in &tree.borrow().children {
-      event_set.insert(child.borrow().start);
-      event_set.insert(child.borrow().end);
+      let start: usize = child.borrow().start;
+      let end: usize = child.borrow().end;
+      event_set.insert(start);
+      event_set.insert(end);
     }
   }
   event_set
@@ -287,13 +306,201 @@ fn merge_children_lists(a: Vec<RangeTreeRef>, b: Vec<RangeTreeRef>) -> Vec<Range
 
 #[cfg(test)]
 mod tests {
+  use coverage::FunctionCov;
   use coverage::ProcessCov;
+  use coverage::RangeCov;
+  use coverage::ScriptCov;
   use super::merge_processes;
 
   #[test]
   fn empty() {
     let inputs: Vec<ProcessCov> = Vec::new();
     let expected: Option<ProcessCov> = None;
+
+    assert_eq!(merge_processes(&inputs), expected);
+  }
+
+  #[test]
+  fn two_flat_trees() {
+    let inputs: Vec<ProcessCov> = vec![
+      ProcessCov {
+        result: vec![
+          ScriptCov {
+            script_id: String::from("1"),
+            url: String::from("/lib.js"),
+            functions: vec![
+              FunctionCov {
+                function_name: String::from("lib"),
+                is_block_coverage: true,
+                ranges: vec![
+                  RangeCov { start_offset: 0, end_offset: 9, count: 1 },
+                ],
+              }
+            ],
+          }
+        ]
+      },
+      ProcessCov {
+        result: vec![
+          ScriptCov {
+            script_id: String::from("1"),
+            url: String::from("/lib.js"),
+            functions: vec![
+              FunctionCov {
+                function_name: String::from("lib"),
+                is_block_coverage: true,
+                ranges: vec![
+                  RangeCov { start_offset: 0, end_offset: 9, count: 2 },
+                ],
+              }
+            ],
+          }
+        ]
+      }
+    ];
+    let expected: Option<ProcessCov> = Some(ProcessCov {
+      result: vec![
+        ScriptCov {
+          script_id: String::from("1"),
+          url: String::from("/lib.js"),
+          functions: vec![
+            FunctionCov {
+              function_name: String::from("lib"),
+              is_block_coverage: true,
+              ranges: vec![
+                RangeCov { start_offset: 0, end_offset: 9, count: 3 },
+              ],
+            }
+          ],
+        }
+      ]
+    });
+
+    assert_eq!(merge_processes(&inputs), expected);
+  }
+
+  #[test]
+  fn two_trees_with_matching_children() {
+    let inputs: Vec<ProcessCov> = vec![
+      ProcessCov {
+        result: vec![
+          ScriptCov {
+            script_id: String::from("1"),
+            url: String::from("/lib.js"),
+            functions: vec![
+              FunctionCov {
+                function_name: String::from("lib"),
+                is_block_coverage: true,
+                ranges: vec![
+                  RangeCov { start_offset: 0, end_offset: 9, count: 10 },
+                  RangeCov { start_offset: 3, end_offset: 6, count: 1 },
+                ],
+              }
+            ],
+          }
+        ]
+      },
+      ProcessCov {
+        result: vec![
+          ScriptCov {
+            script_id: String::from("1"),
+            url: String::from("/lib.js"),
+            functions: vec![
+              FunctionCov {
+                function_name: String::from("lib"),
+                is_block_coverage: true,
+                ranges: vec![
+                  RangeCov { start_offset: 0, end_offset: 9, count: 20 },
+                  RangeCov { start_offset: 3, end_offset: 6, count: 2 },
+                ],
+              }
+            ],
+          }
+        ]
+      }
+    ];
+    let expected: Option<ProcessCov> = Some(ProcessCov {
+      result: vec![
+        ScriptCov {
+          script_id: String::from("1"),
+          url: String::from("/lib.js"),
+          functions: vec![
+            FunctionCov {
+              function_name: String::from("lib"),
+              is_block_coverage: true,
+              ranges: vec![
+                RangeCov { start_offset: 0, end_offset: 9, count: 30 },
+                RangeCov { start_offset: 3, end_offset: 6, count: 3 },
+              ],
+            }
+          ],
+        }
+      ]
+    });
+
+    assert_eq!(merge_processes(&inputs), expected);
+  }
+
+  #[test]
+  fn two_trees_with_partially_overlapping_children() {
+    let inputs: Vec<ProcessCov> = vec![
+      ProcessCov {
+        result: vec![
+          ScriptCov {
+            script_id: String::from("1"),
+            url: String::from("/lib.js"),
+            functions: vec![
+              FunctionCov {
+                function_name: String::from("lib"),
+                is_block_coverage: true,
+                ranges: vec![
+                  RangeCov { start_offset: 0, end_offset: 9, count: 10 },
+                  RangeCov { start_offset: 2, end_offset: 5, count: 1 },
+                ],
+              }
+            ],
+          }
+        ]
+      },
+      ProcessCov {
+        result: vec![
+          ScriptCov {
+            script_id: String::from("1"),
+            url: String::from("/lib.js"),
+            functions: vec![
+              FunctionCov {
+                function_name: String::from("lib"),
+                is_block_coverage: true,
+                ranges: vec![
+                  RangeCov { start_offset: 0, end_offset: 9, count: 20 },
+                  RangeCov { start_offset: 4, end_offset: 7, count: 2 },
+                ],
+              }
+            ],
+          }
+        ]
+      }
+    ];
+    let expected: Option<ProcessCov> = Some(ProcessCov {
+      result: vec![
+        ScriptCov {
+          script_id: String::from("1"),
+          url: String::from("/lib.js"),
+          functions: vec![
+            FunctionCov {
+              function_name: String::from("lib"),
+              is_block_coverage: true,
+              ranges: vec![
+                RangeCov { start_offset: 0, end_offset: 9, count: 30 },
+                RangeCov { start_offset: 2, end_offset: 5, count: 21 },
+                RangeCov { start_offset: 4, end_offset: 5, count: 3 },
+                RangeCov { start_offset: 5, end_offset: 7, count: 12 },
+              ],
+            }
+          ],
+        }
+      ]
+    });
 
     assert_eq!(merge_processes(&inputs), expected);
   }
