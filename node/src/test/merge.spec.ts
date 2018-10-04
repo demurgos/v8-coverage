@@ -17,7 +17,7 @@ interface MergeRangeItem {
 }
 
 describe("merge", () => {
-  describe.skip("benches", () => {
+  describe("benches", () => {
     for (const bench of getBenches()) {
       const name: string = path.basename(bench);
       it(name, async function (this: Mocha.Context) {

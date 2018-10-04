@@ -505,8 +505,74 @@ mod tests {
 //    assert_eq!(merge_processes(&inputs), expected);
 //  }
 
+//  #[test]
+//  fn two_trees_with_with_complementary_children_summing_to_the_same_count() {
+//    let inputs: Vec<ProcessCov> = vec![
+//      ProcessCov {
+//        result: vec![
+//          ScriptCov {
+//            script_id: String::from("1"),
+//            url: String::from("/lib.js"),
+//            functions: vec![
+//              FunctionCov {
+//                function_name: String::from("lib"),
+//                is_block_coverage: true,
+//                ranges: vec![
+//                  RangeCov { start_offset: 0, end_offset: 9, count: 1 },
+//                  RangeCov { start_offset: 1, end_offset: 8, count: 6 },
+//                  RangeCov { start_offset: 1, end_offset: 5, count: 5 },
+//                  RangeCov { start_offset: 5, end_offset: 8, count: 7 },
+//                ],
+//              }
+//            ],
+//          }
+//        ]
+//      },
+//      ProcessCov {
+//        result: vec![
+//          ScriptCov {
+//            script_id: String::from("1"),
+//            url: String::from("/lib.js"),
+//            functions: vec![
+//              FunctionCov {
+//                function_name: String::from("lib"),
+//                is_block_coverage: true,
+//                ranges: vec![
+//                  RangeCov { start_offset: 0, end_offset: 9, count: 4 },
+//                  RangeCov { start_offset: 1, end_offset: 8, count: 8 },
+//                  RangeCov { start_offset: 1, end_offset: 5, count: 9 },
+//                  RangeCov { start_offset: 5, end_offset: 8, count: 7 },
+//                ],
+//              }
+//            ],
+//          }
+//        ]
+//      }
+//    ];
+//    let expected: Option<ProcessCov> = Some(ProcessCov {
+//      result: vec![
+//        ScriptCov {
+//          script_id: String::from("1"),
+//          url: String::from("/lib.js"),
+//          functions: vec![
+//            FunctionCov {
+//              function_name: String::from("lib"),
+//              is_block_coverage: true,
+//              ranges: vec![
+//                RangeCov { start_offset: 0, end_offset: 9, count: 5 },
+//                RangeCov { start_offset: 1, end_offset: 8, count: 14 },
+//              ],
+//            }
+//          ],
+//        }
+//      ]
+//    });
+//
+//    assert_eq!(merge_processes(&inputs), expected);
+//  }
+
   #[test]
-  fn two_trees_with_with_complementary_children_summing_to_the_same_count() {
+  fn merges_a_similar_sliding_chain_a_bc() {
     let inputs: Vec<ProcessCov> = vec![
       ProcessCov {
         result: vec![
@@ -518,10 +584,8 @@ mod tests {
                 function_name: String::from("lib"),
                 is_block_coverage: true,
                 ranges: vec![
-                  RangeCov { start_offset: 0, end_offset: 9, count: 1 },
-                  RangeCov { start_offset: 1, end_offset: 8, count: 6 },
-                  RangeCov { start_offset: 1, end_offset: 5, count: 5 },
-                  RangeCov { start_offset: 5, end_offset: 8, count: 7 },
+                  RangeCov { start_offset: 0, end_offset: 7, count: 10 },
+                  RangeCov { start_offset: 0, end_offset: 4, count: 1 },
                 ],
               }
             ],
@@ -538,10 +602,9 @@ mod tests {
                 function_name: String::from("lib"),
                 is_block_coverage: true,
                 ranges: vec![
-                  RangeCov { start_offset: 0, end_offset: 9, count: 4 },
-                  RangeCov { start_offset: 1, end_offset: 8, count: 8 },
-                  RangeCov { start_offset: 1, end_offset: 5, count: 9 },
-                  RangeCov { start_offset: 5, end_offset: 8, count: 7 },
+                  RangeCov { start_offset: 0, end_offset: 7, count: 20 },
+                  RangeCov { start_offset: 1, end_offset: 6, count: 11 },
+                  RangeCov { start_offset: 2, end_offset: 5, count: 2 },
                 ],
               }
             ],
@@ -559,8 +622,10 @@ mod tests {
               function_name: String::from("lib"),
               is_block_coverage: true,
               ranges: vec![
-                RangeCov { start_offset: 0, end_offset: 9, count: 5 },
-                RangeCov { start_offset: 1, end_offset: 8, count: 14 },
+                RangeCov { start_offset: 0, end_offset: 7, count: 30 },
+                RangeCov { start_offset: 0, end_offset: 6, count: 21 },
+                RangeCov { start_offset: 1, end_offset: 5, count: 12 },
+                RangeCov { start_offset: 2, end_offset: 4, count: 3 },
               ],
             }
           ],

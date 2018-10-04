@@ -106,7 +106,7 @@ function generateNeonTask(nodeFile: string, release: boolean): gulp.TaskFunction
 
 const libBuildNeon: gulp.TaskFunction = generateNeonTask("build/lib/native/index.node", true);
 const libDistNeon: gulp.TaskFunction = generateNeonTask("dist/lib/native/index.node", true);
-const testBuildNeon: gulp.TaskFunction = generateNeonTask("build/test/lib/native/index.node", false);
+const testBuildNeon: gulp.TaskFunction = generateNeonTask("build/test/lib/native/index.node", true);
 const testBuild: gulp.TaskFunction = gulp.parallel(testTasks.build, testBuildNeon);
 const libDist: gulp.TaskFunction = gulp.parallel(libTasks.dist, libDistNeon);
 const npmPublishTask: gulp.TaskFunction = async () => {

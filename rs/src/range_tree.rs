@@ -29,7 +29,7 @@ impl RangeTree {
       let mut child = child.borrow_mut();
       if child.start < value && value < child.end {
         mid = Some(child.split(value));
-        left_child_len = i + i;
+        left_child_len = i + 1;
         break;
       } else if child.start >= value {
         left_child_len = i;
