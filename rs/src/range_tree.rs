@@ -1,5 +1,4 @@
 use coverage::RangeCov;
-use std::cell::Ref;
 use std::cell::RefCell;
 use std::rc::Rc;
 
@@ -53,6 +52,13 @@ impl RangeTree {
       count: self.count,
       children: right_children,
     }))
+  }
+
+  pub fn add_count(&mut self, value: i64) -> () {
+    self.count += value;
+    for child in &self.children {
+      child.borrow_mut().add_count(value);
+    }
   }
 
   pub fn to_ranges(&self) -> Vec<RangeCov> {

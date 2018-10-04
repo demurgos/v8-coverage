@@ -4,10 +4,10 @@ use coverage::ScriptCov;
 use range_tree::RangeTree;
 use range_tree::RangeTreeRef;
 use std::cell::Ref;
+use std::cell::RefCell;
 use std::collections::BTreeSet;
 use std::collections::HashMap;
 use std::hash::Hash;
-use std::ops::Deref;
 use std::rc::Rc;
 
 pub fn merge_processes(processes: &Vec<ProcessCov>) -> Option<ProcessCov> {
@@ -111,7 +111,7 @@ fn merge_range_tree_children(trees: &Vec<RangeTreeRef>) -> Vec<RangeTreeRef> {
   let mut child_stacks: Vec<Vec<RangeTreeRef>> = Vec::new();
   let mut flat_children: Vec<Vec<RangeTreeRef>> = Vec::new();
   let mut wrapped_children: Vec<Vec<RangeTreeRef>> = Vec::new();
-  let mut open_tree: Option<&RangeTree> = None;
+  let mut open_tree: Option<RangeTreeRef> = None;
 
   for tree in trees {
     let mut child_stack: Vec<RangeTreeRef> = Vec::new();
@@ -128,76 +128,82 @@ fn merge_range_tree_children(trees: &Vec<RangeTreeRef>) -> Vec<RangeTreeRef> {
   let _inclusion_tree: HashMap<RefEquality<&RangeTree>, HashMap<usize, Vec<RangeTree>>> = HashMap::new();
 
   for event in events {
-    if open_tree.map(|open_tree| open_tree.end) == Some(event) {
-      open_tree = None;
-    }
+    open_tree = open_tree.filter(|open_tree| open_tree.borrow().end != event);
 
     match open_tree {
-      Some(ref open_tree) => {}
+      Some(ref _open_tree) => {}
       None => {
-        for (parent_idx, child_stack) in child_stacks.iter_mut().enumerate() {
-          let child_opt: Option<&RangeTreeRef> = child_stack.last();
-          let child: RangeTreeRef = match child_opt {
-            None => continue,
-            Some(ref child) => if child.borrow().start == event { Rc::clone(child) } else { continue; },
-          };
+        let mut starting_children: Vec<(usize, RangeTreeRef)> = Vec::new();
+        let mut max_starting_child: Option<RangeTreeRef> = None;
 
-//          let child_stack = &mut child_stacks[parent_idx];
-//          if let Some(last) = child_stack.last().map(Rc::clone) {
-////            let mut child_opt: Option<Rc<RangeTree>> = if last.end == event {
-////              child_stack.pop();
-////              child_stack.last().map(Rc::clone)
-////            } else {
-////              Some(last)
-////            };
-////            if let Some(ref mut child) = child_opt {
-//////          {
-//////            Rc::get_mut(child).unwrap().parent_index.set(parent_idx);
-//////          }
-//////              starting_children.push(Rc::clone(child))
-////            }
-//          }
+        for (parent_idx, child_stack) in child_stacks.iter_mut().enumerate() {
+          let is_starting = match child_stack.last() {
+            Some(child) => child.borrow().start == event,
+            None => false,
+          };
+          if !is_starting {
+            continue;
+          }
+          let child = child_stack.pop().unwrap();
+          max_starting_child = match max_starting_child {
+            Some(cur_max) => {
+              if child.borrow().end > cur_max.borrow().end {
+                Some(Rc::clone(&child))
+              } else {
+                Some(cur_max)
+              }
+            }
+            None => Some(Rc::clone(&child)),
+          };
+          starting_children.push((parent_idx, child));
+        }
+
+        if let Some(max_starting_child) = max_starting_child {
+          for (parent_idx, child) in starting_children {
+            if child.borrow().end == max_starting_child.borrow().end {
+              flat_children[parent_idx].push(child);
+              continue;
+            }
+            // ...
+          }
+          open_tree = Some(max_starting_child)
         }
       }
     }
-
-//    let mut max_starting_tree: Option<&RangeTree> = None;
-//
-//    let mut starting_children: Vec<Rc<RangeTree>> = Vec::new();
-//    for (parent_idx, parent) in trees.iter().enumerate() {
-//      let child_stack = &mut child_stacks[parent_idx];
-//      if let Some(last) = child_stack.last().map(Rc::clone) {
-//        let mut child_opt: Option<Rc<RangeTree>> = if last.end == event {
-//          child_stack.pop();
-//          child_stack.last().map(Rc::clone)
-//        } else {
-//          Some(last)
-//        };
-//        if let Some(ref mut child) = child_opt {
-////          {
-////            Rc::get_mut(child).unwrap().parent_index.set(parent_idx);
-////          }
-//          starting_children.push(Rc::clone(child))
-//        }
-//      }
-//    }
-//
-//    let next_or_cur_end: Option<usize> = open_trees.peek_min();
-//
-//    if !starting_children.is_empty() {
-//      let next_end: Option<usize> = if next_or_cur_end == Some(event) { open_trees.peek_next_min() } else { next_or_cur_end };
-//      let late_open: Option<Rc<RangeTree>> = open_trees.peek_max();
-//      for starting_child in starting_children.iter_mut() {
-//        if let Some(next_end) = next_end {
-//          if starting_child.end > next_end {
-//            let right: Rc<RangeTree> = Rc::get_mut(starting_child).unwrap().split(next_end);
-//          }
-//        }
-//      }
-//    }
   }
 
-  Vec::new()
+  let child_forests: Vec<Vec<RangeTreeRef>> = flat_children.into_iter()
+    .zip(wrapped_children.into_iter())
+    .map(|(flat, wrapped)| merge_children_lists(flat, wrapped))
+    .collect();
+
+  let events = get_child_events_from_forests(&child_forests);
+  let mut next_tree_indexes: Vec<usize> = vec![0; trees.len()];
+  let mut result: Vec<RangeTreeRef> = Vec::new();
+  for event in events.iter() {
+    let mut matching_trees: Vec<RangeTreeRef> = Vec::new();
+    let mut parent_counts: i64 = 0;
+    for (parent_idx, next_tree_index) in next_tree_indexes.iter_mut().enumerate() {
+      let next_tree: Option<&RangeTreeRef> = child_forests[parent_idx].get(*next_tree_index);
+      if let Some(next_tree) = next_tree {
+        if next_tree.borrow().start == *event {
+          *next_tree_index += 1;
+          matching_trees.push(Rc::clone(next_tree));
+        } else {
+          parent_counts += trees[parent_idx].borrow().count;
+        }
+      }
+    }
+    if let Some(merged) = merge_range_trees(&matching_trees) {
+      let merged: RangeTreeRef = Rc::new(RefCell::new(merged));
+      if parent_counts != 0 {
+        merged.borrow_mut().add_count(parent_counts);
+      }
+      result.push(merged);
+    }
+  }
+
+  result
 }
 
 struct RefEquality<'a, T: 'a> (&'a T);
@@ -230,10 +236,21 @@ fn get_child_events(trees: &Vec<RangeTreeRef>) -> BTreeSet<usize> {
   event_set
 }
 
+fn get_child_events_from_forests(forests: &Vec<Vec<RangeTreeRef>>) -> BTreeSet<usize> {
+  let mut event_set: BTreeSet<usize> = BTreeSet::new();
+  for forest in forests {
+    for tree in forest {
+      event_set.insert(tree.borrow().start);
+      event_set.insert(tree.borrow().end);
+    }
+  }
+  event_set
+}
+
 // TODO: itertools?
 // https://play.integer32.com/?gist=ad2cd20d628e647a5dbdd82e68a15cb6&version=stable&mode=debug&edition=2015
-fn merge_children_lists<T>(a: Vec<T>, b: Vec<T>) -> Vec<T> where T: Deref<Target=RangeTree> {
-  let mut merged: Vec<T> = Vec::new();
+fn merge_children_lists(a: Vec<RangeTreeRef>, b: Vec<RangeTreeRef>) -> Vec<RangeTreeRef> {
+  let mut merged: Vec<RangeTreeRef> = Vec::new();
   let mut a = a.into_iter();
   let mut b = b.into_iter();
   let mut next_a = a.next();
@@ -241,7 +258,7 @@ fn merge_children_lists<T>(a: Vec<T>, b: Vec<T>) -> Vec<T> where T: Deref<Target
   loop {
     match (next_a, next_b) {
       (Some(tree_a), Some(tree_b)) => {
-        if tree_a.start < tree_b.start {
+        if tree_a.borrow().start < tree_b.borrow().start {
           merged.push(tree_a);
           next_a = a.next();
           next_b = Some(tree_b);
