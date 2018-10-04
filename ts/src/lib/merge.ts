@@ -165,10 +165,11 @@ function extendChildren(parentTrees: ReadonlyArray<RangeTree>): void {
   const events: number[] = getChildEvents(parentTrees);
 
   // For each end, contains the tree starting the earlier (if is is currently open)
-  const openTrees: OpenTreeQueue = new OpenTreeQueue();
+  // const openTrees: OpenTreeQueue = new OpenTreeQueue();
   const childStacks: RangeTree[][] = [];
   const flatChildren: RangeTree[][] = [];
   const wrappedChildren: RangeTree[][] = [];
+  let openTree: RangeTree | undefined;
   // tslint:disable-next-line:prefer-for-of
   for (let i: number = 0; i < parentTrees.length; i++) {
     const children: RangeTree[] = parentTrees[i].children;
@@ -184,21 +185,12 @@ function extendChildren(parentTrees: ReadonlyArray<RangeTree>): void {
   const inclusionTree: Map<RangeTree, Map<number, RangeTree[]>> = new Map();
 
   for (const event of events) {
-    // Next open tree to end (can end during the current event)
-    const nextOrCurEnd: number | undefined = openTrees.peekMin();
-    // Next open tree to end (but not during the current event)
-    let nextEnd: number | undefined;
-    if (nextOrCurEnd === event) {
-      openTrees.popMin();
-      nextEnd = openTrees.peekMin();
-    } else {
-      nextEnd = nextOrCurEnd;
+    if (openTree !== undefined && openTree.end === event) {
+      openTree = undefined;
     }
 
     // Starting tree to end the last
     let maxStartingChild: RangeTree | undefined;
-    // Open tree to end the last
-    const lateOpen: RangeTree | undefined = openTrees.peekMax();
 
     const startingChildren: [number, RangeTree][] = [];
     for (let parentIndex: number = 0; parentIndex < parentTrees.length; parentIndex++) {
@@ -211,14 +203,14 @@ function extendChildren(parentTrees: ReadonlyArray<RangeTree>): void {
         continue;
       }
       childStack.pop();
-      if (lateOpen !== undefined) {
-        if (child.end > lateOpen.end) {
-          childStack.push(child.split(lateOpen.end));
+      if (openTree !== undefined) {
+        if (child.end > openTree.end) {
+          childStack.push(child.split(openTree.end));
         }
-        let parentToNested: Map<number, RangeTree[]> | undefined = inclusionTree.get(lateOpen);
+        let parentToNested: Map<number, RangeTree[]> | undefined = inclusionTree.get(openTree);
         if (parentToNested === undefined) {
           parentToNested = new Map();
-          inclusionTree.set(lateOpen, parentToNested);
+          inclusionTree.set(openTree, parentToNested);
         }
         let nested: RangeTree[] | undefined = parentToNested.get(parentIndex);
         if (nested === undefined) {
@@ -252,7 +244,9 @@ function extendChildren(parentTrees: ReadonlyArray<RangeTree>): void {
           flatChildren[parentIndex].push(child);
         }
       }
-      openTrees.pushIfNew(maxStartingChild);
+      if (openTree === undefined || maxStartingChild.end > openTree.end) {
+        openTree = maxStartingChild;
+      }
     }
   }
   for (const [superTree, parentToNested] of inclusionTree) {
@@ -312,116 +306,4 @@ function getChildEvents(trees: Iterable<RangeTree>): number[] {
 
 function compareNumbers(a: number, b: number): number {
   return a - b;
-}
-
-/**
- * Min heap of `RangeTree`, ordered by `end`.
- */
-class OpenTreeQueue {
-  private minHeap: number[];
-  private max: RangeTree | undefined;
-  private keys: Set<number>;
-
-  constructor() {
-    this.minHeap = [];
-    this.max = undefined;
-    this.keys = new Set();
-  }
-
-  pushIfNew(tree: RangeTree): void {
-    const end: number = tree.end;
-    if (this.keys.has(end)) {
-      return;
-    }
-    this.keys.add(end);
-    minHeapPush(this.minHeap, end);
-    if (this.max === undefined || end > this.max.end) {
-      this.max = tree;
-    }
-  }
-
-  peekMax(): RangeTree | undefined {
-    return this.max;
-  }
-
-  peekMin(): number | undefined {
-    return this.minHeap.length > 0 ? this.minHeap[0] : undefined;
-  }
-
-  peekNextMin(): number | undefined {
-    if (this.minHeap.length > 2) {
-      return Math.min(this.minHeap[1], this.minHeap[2]);
-    } else {
-      return this.minHeap.length > 1 ? this.minHeap[1] : undefined;
-    }
-  }
-
-  popMin(): void {
-    const minKey: number | undefined = minHeapPop(this.minHeap);
-    if (minKey !== undefined) {
-      this.keys.delete(minKey);
-      if (this.minHeap.length === 0) {
-        this.max = undefined;
-      }
-    }
-  }
-}
-
-/**
- * Inserts a key to the binary min-heap.
- *
- * @param heap Binary min-heap
- * @param key Key to push
- */
-function minHeapPush(heap: number[], key: number): void {
-  let idx: number = heap.length;
-  heap.push(key);
-  while (idx > 0) {
-    const parentIdx: number = Math.floor((idx - 1) / 2);
-    const parentKey: number = heap[parentIdx];
-    if (parentKey <= key) {
-      break;
-    }
-    heap[parentIdx] = key;
-    heap[idx] = parentKey;
-    idx = parentIdx;
-  }
-}
-
-function minHeapPop(heap: number[]): number | undefined {
-  if (heap.length <= 1) {
-    return heap.length > 0 ? heap.pop() : undefined;
-  }
-  let idx: number = 0;
-  const minKey: number = heap[0];
-  const heapLen: number = heap.length;
-  while (true) {
-    const leftIdx: number = 2 * idx + 1;
-    if (leftIdx >= heapLen) {
-      break;
-    }
-    const leftKey: number = heap[leftIdx];
-    const rightIdx: number = leftIdx + 1;
-    if (rightIdx >= heapLen) {
-      heap[idx] = leftKey;
-      heap[leftIdx] = minKey;
-      idx = leftIdx;
-      break;
-    }
-    const rightKey: number = heap[rightIdx];
-    if (leftKey < rightKey) {
-      heap[idx] = leftKey;
-      heap[leftIdx] = minKey;
-      idx = leftIdx;
-    } else {
-      heap[idx] = rightKey;
-      heap[rightIdx] = minKey;
-      idx = rightIdx;
-    }
-  }
-  if (idx !== heapLen - 1) {
-    heap[idx] = heap[heapLen - 1];
-    heap[heapLen - 1] = minKey;
-  }
-  return heap.pop();
 }
