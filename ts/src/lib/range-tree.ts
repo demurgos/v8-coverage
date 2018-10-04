@@ -84,7 +84,6 @@ export class RangeTree {
         this.count = child.count;
         this.children = child.children;
         // `.lazyCount` is zero for both (both are after normalization)
-        // `.parentIndex` is irrelevant
         return;
       }
     }

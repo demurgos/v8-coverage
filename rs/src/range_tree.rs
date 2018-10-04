@@ -54,6 +54,73 @@ impl RangeTree {
     }))
   }
 
+  pub fn normalize(&mut self) -> () {
+    let mut children: Vec<RangeTreeRef> = Vec::new();
+    let mut cur_end: usize = 0;
+    let mut head: Option<RangeTreeRef> = None;
+    let mut tail: Vec<RangeTreeRef> = Vec::new();
+    for child in self.children.iter_mut() {
+      head = match head {
+        None => {
+          Some(Rc::clone(child))
+        }
+        Some(head) => {
+          if child.borrow().count == head.borrow().count && child.borrow().start == cur_end {
+            tail.push(Rc::clone(child));
+            Some(head)
+          } else {
+            {
+              {
+                let mut head = head.borrow_mut();
+                if tail.len() > 0 {
+                  head.end = tail.last().unwrap().borrow().end;
+                  for tail_tree in tail.iter() {
+                    for sub_child in tail_tree.borrow().children.iter() {
+                      head.children.push(Rc::clone(sub_child));
+                    }
+                  }
+                  tail.clear();
+                }
+                head.normalize();
+              }
+              children.push(head)
+            }
+            Some(Rc::clone(child))
+          }
+        }
+      };
+      cur_end = child.borrow().end;
+    }
+    if let Some(head) = head {
+      {
+        let mut head = head.borrow_mut();
+        if !tail.is_empty() {
+          head.end = tail.last().unwrap().borrow().end;
+          for tail_tree in tail.iter() {
+            for sub_child in tail_tree.borrow().children.iter() {
+              head.children.push(Rc::clone(sub_child));
+            }
+          }
+          tail.clear();
+        }
+        head.normalize();
+      }
+      children.push(head)
+    }
+
+    if children.len() == 1 {
+      let child = children[0].borrow();
+      if child.start == self.start && child.end == self.end {
+        self.count = child.count;
+        self.children.clear();
+        self.children.extend(child.children.iter().map(Rc::clone));
+        return;
+      }
+    }
+
+    self.children = children;
+  }
+
   pub fn add_count(&mut self, value: i64) -> () {
     self.count += value;
     for child in &self.children {
