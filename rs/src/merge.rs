@@ -5,6 +5,7 @@ use range_tree::RangeTree;
 use range_tree::RangeTreeRef;
 use std::cell::Ref;
 use std::cell::RefCell;
+use std::collections::BTreeMap;
 use std::collections::BTreeSet;
 use std::collections::HashMap;
 use std::rc::Rc;
@@ -15,21 +16,22 @@ pub fn merge_processes(processes: &Vec<ProcessCov>) -> Option<ProcessCov> {
     1 => return Some(processes[0].clone()),
     _ => {}
   }
-  let mut url_to_scripts: HashMap<String, Vec<ScriptCov>> = HashMap::new();
+  let mut url_to_scripts: BTreeMap<String, Vec<ScriptCov>> = BTreeMap::new();
   for process_cov in processes {
     for script_cov in &process_cov.result {
       let mut scripts = url_to_scripts.entry(script_cov.url.clone()).or_insert(Vec::new());
       scripts.push(script_cov.clone());
     }
   }
-  let mut result: Vec<ScriptCov> = Vec::new();
-  let mut script_id: u64 = 1;
-  for (_, scripts) in url_to_scripts.iter() {
-    let mut merged: ScriptCov = merge_scripts(scripts).unwrap();
-    merged.script_id = script_id.to_string();
-    script_id += 1;
-    result.push(merged)
-  }
+  let result: Vec<ScriptCov> = url_to_scripts
+    .into_iter()
+    .enumerate()
+    .map(|(script_id, (_, scripts))| {
+      let mut merged: ScriptCov = merge_scripts(&scripts).unwrap();
+      merged.script_id = script_id.to_string();
+      merged
+    })
+    .collect();
 
   Some(ProcessCov { result })
 }
@@ -41,7 +43,7 @@ pub fn merge_scripts(scripts: &Vec<ScriptCov>) -> Option<ScriptCov> {
     _ => {}
   }
   let first: &ScriptCov = &scripts[0];
-  let mut range_to_funcs: HashMap<Range, Vec<FunctionCov>> = HashMap::new();
+  let mut range_to_funcs: BTreeMap<Range, Vec<FunctionCov>> = BTreeMap::new();
   for script_cov in scripts {
     for func_cov in &script_cov.functions {
       let root_range_cov: &RangeCov = &func_cov.ranges[0];
@@ -51,11 +53,10 @@ pub fn merge_scripts(scripts: &Vec<ScriptCov>) -> Option<ScriptCov> {
     }
   }
 
-  let mut functions: Vec<FunctionCov> = Vec::new();
-  for (_, funcs) in range_to_funcs.iter() {
-    let merged: FunctionCov = merge_functions(funcs).unwrap();
-    functions.push(merged)
-  }
+  let functions: Vec<FunctionCov> = range_to_funcs
+    .into_iter()
+    .map(|(_, funcs)| merge_functions(&funcs).unwrap())
+    .collect();
 
   Some(ScriptCov { script_id: first.script_id.clone(), url: first.url.clone(), functions })
 }
@@ -64,6 +65,26 @@ pub fn merge_scripts(scripts: &Vec<ScriptCov>) -> Option<ScriptCov> {
 struct Range {
   start: usize,
   end: usize,
+}
+
+impl Ord for Range {
+  fn cmp(&self, other: &Self) -> ::std::cmp::Ordering {
+    if self.start != other.start {
+      self.start.cmp(&other.start)
+    } else {
+      other.end.cmp(&self.end)
+    }
+  }
+}
+
+impl PartialOrd for Range {
+  fn partial_cmp(&self, other: &Self) -> Option<::std::cmp::Ordering> {
+    if self.start != other.start {
+      self.start.partial_cmp(&other.start)
+    } else {
+      other.end.partial_cmp(&self.end)
+    }
+  }
 }
 
 pub fn merge_functions(funcs: &Vec<FunctionCov>) -> Option<FunctionCov> {

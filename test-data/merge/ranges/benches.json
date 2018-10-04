@@ -6,7 +6,7 @@
       {
         "result": [
           {
-            "scriptId": "1",
+            "scriptId": "0",
             "url": "/lib.js",
             "functions": [
               {
@@ -27,7 +27,7 @@
       {
         "result": [
           {
-            "scriptId": "1",
+            "scriptId": "0",
             "url": "/lib.js",
             "functions": [
               {
@@ -58,7 +58,7 @@
       {
         "result": [
           {
-            "scriptId": "1",
+            "scriptId": "0",
             "url": "/lib.js",
             "functions": [
               {
@@ -139,7 +139,7 @@
       {
         "result": [
           {
-            "scriptId": "1",
+            "scriptId": "0",
             "url": "/lib.js",
             "functions": [
               {
@@ -205,7 +205,7 @@
       {
         "result": [
           {
-            "scriptId": "1",
+            "scriptId": "0",
             "url": "/lib.js",
             "functions": [
               {
@@ -251,7 +251,7 @@
       {
         "result": [
           {
-            "scriptId": "1",
+            "scriptId": "0",
             "url": "/lib.js",
             "functions": [
               {
@@ -297,7 +297,7 @@
       {
         "result": [
           {
-            "scriptId": "1",
+            "scriptId": "0",
             "url": "/lib.js",
             "functions": [
               {
@@ -338,7 +338,7 @@
       {
         "result": [
           {
-            "scriptId": "1",
+            "scriptId": "0",
             "url": "/lib.js",
             "functions": [
               {
@@ -404,7 +404,7 @@
       {
         "result": [
           {
-            "scriptId": "1",
+            "scriptId": "0",
             "url": "/lib.js",
             "functions": [
               {
@@ -435,7 +435,7 @@
       {
         "result": [
           {
-            "scriptId": "1",
+            "scriptId": "0",
             "url": "/lib.js",
             "functions": [
               {
@@ -486,7 +486,7 @@
       {
         "result": [
           {
-            "scriptId": "1",
+            "scriptId": "0",
             "url": "/lib.js",
             "functions": [
               {
@@ -513,7 +513,7 @@
     "expected": {
       "result": [
         {
-          "scriptId": "1",
+          "scriptId": "0",
           "url": "/lib.js",
           "functions": [
             {

@@ -209,11 +209,11 @@ function rangesToProcessCov(ranges) {
   return {
     result: [
       {
-        scriptId: '1',
-        url: '/lib.js',
+        scriptId: "0",
+        url: "/lib.js",
         functions: [
           {
-            functionName: 'test',
+            functionName: "test",
             isBlockCoverage: true,
             ranges,
           }

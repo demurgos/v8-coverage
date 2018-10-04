@@ -23,13 +23,13 @@ export function mergeProcesses(processes: ReadonlyArray<ProcessCov>): ProcessCov
     }
   }
   const result: ScriptCov[] = [];
-  let scriptId: number = 1;
   for (const scripts of urlToScripts.values()) {
     // assert: `scripts.length > 0`
-    const merged: ScriptCov = mergeScripts(scripts)!;
-    merged.scriptId = scriptId.toString(10);
-    scriptId++;
-    result.push(merged);
+    result.push(mergeScripts(scripts)!);
+  }
+  result.sort((a, b) => a.url < b.url ? -1 : 1);
+  for (const [scriptId, scriptCov] of result.entries()) {
+    scriptCov.scriptId = scriptId.toString(10);
   }
   return {result};
 }
@@ -62,6 +62,13 @@ export function mergeScripts(scripts: ReadonlyArray<ScriptCov>): ScriptCov | und
     // assert: `fns.length > 0`
     functions.push(mergeFunctions(fns)!);
   }
+  functions.sort((a: FunctionCov, b: FunctionCov): number => {
+    const rootA: RangeCov = a.ranges[0];
+    const rootB: RangeCov = b.ranges[0];
+    return rootA.startOffset !== rootB.startOffset
+      ? rootA.startOffset - rootB.startOffset
+      : rootB.endOffset - rootA.endOffset;
+  });
   return {
     scriptId: first.scriptId,
     url: first.url,

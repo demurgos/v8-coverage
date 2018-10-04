@@ -1,6 +1,6 @@
 const fs = require("fs");
 const path = require("path");
-const v8Coverage = require("../ts");
+const v8Coverage = require("../node");
 
 const ROOT = path.join(__dirname, "..");
 const BENCHES_DIR = path.join(ROOT, "benches");
