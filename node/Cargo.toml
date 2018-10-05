@@ -15,4 +15,5 @@ neon-build = "^0.2.0"
 
 [dependencies]
 neon = "^0.2.0"
+serde_json = "^1.0.31"
 v8-coverage = { path = '../rs' }

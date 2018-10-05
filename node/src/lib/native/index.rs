@@ -1,9 +1,41 @@
 #[macro_use]
 extern crate neon;
+extern crate serde_json;
 extern crate v8_coverage;
 
 use neon::prelude::*;
 use v8_coverage::{FunctionCov, ProcessCov, RangeCov, ScriptCov};
+
+pub fn merge_process_cov_buffers_sync(mut cx: FunctionContext) -> JsResult<JsValue> {
+  let buffers_js: Handle<JsArray> = cx.argument::<JsArray>(0)?;
+
+  let processes: NeonResult<Vec<ProcessCov>> = buffers_js
+    .to_vec(&mut cx)?
+    .iter()
+    .map(|buffer_js| -> NeonResult<ProcessCov> {
+      let buffer: Handle<JsBuffer> = buffer_js.downcast::<JsBuffer>().or_throw(&mut cx)?;
+      cx.borrow(&buffer, |data| {
+        let slice: &[u8] = data.as_slice::<u8>();
+        let result: serde_json::Result<ProcessCov> = serde_json::from_slice(slice);
+        Ok(result.unwrap())
+      })
+    })
+    .collect();
+
+  let processes = processes?;
+
+  match v8_coverage::merge_processes(processes) {
+    None => Ok(JsUndefined::new().as_value(&mut cx)),
+    Some(merged) => {
+      let data = serde_json::to_vec(&merged).unwrap();
+      let mut buffer: Handle<JsBuffer> = cx.buffer(data.len() as u32)?;
+      cx.borrow_mut(&mut buffer, |bytes| {
+        bytes.as_mut_slice().copy_from_slice(&data)
+      });
+      Ok(buffer.as_value(&mut cx))
+    }
+  }
+}
 
 pub fn merge_processes(mut cx: FunctionContext) -> JsResult<JsValue> {
   let processes_js: Handle<JsArray> = cx.argument::<JsArray>(0)?;
@@ -168,6 +200,7 @@ fn range_cov_to_js<'a, C: Context<'a>>(cx: &mut C, func: &RangeCov) -> JsResult<
 }
 
 register_module!(mut cx, {
+    cx.export_function("mergeProcessCovBuffersSync", merge_process_cov_buffers_sync)?;
     cx.export_function("mergeProcesses", merge_processes)?;
     cx.export_function("mergeScripts", merge_scripts)?;
     cx.export_function("mergeFunctions", merge_functions)?;

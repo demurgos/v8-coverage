@@ -1,7 +1,7 @@
 import chai from "chai";
 import fs from "fs";
 import path from "path";
-import { mergeProcesses, ProcessCov } from "../lib";
+import { mergeProcessCovBuffersSync, mergeProcesses, ProcessCov } from "../lib";
 
 const REPO_ROOT: string = path.join(__dirname, "..", "..", "..", "..");
 const BENCHES_INPUT_DIR: string = path.join(REPO_ROOT, "benches");
@@ -24,17 +24,18 @@ describe("merge", () => {
         this.timeout(BENCHES_TIMEOUT);
 
         const inputFileNames: string[] = await fs.promises.readdir(bench);
-        const inputPromises: Promise<ProcessCov>[] = [];
+        const inputPromises: Promise<Buffer>[] = [];
         for (const inputFileName of inputFileNames) {
           const resolved: string = path.join(bench, inputFileName);
-          inputPromises.push(fs.promises.readFile(resolved).then(buffer => JSON.parse(buffer.toString("UTF-8"))));
+          inputPromises.push(fs.promises.readFile(resolved));
         }
-        const inputs: ProcessCov[] = await Promise.all(inputPromises);
+        const inputs: Buffer[] = await Promise.all(inputPromises);
         const expectedPath: string = path.join(BENCHES_DIR, `${name}.json`);
         const expectedContent: string = await fs.promises.readFile(expectedPath, {encoding: "UTF-8"}) as string;
         const expected: ProcessCov = JSON.parse(expectedContent);
         const startTime: number = Date.now();
-        const actual: ProcessCov | undefined = mergeProcesses(inputs);
+        const actualBuffer: Buffer | undefined = mergeProcessCovBuffersSync(inputs);
+        const actual: ProcessCov | undefined = actualBuffer !== undefined ? JSON.parse(actualBuffer.toString("UTF-8")) : undefined;
         const endTime: number = Date.now();
         console.error(`Time (${name}): ${(endTime - startTime) / 1000}`);
         chai.assert.deepEqual(actual, expected);

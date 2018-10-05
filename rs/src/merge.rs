@@ -3,6 +3,7 @@ use coverage::RangeCov;
 use coverage::ScriptCov;
 use range_tree::RangeTree;
 use range_tree::RangeTreeRef;
+use rayon::prelude::*;
 use std::cell::Ref;
 use std::cell::RefCell;
 use std::collections::BTreeMap;
@@ -23,11 +24,19 @@ pub fn merge_processes(mut processes: Vec<ProcessCov>) -> Option<ProcessCov> {
         .push(script_cov);
     }
   }
-  let result: Vec<ScriptCov> = url_to_scripts
+
+  let result: Vec<(usize, Vec<ScriptCov>)> = url_to_scripts
     .into_iter()
     .enumerate()
-    .map(|(script_id, (_, scripts))| {
-      let mut merged: ScriptCov = merge_scripts(scripts).unwrap();
+    .map(|(script_id, (_, scripts))| (script_id, scripts))
+    .collect();
+
+  let result: Vec<ScriptCov> = result
+//    .into_par_iter()
+    .par_iter()
+//    .into_iter()
+    .map(|(script_id, scripts)| {
+      let mut merged: ScriptCov = merge_scripts(scripts.to_vec()).unwrap();
       merged.script_id = script_id.to_string();
       merged
     })

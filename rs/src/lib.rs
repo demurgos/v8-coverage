@@ -1,6 +1,6 @@
+extern crate rayon;
 #[macro_use]
 extern crate serde_derive;
-extern crate core;
 
 pub use coverage::*;
 pub use merge::*;
@@ -8,7 +8,6 @@ pub use merge::*;
 mod coverage;
 mod merge;
 mod range_tree;
-
 
 #[cfg(test)]
 mod tests {

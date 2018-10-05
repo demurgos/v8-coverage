@@ -1,6 +1,10 @@
 import * as native from "./native/index";
 import { FunctionCov, ProcessCov, RangeCov, ScriptCov } from "./types";
 
+export function mergeProcessCovBuffersSync(buffers: Buffer[]): Buffer | undefined {
+  return native.mergeProcessCovBuffersSync(buffers);
+}
+
 export function mergeProcesses(processes: ProcessCov[]): ProcessCov | undefined {
   return native.mergeProcesses(processes);
 }
