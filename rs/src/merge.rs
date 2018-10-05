@@ -10,24 +10,24 @@ use std::collections::BTreeSet;
 use std::collections::HashMap;
 use std::rc::Rc;
 
-pub fn merge_processes(processes: &Vec<ProcessCov>) -> Option<ProcessCov> {
-  match processes.len() {
-    0 => return None,
-    1 => return Some(processes[0].clone()),
-    _ => {}
+pub fn merge_processes(mut processes: Vec<ProcessCov>) -> Option<ProcessCov> {
+  if processes.len() <= 1 {
+    return processes.pop();
   }
   let mut url_to_scripts: BTreeMap<String, Vec<ScriptCov>> = BTreeMap::new();
   for process_cov in processes {
-    for script_cov in &process_cov.result {
-      let mut scripts = url_to_scripts.entry(script_cov.url.clone()).or_insert(Vec::new());
-      scripts.push(script_cov.clone());
+    for script_cov in process_cov.result {
+      url_to_scripts
+        .entry(script_cov.url.clone())
+        .or_insert(Vec::new())
+        .push(script_cov);
     }
   }
   let result: Vec<ScriptCov> = url_to_scripts
     .into_iter()
     .enumerate()
     .map(|(script_id, (_, scripts))| {
-      let mut merged: ScriptCov = merge_scripts(&scripts).unwrap();
+      let mut merged: ScriptCov = merge_scripts(scripts).unwrap();
       merged.script_id = script_id.to_string();
       merged
     })
@@ -36,29 +36,34 @@ pub fn merge_processes(processes: &Vec<ProcessCov>) -> Option<ProcessCov> {
   Some(ProcessCov { result })
 }
 
-pub fn merge_scripts(scripts: &Vec<ScriptCov>) -> Option<ScriptCov> {
-  match scripts.len() {
-    0 => return None,
-    1 => return Some(scripts[0].clone()),
-    _ => {}
+pub fn merge_scripts(mut scripts: Vec<ScriptCov>) -> Option<ScriptCov> {
+  if scripts.len() <= 1 {
+    return scripts.pop();
   }
-  let first: &ScriptCov = &scripts[0];
+  let (script_id, url) = {
+    let first: &ScriptCov = &scripts[0];
+    (first.script_id.clone(), first.url.clone())
+  };
   let mut range_to_funcs: BTreeMap<Range, Vec<FunctionCov>> = BTreeMap::new();
   for script_cov in scripts {
-    for func_cov in &script_cov.functions {
-      let root_range_cov: &RangeCov = &func_cov.ranges[0];
-      let root_range = Range { start: root_range_cov.start_offset, end: root_range_cov.end_offset };
-      let mut funcs = range_to_funcs.entry(root_range).or_insert(Vec::new());
-      funcs.push(func_cov.clone());
+    for func_cov in script_cov.functions {
+      let root_range = {
+        let root_range_cov: &RangeCov = &func_cov.ranges[0];
+        Range { start: root_range_cov.start_offset, end: root_range_cov.end_offset }
+      };
+      range_to_funcs
+        .entry(root_range)
+        .or_insert(Vec::new())
+        .push(func_cov);
     }
   }
 
   let functions: Vec<FunctionCov> = range_to_funcs
     .into_iter()
-    .map(|(_, funcs)| merge_functions(&funcs).unwrap())
+    .map(|(_, funcs)| merge_functions(funcs).unwrap())
     .collect();
 
-  Some(ScriptCov { script_id: first.script_id.clone(), url: first.url.clone(), functions })
+  Some(ScriptCov { script_id, url, functions })
 }
 
 #[derive(Eq, PartialEq, Hash, Copy, Clone, Debug)]
@@ -87,13 +92,11 @@ impl PartialOrd for Range {
   }
 }
 
-pub fn merge_functions(funcs: &Vec<FunctionCov>) -> Option<FunctionCov> {
-  match funcs.len() {
-    0 => return None,
-    1 => return Some(funcs[0].clone()),
-    _ => {}
+pub fn merge_functions(mut funcs: Vec<FunctionCov>) -> Option<FunctionCov> {
+  if funcs.len() <= 1 {
+    return funcs.pop();
   }
-  let first: &FunctionCov = &funcs[0];
+  let function_name = funcs[0].function_name.clone();
   let mut trees: Vec<RangeTreeRef> = Vec::new();
   for func in funcs {
     let tree = RangeTree::from_sorted_ranges(&func.ranges);
@@ -105,7 +108,7 @@ pub fn merge_functions(funcs: &Vec<FunctionCov>) -> Option<FunctionCov> {
   let ranges = merged.to_ranges();
   let is_block_coverage: bool = !(ranges.len() == 1 && ranges[0].count == 0);
 
-  Some(FunctionCov { function_name: first.function_name.clone(), ranges, is_block_coverage })
+  Some(FunctionCov { function_name, ranges, is_block_coverage })
 }
 
 fn merge_range_trees(trees: &Vec<RangeTreeRef>) -> Option<RangeTree> {
@@ -654,6 +657,6 @@ mod tests {
       ]
     });
 
-    assert_eq!(merge_processes(&inputs), expected);
+    assert_eq!(merge_processes(inputs), expected);
   }
 }

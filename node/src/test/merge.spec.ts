@@ -7,7 +7,7 @@ const REPO_ROOT: string = path.join(__dirname, "..", "..", "..", "..");
 const BENCHES_INPUT_DIR: string = path.join(REPO_ROOT, "benches");
 const BENCHES_DIR: string = path.join(REPO_ROOT, "test-data", "merge", "benches");
 const RANGES_DIR: string = path.join(REPO_ROOT, "test-data", "merge", "ranges");
-const BENCHES_TIMEOUT: number = 20000; // 20sec
+const BENCHES_TIMEOUT: number = 60000; // 60 seconds
 
 interface MergeRangeItem {
   name: string;
