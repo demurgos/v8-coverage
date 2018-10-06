@@ -2,6 +2,7 @@ use coverage::{FunctionCov, ProcessCov};
 use coverage::RangeCov;
 use coverage::ScriptCov;
 use range_tree::RangeTree;
+use range_tree::RangeTreeArena;
 use rayon::prelude::*;
 use std::collections::BTreeMap;
 use std::collections::BTreeSet;
@@ -30,8 +31,8 @@ pub fn merge_processes(mut processes: Vec<ProcessCov>) -> Option<ProcessCov> {
 
   let result: Vec<ScriptCov> = result
 //    .into_par_iter()
-    .par_iter()
-//    .into_iter()
+//    .par_iter()
+    .into_iter()
     .map(|(script_id, scripts)| {
       let mut merged: ScriptCov = merge_scripts(scripts.to_vec()).unwrap();
       merged.script_id = script_id.to_string();
@@ -103,43 +104,44 @@ pub fn merge_functions(mut funcs: Vec<FunctionCov>) -> Option<FunctionCov> {
     return funcs.pop();
   }
   let function_name = funcs[0].function_name.clone();
-  let mut trees: Vec<RangeTree> = Vec::new();
+  let rta_capacity: usize = funcs.iter().fold(0, |acc, func| acc + func.ranges.len());
+  let rta = RangeTreeArena::with_capacity(rta_capacity);
+  let mut trees: Vec<&mut RangeTree> = Vec::new();
   for func in funcs {
-    let tree = RangeTree::from_sorted_ranges(&func.ranges);
-    let tree = tree.unwrap();
-    trees.push(tree);
+    if let Some(tree) = RangeTree::from_sorted_ranges(&rta, &func.ranges) {
+      trees.push(tree);
+    }
   }
-  let mut merged = merge_range_trees(trees).unwrap();
-  merged = merged.normalize();
+  let merged = RangeTree::normalize(&rta, merge_range_trees(&rta, trees).unwrap());
   let ranges = merged.to_ranges();
   let is_block_coverage: bool = !(ranges.len() == 1 && ranges[0].count == 0);
 
   Some(FunctionCov { function_name, ranges, is_block_coverage })
 }
 
-fn merge_range_trees(mut trees: Vec<RangeTree>) -> Option<RangeTree> {
+fn merge_range_trees<'a>(rta: &'a RangeTreeArena<'a>, mut trees: Vec<&'a mut RangeTree<'a>>) -> Option<&'a mut RangeTree<'a>> {
   if trees.len() <= 1 {
     return trees.pop();
   }
   let (start, end) = {
-    let first: &RangeTree = &trees[0];
+    let first = &trees[0];
     (first.start, first.end)
   };
   let count: i64 = trees.iter().fold(0, |acc, tree| acc + tree.count);
-  let children = merge_range_tree_children(trees);
+  let children = merge_range_tree_children(rta, trees);
 
-  Some(RangeTree::new(start, end, count, children))
+  Some(rta.alloc(RangeTree::new(start, end, count, children)))
 }
 
-struct StartEvent {
+struct StartEvent<'a> {
   offset: usize,
-  trees: Vec<(usize, RangeTree)>,
+  trees: Vec<(usize, &'a mut RangeTree<'a>)>,
 }
 
-fn into_start_events(trees: Vec<RangeTree>) -> Vec<StartEvent> {
-  let mut result: BTreeMap<usize, Vec<(usize, RangeTree)>> = BTreeMap::new();
+fn into_start_events<'a>(trees: Vec<&'a mut RangeTree<'a>>) -> Vec<StartEvent> {
+  let mut result: BTreeMap<usize, Vec<(usize, &'a mut RangeTree<'a>)>> = BTreeMap::new();
   for (parent_index, tree) in trees.into_iter().enumerate() {
-    for child in tree.children {
+    for child in tree.children.drain(..) {
       result
         .entry(child.start)
         .or_insert(Vec::new())
@@ -152,13 +154,13 @@ fn into_start_events(trees: Vec<RangeTree>) -> Vec<StartEvent> {
     .collect()
 }
 
-struct StartEventQueue {
-  pending: Option<StartEvent>,
-  queue: Peekable<::std::vec::IntoIter<StartEvent>>,
+struct StartEventQueue<'a> {
+  pending: Option<StartEvent<'a>>,
+  queue: Peekable<::std::vec::IntoIter<StartEvent<'a>>>,
 }
 
-impl StartEventQueue {
-  pub fn new(queue: Vec<StartEvent>) -> StartEventQueue {
+impl<'a> StartEventQueue<'a> {
+  pub fn new(queue: Vec<StartEvent<'a>>) -> StartEventQueue<'a> {
     StartEventQueue {
       pending: None,
       queue: queue.into_iter().peekable(),
@@ -169,7 +171,7 @@ impl StartEventQueue {
     self.pending = Some(StartEvent { offset, trees: Vec::new() });
   }
 
-  pub(crate) fn push_pending_tree(&mut self, tree: (usize, RangeTree)) -> () {
+  pub(crate) fn push_pending_tree(&mut self, tree: (usize, &'a mut RangeTree<'a>)) -> () {
     self.pending = self.pending.take().map(|mut start_event| {
       start_event.trees.push(tree);
       start_event
@@ -177,8 +179,8 @@ impl StartEventQueue {
   }
 }
 
-impl Iterator for StartEventQueue {
-  type Item = StartEvent;
+impl<'a> Iterator for StartEventQueue<'a> {
+  type Item = StartEvent<'a>;
 
   fn next(&mut self) -> Option<<Self as Iterator>::Item> {
     let pending_offset: Option<usize> = match &self.pending {
@@ -210,13 +212,13 @@ impl Iterator for StartEventQueue {
   }
 }
 
-fn merge_range_tree_children(parent_trees: Vec<RangeTree>) -> Vec<RangeTree> {
+fn merge_range_tree_children<'a>(rta: &'a RangeTreeArena<'a>, parent_trees: Vec<&'a mut RangeTree<'a>>) -> Vec<&'a mut RangeTree<'a>> {
   let mut parent_counts: Vec<i64> = Vec::with_capacity(parent_trees.len());
-  let mut flat_children: Vec<Vec<RangeTree>> = Vec::with_capacity(parent_trees.len());
-  let mut wrapped_children: Vec<Vec<RangeTree>> = Vec::with_capacity(parent_trees.len());
+  let mut flat_children: Vec<Vec<&'a mut RangeTree<'a>>> = Vec::with_capacity(parent_trees.len());
+  let mut wrapped_children: Vec<Vec<&'a mut RangeTree<'a>>> = Vec::with_capacity(parent_trees.len());
   let mut open_range: Option<Range> = None;
 
-  for parent_tree in &parent_trees {
+  for parent_tree in parent_trees.iter() {
     parent_counts.push(parent_tree.count);
     flat_children.push(Vec::new());
     wrapped_children.push(Vec::new());
@@ -224,18 +226,18 @@ fn merge_range_tree_children(parent_trees: Vec<RangeTree>) -> Vec<RangeTree> {
 
   let mut start_event_queue = StartEventQueue::new(into_start_events(parent_trees));
 
-  let mut parent_to_nested: HashMap<usize, Vec<RangeTree>> = HashMap::new();
+  let mut parent_to_nested: HashMap<usize, Vec<&'a mut RangeTree<'a>>> = HashMap::new();
 
   while let Some(event) = start_event_queue.next() {
     open_range = if let Some(open_range) = open_range {
       if open_range.end <= event.offset {
         for (parent_index, nested) in parent_to_nested {
-          wrapped_children[parent_index].push(RangeTree::new(
+          wrapped_children[parent_index].push(rta.alloc(RangeTree::new(
             open_range.start,
             open_range.end,
             parent_counts[parent_index],
             nested,
-          ));
+          )));
         }
         parent_to_nested = HashMap::new();
         None
@@ -249,15 +251,17 @@ fn merge_range_tree_children(parent_trees: Vec<RangeTree>) -> Vec<RangeTree> {
     match open_range {
       Some(open_range) => {
         for (parent_index, mut tree) in event.trees {
-          if tree.end > open_range.end {
-            let (left, right) = tree.split(open_range.end);
+          let child = if tree.end > open_range.end {
+            let (left, right) = RangeTree::split(rta, tree, open_range.end);
             start_event_queue.push_pending_tree((parent_index, right));
-            tree = left;
-          }
+            left
+          } else {
+            tree
+          };
           parent_to_nested
             .entry(parent_index)
             .or_insert(Vec::new())
-            .push(tree);
+            .push(child);
         }
       }
       None => {
@@ -282,32 +286,32 @@ fn merge_range_tree_children(parent_trees: Vec<RangeTree>) -> Vec<RangeTree> {
   }
   if let Some(open_range) = open_range {
     for (parent_index, nested) in parent_to_nested {
-      wrapped_children[parent_index].push(RangeTree::new(
+      wrapped_children[parent_index].push(rta.alloc(RangeTree::new(
         open_range.start,
         open_range.end,
         parent_counts[parent_index],
         nested,
-      ));
+      )));
     }
   }
 
-  let child_forests: Vec<Vec<RangeTree>> = flat_children.into_iter()
+  let child_forests: Vec<Vec<&'a mut RangeTree<'a>>> = flat_children.into_iter()
     .zip(wrapped_children.into_iter())
     .map(|(flat, wrapped)| merge_children_lists(flat, wrapped))
     .collect();
 
   let events = get_child_events_from_forests(&child_forests);
 
-  let mut child_forests: Vec<Peekable<::std::vec::IntoIter<RangeTree>>> = child_forests.into_iter()
+  let mut child_forests: Vec<Peekable<::std::vec::IntoIter<&'a mut RangeTree<'a>>>> = child_forests.into_iter()
     .map(|forest| forest.into_iter().peekable())
     .collect();
 
-  let mut result: Vec<RangeTree> = Vec::new();
+  let mut result: Vec<&'a mut RangeTree<'a>> = Vec::new();
   for event in events.iter() {
-    let mut matching_trees: Vec<RangeTree> = Vec::new();
+    let mut matching_trees: Vec<&'a mut RangeTree<'a>> = Vec::new();
     let mut extra_count: i64 = 0;
     for (parent_index, children) in child_forests.iter_mut().enumerate() {
-      let next_tree: Option<RangeTree> = {
+      let next_tree: Option<&'a mut RangeTree<'a>> = {
         if children.peek().map_or(false, |tree| tree.start == *event) {
           children.next()
         } else {
@@ -320,7 +324,7 @@ fn merge_range_tree_children(parent_trees: Vec<RangeTree>) -> Vec<RangeTree> {
         extra_count += parent_counts[parent_index];
       }
     }
-    if let Some(mut merged) = merge_range_trees(matching_trees) {
+    if let Some(mut merged) = merge_range_trees(rta, matching_trees) {
       if extra_count != 0 {
         merged.add_count(extra_count);
       }
@@ -331,7 +335,7 @@ fn merge_range_tree_children(parent_trees: Vec<RangeTree>) -> Vec<RangeTree> {
   result
 }
 
-fn get_child_events_from_forests(forests: &Vec<Vec<RangeTree>>) -> BTreeSet<usize> {
+fn get_child_events_from_forests<'a>(forests: &Vec<Vec<&'a mut RangeTree<'a>>>) -> BTreeSet<usize> {
   let mut event_set: BTreeSet<usize> = BTreeSet::new();
   for forest in forests {
     for tree in forest {
@@ -344,8 +348,8 @@ fn get_child_events_from_forests(forests: &Vec<Vec<RangeTree>>) -> BTreeSet<usiz
 
 // TODO: itertools?
 // https://play.integer32.com/?gist=ad2cd20d628e647a5dbdd82e68a15cb6&version=stable&mode=debug&edition=2015
-fn merge_children_lists(a: Vec<RangeTree>, b: Vec<RangeTree>) -> Vec<RangeTree> {
-  let mut merged: Vec<RangeTree> = Vec::new();
+fn merge_children_lists<'a>(a: Vec<&'a mut RangeTree<'a>>, b: Vec<&'a mut RangeTree<'a>>) -> Vec<&'a mut RangeTree<'a>> {
+  let mut merged: Vec<&'a mut RangeTree<'a>> = Vec::new();
   let mut a = a.into_iter();
   let mut b = b.into_iter();
   let mut next_a = a.next();

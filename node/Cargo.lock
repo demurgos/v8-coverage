@@ -260,6 +260,11 @@ dependencies = [
 ]
 
 [[package]]
+name = "typed-arena"
+version = "1.4.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+
+[[package]]
 name = "ucd-util"
 version = "0.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -281,6 +286,7 @@ dependencies = [
  "rayon 1.0.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "serde 1.0.79 (registry+https://github.com/rust-lang/crates.io-index)",
  "serde_derive 1.0.79 (registry+https://github.com/rust-lang/crates.io-index)",
+ "typed-arena 1.4.1 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -333,6 +339,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 "checksum serde_json 1.0.31 (registry+https://github.com/rust-lang/crates.io-index)" = "bb47a3d5c84320222f66d7db21157c4a7407755de41798f9b4c1c40593397b1a"
 "checksum syn 0.15.7 (registry+https://github.com/rust-lang/crates.io-index)" = "455a6ec9b368f8c479b0ae5494d13b22dc00990d2f00d68c9dc6a2dc4f17f210"
 "checksum thread_local 0.3.6 (registry+https://github.com/rust-lang/crates.io-index)" = "c6b53e329000edc2b34dbe8545fd20e55a333362d0a321909685a19bd28c3f1b"
+"checksum typed-arena 1.4.1 (registry+https://github.com/rust-lang/crates.io-index)" = "c6c06a92aef38bb4dc5b0df00d68496fc31307c5344c867bb61678c6e1671ec5"
 "checksum ucd-util 0.1.1 (registry+https://github.com/rust-lang/crates.io-index)" = "fd2be2d6639d0f8fe6cdda291ad456e23629558d466e2789d2c3e9892bda285d"
 "checksum unicode-xid 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)" = "fc72304796d0818e357ead4e000d19c9c174ab23dc11093ac919054d20a6a7fc"
 "checksum utf8-ranges 1.0.1 (registry+https://github.com/rust-lang/crates.io-index)" = "fd70f467df6810094968e2fce0ee1bd0e87157aceb026a8c083bcf5e25b9efe4"
