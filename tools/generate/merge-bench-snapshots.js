@@ -5,7 +5,7 @@ const {getBenches, mergeBench} = require("../benches");
 const ROOT = path.join(__dirname, "..", "..");
 const OUT_DIR = path.join(ROOT, "test-data", "merge", "benches");
 
-async function generateMergeBenches() {
+async function generateMergeBenchSnapshots() {
   for await (const bench of getBenches()) {
     const name = path.basename(bench);
     console.error(`Generating snapshot for: ${name}`);
@@ -19,8 +19,8 @@ async function writeJson(p, data) {
   await fsExtra.outputFile(p, JSON.stringify(data, null, 2), {encoding: "UTF-8"});
 }
 
-module.exports = {generateMergeBenches};
+module.exports = {generateMergeBenchSnapshots};
 
 if (require.main === module) {
-  generateMergeBenches();
+  generateMergeBenchSnapshots();
 }

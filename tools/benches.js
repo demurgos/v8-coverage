@@ -1,6 +1,7 @@
 const fs = require("fs");
 const path = require("path");
-const v8Coverage = require("../node");
+const nodeLib = require("../node");
+const tsLib = require("../ts");
 
 const ROOT = path.join(__dirname, "..");
 const BENCHES_DIR = path.join(ROOT, "benches");
@@ -16,7 +17,7 @@ async function* getBenches() {
   }
 }
 
-async function mergeBench(dirOrName) {
+async function mergeBench(dirOrName, lib = "ts", debug = false) {
   const startTime = Date.now();
   const dir = path.isAbsolute(dirOrName) ? dirOrName : path.join(BENCHES_DIR, name);
   const names = await fs.promises.readdir(dir);
@@ -27,17 +28,45 @@ async function mergeBench(dirOrName) {
   }
   const buffers = await Promise.all(bufferPromises);
   const readTime = Date.now();
-  console.error(`Read: ${(readTime - startTime) / 1000}`);
-  // const processCovs = [];
-  // for (const buffer of buffers) {
-  //   processCovs.push(JSON.parse(buffer.toString("UTF-8")));
-  // }
-  // const parsedTime = Date.now();
-  // console.error(`Parse: ${(parsedTime - readTime) / 1000}`);
-  const merged = v8Coverage.mergeProcessCovBuffersSync(buffers);
-  const endTime = Date.now();
-  console.error(`Merge: ${(endTime - readTime) / 1000}`);
-  console.error(`All: ${(endTime - startTime) / 1000}`);
+  if (debug) {
+    console.error(`Read: ${(readTime - startTime) / 1000}s`);
+  }
+  let merged, endTime;
+  switch (lib) {
+    case "node": {
+      let merged = nodeLib.mergeProcessCovBuffersSync(buffers);
+      if (merged !== undefined) {
+        merged = JSON.parse(merged);
+      }
+      endTime = Date.now();
+      if (debug) {
+        console.error(`Rust round-trip: ${(endTime - readTime) / 1000}s`);
+      }
+      break;
+    }
+    case "ts": {
+      const processCovs = [];
+      for (const buffer of buffers) {
+        processCovs.push(JSON.parse(buffer.toString("UTF-8")));
+      }
+      const parsedTime = Date.now();
+      if (debug) {
+        console.error(`Parse: ${(parsedTime - readTime) / 1000}s`);
+      }
+      const merged = tsLib.mergeProcesses(processCovs);
+      endTime = Date.now();
+      if (debug) {
+        console.error(`Merge: ${(endTime - parsedTime) / 1000}s`);
+      }
+      break;
+    }
+    default:
+      throw new Error(`Unexpected lib: ${lib}`);
+  }
+
+  if (debug) {
+    console.error(`Overall: ${(endTime - startTime) / 1000}s`);
+  }
   return merged;
 }
 
