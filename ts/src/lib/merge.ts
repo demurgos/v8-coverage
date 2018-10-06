@@ -193,127 +193,192 @@ function mergeRangeTreeChildren(parentTrees: ReadonlyArray<RangeTree>): RangeTre
   return result;
 }
 
+class StartEvent {
+  readonly offset: number;
+  readonly trees: [number, RangeTree][];
+
+  constructor(offset: number, trees: [number, RangeTree][]) {
+    this.offset = offset;
+    this.trees = trees;
+  }
+
+  static compare(a: StartEvent, b: StartEvent): number {
+    return a.offset - b.offset;
+  }
+}
+
+class StartEventQueue {
+  private readonly queue: StartEvent[];
+  private nextIndex: number;
+  private pendingOffset: number;
+  private pendingTrees: [number, RangeTree][] | undefined;
+
+  private constructor(queue: StartEvent[]) {
+    this.queue = queue;
+    this.nextIndex = 0;
+    this.pendingOffset = 0;
+    this.pendingTrees = undefined;
+  }
+
+  static fromParentTrees(parentTrees: ReadonlyArray<RangeTree>): StartEventQueue {
+    const startToTrees: Map<number, [number, RangeTree][]> = new Map();
+    for (const [parentIndex, parentTree] of parentTrees.entries()) {
+      for (const child of parentTree.children) {
+        let trees: [number, RangeTree][] | undefined = startToTrees.get(child.start);
+        if (trees === undefined) {
+          trees = [];
+          startToTrees.set(child.start, trees);
+        }
+        trees.push([parentIndex, child]);
+      }
+    }
+    const queue: StartEvent[] = [];
+    for (const [startOffset, trees] of startToTrees) {
+      queue.push(new StartEvent(startOffset, trees));
+    }
+    queue.sort(StartEvent.compare);
+    return new StartEventQueue(queue);
+  }
+
+  setPendingOffset(offset: number): void {
+    this.pendingOffset = offset;
+  }
+
+  pushPendingTree(tree: [number, RangeTree]): void {
+    if (this.pendingTrees === undefined) {
+      this.pendingTrees = [];
+    }
+    this.pendingTrees.push(tree);
+  }
+
+  next(): StartEvent | undefined {
+    const pendingTrees: [number, RangeTree][] | undefined = this.pendingTrees;
+    const nextEvent: StartEvent | undefined = this.queue[this.nextIndex];
+    if (pendingTrees === undefined) {
+      this.nextIndex++;
+      return nextEvent;
+    } else if (nextEvent === undefined) {
+      this.pendingTrees = undefined;
+      return new StartEvent(this.pendingOffset, pendingTrees);
+    } else {
+      if (this.pendingOffset < nextEvent.offset) {
+        this.pendingTrees = undefined;
+        return new StartEvent(this.pendingOffset, pendingTrees);
+      } else {
+        if (this.pendingOffset === nextEvent.offset) {
+          this.pendingTrees = undefined;
+          for (const tree of pendingTrees) {
+            nextEvent.trees.push(tree);
+          }
+        }
+        this.nextIndex++;
+        return nextEvent;
+      }
+    }
+  }
+}
+
 // tslint:disable-next-line:cyclomatic-complexity
 function extendChildren(parentTrees: ReadonlyArray<RangeTree>): void {
-  const events: number[] = getChildEvents(parentTrees);
-
-  // For each end, contains the tree starting the earlier (if is is currently open)
-  // const openTrees: OpenTreeQueue = new OpenTreeQueue();
-  const childStacks: RangeTree[][] = [];
   const flatChildren: RangeTree[][] = [];
   const wrappedChildren: RangeTree[][] = [];
-  let openTree: RangeTree | undefined;
   // tslint:disable-next-line:prefer-for-of
   for (let i: number = 0; i < parentTrees.length; i++) {
-    const children: RangeTree[] = parentTrees[i].children;
-    const childStack: RangeTree[] = [];
-    for (let j: number = children.length - 1; j >= 0; j--) {
-      childStack.push(children[j]);
-    }
-    childStacks.push(childStack);
     flatChildren.push([]);
     wrappedChildren.push([]);
   }
 
+  const startEventQueue: StartEventQueue = StartEventQueue.fromParentTrees(parentTrees);
   const parentToNested: Map<number, RangeTree[]> = new Map();
+  let openRange: { start: number; end: number } | undefined;
 
-  function finalizeWrapped() {
-    const superTree: RangeTree = openTree!;
+  function closeOpenRange() {
     for (const [parentIndex, nested] of parentToNested) {
       const wrapper: RangeTree = new RangeTree(
-        superTree.start,
-        superTree.end,
+        openRange!.start,
+        openRange!.end,
         0,
         nested,
       );
       wrappedChildren[parentIndex].push(wrapper);
     }
     parentToNested.clear();
+    openRange = undefined;
   }
 
-  for (const event of events) {
-    if (openTree !== undefined && openTree.end === event) {
-      finalizeWrapped();
-      openTree = undefined;
+  function insertNested(parentIndex: number, tree: RangeTree): void {
+    let nested: RangeTree[] | undefined = parentToNested.get(parentIndex);
+    if (nested === undefined) {
+      nested = [];
+      parentToNested.set(parentIndex, nested);
     }
+    nested.push(tree);
+  }
 
-    // Starting tree to end the last
-    let maxStartingChild: RangeTree | undefined;
-
-    const startingChildren: [number, RangeTree][] = [];
-    for (let parentIndex: number = 0; parentIndex < parentTrees.length; parentIndex++) {
-      const childStack: RangeTree[] = childStacks[parentIndex];
-      if (childStack.length === 0) {
-        continue;
-      }
-      const child: RangeTree = childStack[childStack.length - 1];
-      if (child.start !== event) {
-        continue;
-      }
-      childStack.pop();
-      if (openTree !== undefined) {
-        if (child.end > openTree.end) {
-          childStack.push(child.split(openTree.end));
-        }
-        let nested: RangeTree[] | undefined = parentToNested.get(parentIndex);
-        if (nested === undefined) {
-          nested = [];
-          parentToNested.set(parentIndex, nested);
-        }
-        nested.push(child);
-      } else {
-        startingChildren.push([parentIndex, child]);
-        if (maxStartingChild === undefined || child.end > maxStartingChild.end) {
-          maxStartingChild = child;
-        }
-      }
+  while (true) {
+    const event: StartEvent | undefined = startEventQueue.next();
+    if (event === undefined) {
+      break;
     }
-
-    if (maxStartingChild !== undefined) {
-      for (const [parentIndex, child] of startingChildren) {
-        if (child.end < maxStartingChild.end) {
-          let nested: RangeTree[] | undefined = parentToNested.get(parentIndex);
-          if (nested === undefined) {
-            nested = [];
-            parentToNested.set(parentIndex, nested);
-          }
-          nested.push(child);
+    if (openRange !== undefined && openRange.end <= event.offset) {
+      closeOpenRange();
+    }
+    if (openRange === undefined) {
+      let openRangeEnd: number = event.offset + 1;
+      for (const [_, tree] of event.trees) {
+        openRangeEnd = Math.max(openRangeEnd, tree.end);
+      }
+      for (const [parentIndex, tree] of event.trees) {
+        if (tree.end === openRangeEnd) {
+          flatChildren[parentIndex].push(tree);
         } else {
-          flatChildren[parentIndex].push(child);
+          insertNested(parentIndex, tree);
         }
       }
-      if (openTree === undefined || maxStartingChild.end > openTree.end) {
-        openTree = maxStartingChild;
+      startEventQueue.setPendingOffset(openRangeEnd);
+      openRange = {start: event.offset, end: openRangeEnd};
+    } else {
+      for (const [parentIndex, tree] of event.trees) {
+        if (tree.end > openRange.end) {
+          startEventQueue.pushPendingTree([parentIndex, tree.split(openRange.end)]);
+        }
+        insertNested(parentIndex, tree);
       }
     }
   }
+  if (openRange !== undefined) {
+    closeOpenRange();
+  }
+
   for (let parentIndex: number = 0; parentIndex < parentTrees.length; parentIndex++) {
-    const flat: RangeTree[] = flatChildren[parentIndex];
-    const wrapped: RangeTree[] = wrappedChildren[parentIndex];
-    const merged: RangeTree[] = [];
-
-    let nextFlatIndex: number = 0;
-    let nextWrappedIndex: number = 0;
-    while (nextFlatIndex < flat.length || nextWrappedIndex < wrapped.length) {
-      const nextFlat: RangeTree | undefined = flat[nextFlatIndex];
-      const nextWrapped: RangeTree | undefined = wrapped[nextWrappedIndex];
-      if (nextFlat === undefined) {
-        merged.push(nextWrapped);
-        nextWrappedIndex++;
-      } else if (nextWrapped === undefined) {
-        merged.push(nextFlat);
-        nextFlatIndex++;
-      } else if (nextWrapped.start < nextFlat.start) {
-        merged.push(nextWrapped);
-        nextWrappedIndex++;
-      } else {
-        merged.push(nextFlat);
-        nextFlatIndex++;
-      }
-    }
-
-    parentTrees[parentIndex].children = merged;
+    parentTrees[parentIndex].children = mergeForests(flatChildren[parentIndex], wrappedChildren[parentIndex]);
   }
+}
+
+function mergeForests(a: RangeTree[], b: RangeTree[]): RangeTree[] {
+  const merged: RangeTree[] = [];
+
+  let nextIndexA: number = 0;
+  let nextIndexB: number = 0;
+  while (nextIndexA < a.length || nextIndexB < b.length) {
+    const nextA: RangeTree | undefined = a[nextIndexA];
+    const nextB: RangeTree | undefined = b[nextIndexB];
+    if (nextA === undefined) {
+      merged.push(nextB);
+      nextIndexB++;
+    } else if (nextB === undefined) {
+      merged.push(nextA);
+      nextIndexA++;
+    } else if (nextB.start < nextA.start) {
+      merged.push(nextB);
+      nextIndexB++;
+    } else {
+      merged.push(nextA);
+      nextIndexA++;
+    }
+  }
+
+  return merged;
 }
 
 function getChildEvents(trees: Iterable<RangeTree>): number[] {
