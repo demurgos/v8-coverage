@@ -87,9 +87,7 @@ impl<'rt> RangeTree<'rt> {
       }
 
       if children.len() == 1 && children[0].start == tree.start && children[0].end == tree.end {
-        let child = children.remove(0);
-        tree.count = child.count;
-        children = child.children.drain(..).collect();
+        return children.remove(0);
       }
 
       children

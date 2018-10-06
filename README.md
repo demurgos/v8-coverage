@@ -1,19 +1,37 @@
 # V8 coverage 
 
 This repository contains helper functions to manipulate V8 coverage files.
+At the moment, the library only exposes merging. The plan is to also expose
+validation and normalization functions.
 
-These functions are implemented as a Rust crate (`rs`), a simple Javascript 
-package (`ts`) and a native Node module (`node`).
+There are three implementations:
+- **Typescript (`ts`)**: Reference implementation, available on npm as `c88/v8-coverage`.
+- **Rust (`rs`)**: Available on crates.io as `v8-coverage`.
+- **Node native module (`node`)**: Not available yet, planned to be published on npm as `c88/v8-coverage-node`.
+
+All the implementations expose the same API.
 
 ## API
 
-### `mergeProcesses(processes: ProcessCov[]): ProcessCov`
+### `mergeProcessCovsSync(processCovs: ProcessCov[]): ProcessCov`
 
 Merges multiple process coverages into a single process coverage.
 
-### `mergeScripts(scripts: ScriptCov[]): ScriptCov`
+### `mergeScriptCovsSync(scriptCovs: ScriptCov[]): ScriptCov | undefined`
 
 Merges a list of matching script coverages into a single script coverage.
+
+The lib assumes two scripts are matching if they have the same `url`.
+
+If the list is empty, returns `undefined`.
+
+### `mergeFunctionCovsSync(funcCovs: ScriptCov[]): ScriptCov | undefined`
+
+Merges a list of matching script coverages into a single script coverage.
+
+The lib assumes two scripts are matching if they have the same `url`.
+
+If the list is empty, returns `undefined`.
 
 ## Types
 

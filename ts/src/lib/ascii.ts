@@ -1,4 +1,4 @@
-import { compareRanges } from "./range";
+import { compareRangeCovs } from "./compare";
 import { RangeCov } from "./types";
 
 interface ReadonlyRangeTree {
@@ -68,7 +68,7 @@ export function parseFunctionRanges(text: string, offsetMap: Map<number, number>
       result.push(range);
     }
   }
-  result.sort(compareRanges);
+  result.sort(compareRangeCovs);
   return result;
 }
 

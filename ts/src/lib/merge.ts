@@ -1,124 +1,154 @@
+import { deepNormalizeProcessCov, deepNormalizeScriptCov, normalizeFunctionCov, normalizeProcessCov, normalizeRangeTree, normalizeScriptCov } from "./normalize";
 import { RangeTree } from "./range-tree";
 import { FunctionCov, ProcessCov, RangeCov, ScriptCov } from "./types";
 
 /**
  * Merges a list of process coverages.
  *
- * @param processes Process coverages to merge.
- * @return Merged process coverage, or `undefined` if the input list was empty.
+ * The result is normalized.
+ * The input values may be mutated, it is not safe to use them after passing
+ * them to this function.
+ * The computation is synchronous.
+ *
+ * @param processCovs Process coverages to merge.
+ * @return Merged process coverage.
  */
-export function mergeProcesses(processes: ReadonlyArray<ProcessCov>): ProcessCov | undefined {
-  if (processes.length <= 1) {
-    return processes[0];
+export function mergeProcessCovs(processCovs: ReadonlyArray<ProcessCov>): ProcessCov {
+  if (processCovs.length === 0) {
+    return {result: []};
+  } else if (processCovs.length === 1) {
+    const merged: ProcessCov = processCovs[0];
+    deepNormalizeProcessCov(merged);
+    return merged;
   }
+
   const urlToScripts: Map<string, ScriptCov[]> = new Map();
-  for (const process of processes) {
-    for (const script of process.result) {
-      let scripts: ScriptCov[] | undefined = urlToScripts.get(script.url);
-      if (scripts === undefined) {
-        scripts = [];
-        urlToScripts.set(script.url, scripts);
+  for (const processCov of processCovs) {
+    for (const scriptCov of processCov.result) {
+      let scriptCovs: ScriptCov[] | undefined = urlToScripts.get(scriptCov.url);
+      if (scriptCovs === undefined) {
+        scriptCovs = [];
+        urlToScripts.set(scriptCov.url, scriptCovs);
       }
-      scripts.push(script);
+      scriptCovs.push(scriptCov);
     }
   }
+
   const result: ScriptCov[] = [];
   for (const scripts of urlToScripts.values()) {
     // assert: `scripts.length > 0`
-    result.push(mergeScripts(scripts)!);
+    result.push(mergeScriptCovs(scripts)!);
   }
-  result.sort((a, b) => a.url < b.url ? -1 : 1);
-  for (const [scriptId, scriptCov] of result.entries()) {
-    scriptCov.scriptId = scriptId.toString(10);
-  }
-  return {result};
+  const merged: ProcessCov = {result};
+
+  normalizeProcessCov(merged);
+  return merged;
 }
 
 /**
  * Merges a list of matching script coverages.
  *
- * @param scripts Script coverages to merge.
+ * Scripts are matching if they have the same `url`.
+ * The result is normalized.
+ * The input values may be mutated, it is not safe to use them after passing
+ * them to this function.
+ * The computation is synchronous.
+ *
+ * @param scriptCovs Process coverages to merge.
  * @return Merged script coverage, or `undefined` if the input list was empty.
  */
-export function mergeScripts(scripts: ReadonlyArray<ScriptCov>): ScriptCov | undefined {
-  if (scripts.length <= 1) {
-    return scripts[0];
+export function mergeScriptCovs(scriptCovs: ReadonlyArray<ScriptCov>): ScriptCov | undefined {
+  if (scriptCovs.length === 0) {
+    return undefined;
+  } else if (scriptCovs.length === 1) {
+    const merged: ScriptCov = scriptCovs[0];
+    deepNormalizeScriptCov(merged);
+    return merged;
   }
-  const first: ScriptCov = scripts[0];
-  const rangeToFns: Map<string, FunctionCov[]> = new Map();
-  for (const script of scripts) {
-    for (const fn of script.functions) {
-      const hash: string = hashFunction(fn);
-      let fns: FunctionCov[] | undefined = rangeToFns.get(hash);
-      if (fns === undefined) {
-        fns = [];
-        rangeToFns.set(hash, fns);
+
+  const first: ScriptCov = scriptCovs[0];
+  const scriptId: string = first.scriptId;
+  const url: string = first.url;
+
+  const rangeToFuncs: Map<string, FunctionCov[]> = new Map();
+  for (const scriptCov of scriptCovs) {
+    for (const funcCov of scriptCov.functions) {
+      const rootRange: string = stringifyFunctionRootRange(funcCov);
+      let funcCovs: FunctionCov[] | undefined = rangeToFuncs.get(rootRange);
+      if (funcCovs === undefined) {
+        funcCovs = [];
+        rangeToFuncs.set(rootRange, funcCovs);
       }
-      fns.push(fn);
+      funcCovs.push(funcCov);
     }
   }
+
   const functions: FunctionCov[] = [];
-  for (const fns of rangeToFns.values()) {
-    // assert: `fns.length > 0`
-    functions.push(mergeFunctions(fns)!);
+  for (const funcCovs of rangeToFuncs.values()) {
+    // assert: `funcCovs.length > 0`
+    functions.push(mergeFunctions(funcCovs)!);
   }
-  functions.sort((a: FunctionCov, b: FunctionCov): number => {
-    const rootA: RangeCov = a.ranges[0];
-    const rootB: RangeCov = b.ranges[0];
-    return rootA.startOffset !== rootB.startOffset
-      ? rootA.startOffset - rootB.startOffset
-      : rootB.endOffset - rootA.endOffset;
-  });
-  return {
-    scriptId: first.scriptId,
-    url: first.url,
-    functions,
-  };
+
+  const merged: ScriptCov = {scriptId, url, functions};
+  normalizeScriptCov(merged);
+  return merged;
+}
+
+/**
+ * Returns a string representation of the root range of the function.
+ *
+ * This string can be used to match function with same root range.
+ * The string is derived from the start and end offsets of the root range of
+ * the function.
+ * This assumes that `ranges` is non-empty (true for valid function coverages).
+ *
+ * @param funcCov Function coverage with the range to stringify
+ * @internal
+ */
+function stringifyFunctionRootRange(funcCov: Readonly<FunctionCov>): string {
+  const rootRange: RangeCov = funcCov.ranges[0];
+  return `${rootRange.startOffset.toString(10)};${rootRange.endOffset.toString(10)}`;
 }
 
 /**
  * Merges a list of matching function coverages.
  *
- * @param fns Function coverages to merge.
+ * Functions are matching if their root ranges have the same span.
+ * The result is normalized.
+ * The input values may be mutated, it is not safe to use them after passing
+ * them to this function.
+ * The computation is synchronous.
+ *
+ * @param funcCovs Function coverages to merge.
  * @return Merged function coverage, or `undefined` if the input list was empty.
  */
-export function mergeFunctions(fns: ReadonlyArray<FunctionCov>): FunctionCov | undefined {
-  if (fns.length <= 1) {
-    return fns[0];
+export function mergeFunctions(funcCovs: ReadonlyArray<FunctionCov>): FunctionCov | undefined {
+  if (funcCovs.length === 0) {
+    return undefined;
+  } else if (funcCovs.length === 1) {
+    const merged: FunctionCov = funcCovs[0];
+    normalizeFunctionCov(merged);
+    return merged;
   }
-  const first: FunctionCov = fns[0];
+
+  const functionName: string = funcCovs[0].functionName;
+
   const trees: RangeTree[] = [];
-  for (const fn of fns) {
+  for (const funcCov of funcCovs) {
     // assert: `fn.ranges.length > 0`
     // assert: `fn.ranges` is sorted
-    const tree: RangeTree = RangeTree.fromSortedRanges(fn.ranges)!;
-    trees.push(tree);
+    trees.push(RangeTree.fromSortedRanges(funcCov.ranges)!);
   }
+
   // assert: `trees.length > 0`
   const mergedTree: RangeTree = mergeRangeTrees(trees)!;
-  mergedTree.normalize();
+  normalizeRangeTree(mergedTree);
   const ranges: RangeCov[] = mergedTree.toRanges();
   const isBlockCoverage: boolean = !(ranges.length === 1 && ranges[0].count === 0);
-  return {
-    functionName: first.functionName,
-    ranges,
-    isBlockCoverage,
-  };
-}
 
-/**
- * Returns a string identifying a function inside a script.
- *
- * This string is the same for matching functions from matching script
- * coverages.
- * This string is derived from the start and end offsets of the root range of
- * the function.
- * This string is unique without collisions, assuming the inputs are valid.
- *
- * @param fn
- */
-function hashFunction(fn: Readonly<FunctionCov>): string {
-  return JSON.stringify([fn.ranges[0].startOffset, fn.ranges[0].endOffset]);
+  const merged: FunctionCov = {functionName, ranges, isBlockCoverage};
+  // assert: `merged` is normalized
+  return merged;
 }
 
 /**

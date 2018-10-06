@@ -53,7 +53,7 @@ async function mergeBench(dirOrName, lib = "ts", debug = false) {
       if (debug) {
         console.error(`Parse: ${(parsedTime - readTime) / 1000}s`);
       }
-      const merged = tsLib.mergeProcesses(processCovs);
+      merged = tsLib.mergeProcessCovs(processCovs);
       endTime = Date.now();
       if (debug) {
         console.error(`Merge: ${(endTime - parsedTime) / 1000}s`);

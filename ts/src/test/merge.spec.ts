@@ -1,7 +1,7 @@
 import chai from "chai";
 import fs from "fs";
 import path from "path";
-import { mergeProcesses, ProcessCov } from "../lib";
+import { mergeProcessCovs, ProcessCov } from "../lib";
 
 const REPO_ROOT: string = path.join(__dirname, "..", "..", "..", "..");
 const BENCHES_INPUT_DIR: string = path.join(REPO_ROOT, "benches");
@@ -34,7 +34,7 @@ describe("merge", () => {
         const expectedContent: string = await fs.promises.readFile(expectedPath, {encoding: "UTF-8"}) as string;
         const expected: ProcessCov = JSON.parse(expectedContent);
         const startTime: number = Date.now();
-        const actual: ProcessCov | undefined = mergeProcesses(inputs);
+        const actual: ProcessCov | undefined = mergeProcessCovs(inputs);
         const endTime: number = Date.now();
         console.error(`Time (${name}): ${(endTime - startTime) / 1000}`);
         chai.assert.deepEqual(actual, expected);
@@ -51,7 +51,7 @@ describe("merge", () => {
         const items: MergeRangeItem[] = JSON.parse(content);
         for (const item of items) {
           const test: () => void = () => {
-            const actual: ProcessCov | undefined = mergeProcesses(item.inputs);
+            const actual: ProcessCov | undefined = mergeProcessCovs(item.inputs);
             chai.assert.deepEqual(actual, item.expected);
           };
           switch (item.status) {
