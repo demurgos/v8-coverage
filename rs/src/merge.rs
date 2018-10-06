@@ -127,10 +127,10 @@ fn merge_range_trees<'a>(rta: &'a RangeTreeArena<'a>, mut trees: Vec<&'a mut Ran
     let first = &trees[0];
     (first.start, first.end)
   };
-  let count: i64 = trees.iter().fold(0, |acc, tree| acc + tree.count);
+  let delta: i64 = trees.iter().fold(0, |acc, tree| acc + tree.delta);
   let children = merge_range_tree_children(rta, trees);
 
-  Some(rta.alloc(RangeTree::new(start, end, count, children)))
+  Some(rta.alloc(RangeTree::new(start, end, delta, children)))
 }
 
 struct StartEvent<'a> {
@@ -213,13 +213,11 @@ impl<'a> Iterator for StartEventQueue<'a> {
 }
 
 fn merge_range_tree_children<'a>(rta: &'a RangeTreeArena<'a>, parent_trees: Vec<&'a mut RangeTree<'a>>) -> Vec<&'a mut RangeTree<'a>> {
-  let mut parent_counts: Vec<i64> = Vec::with_capacity(parent_trees.len());
   let mut flat_children: Vec<Vec<&'a mut RangeTree<'a>>> = Vec::with_capacity(parent_trees.len());
   let mut wrapped_children: Vec<Vec<&'a mut RangeTree<'a>>> = Vec::with_capacity(parent_trees.len());
   let mut open_range: Option<Range> = None;
 
   for parent_tree in parent_trees.iter() {
-    parent_counts.push(parent_tree.count);
     flat_children.push(Vec::new());
     wrapped_children.push(Vec::new());
   }
@@ -235,7 +233,7 @@ fn merge_range_tree_children<'a>(rta: &'a RangeTreeArena<'a>, parent_trees: Vec<
           wrapped_children[parent_index].push(rta.alloc(RangeTree::new(
             open_range.start,
             open_range.end,
-            parent_counts[parent_index],
+            0,
             nested,
           )));
         }
@@ -289,7 +287,7 @@ fn merge_range_tree_children<'a>(rta: &'a RangeTreeArena<'a>, parent_trees: Vec<
       wrapped_children[parent_index].push(rta.alloc(RangeTree::new(
         open_range.start,
         open_range.end,
-        parent_counts[parent_index],
+        0,
         nested,
       )));
     }
@@ -309,7 +307,6 @@ fn merge_range_tree_children<'a>(rta: &'a RangeTreeArena<'a>, parent_trees: Vec<
   let mut result: Vec<&'a mut RangeTree<'a>> = Vec::new();
   for event in events.iter() {
     let mut matching_trees: Vec<&'a mut RangeTree<'a>> = Vec::new();
-    let mut extra_count: i64 = 0;
     for (parent_index, children) in child_forests.iter_mut().enumerate() {
       let next_tree: Option<&'a mut RangeTree<'a>> = {
         if children.peek().map_or(false, |tree| tree.start == *event) {
@@ -320,14 +317,9 @@ fn merge_range_tree_children<'a>(rta: &'a RangeTreeArena<'a>, parent_trees: Vec<
       };
       if let Some(next_tree) = next_tree {
         matching_trees.push(next_tree);
-      } else {
-        extra_count += parent_counts[parent_index];
       }
     }
     if let Some(mut merged) = merge_range_trees(rta, matching_trees) {
-      if extra_count != 0 {
-        merged.add_count(extra_count);
-      }
       result.push(merged);
     }
   }

@@ -86,7 +86,7 @@ export function mergeScriptCovs(scriptCovs: ReadonlyArray<ScriptCov>): ScriptCov
   const functions: FunctionCov[] = [];
   for (const funcCovs of rangeToFuncs.values()) {
     // assert: `funcCovs.length > 0`
-    functions.push(mergeFunctions(funcCovs)!);
+    functions.push(mergeFunctionCovs(funcCovs)!);
   }
 
   const merged: ScriptCov = {scriptId, url, functions};
@@ -122,7 +122,7 @@ function stringifyFunctionRootRange(funcCov: Readonly<FunctionCov>): string {
  * @param funcCovs Function coverages to merge.
  * @return Merged function coverage, or `undefined` if the input list was empty.
  */
-export function mergeFunctions(funcCovs: ReadonlyArray<FunctionCov>): FunctionCov | undefined {
+export function mergeFunctionCovs(funcCovs: ReadonlyArray<FunctionCov>): FunctionCov | undefined {
   if (funcCovs.length === 0) {
     return undefined;
   } else if (funcCovs.length === 1) {

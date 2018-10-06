@@ -22,16 +22,16 @@ impl<'a> RangeTreeArena<'a> {
 pub struct RangeTree<'a> {
   pub start: usize,
   pub end: usize,
-  pub count: i64,
+  pub delta: i64,
   pub children: Vec<&'a mut RangeTree<'a>>,
 }
 
 impl<'rt> RangeTree<'rt> {
-  pub fn new<'a>(start: usize, end: usize, count: i64, children: Vec<&'a mut RangeTree<'a>>) -> RangeTree<'a> {
+  pub fn new<'a>(start: usize, end: usize, delta: i64, children: Vec<&'a mut RangeTree<'a>>) -> RangeTree<'a> {
     RangeTree {
       start,
       end,
-      count,
+      delta,
       children,
     }
   }
@@ -51,8 +51,8 @@ impl<'rt> RangeTree<'rt> {
       }
     }
 
-    let left = RangeTree::new(tree.start, value, tree.count, left_children);
-    let right = RangeTree::new(value, tree.end, tree.count, right_children);
+    let left = RangeTree::new(tree.start, value, tree.delta, left_children);
+    let right = RangeTree::new(value, tree.end, tree.delta, right_children);
     (rta.alloc(left), rta.alloc(right))
   }
 
@@ -61,8 +61,8 @@ impl<'rt> RangeTree<'rt> {
       let mut children: Vec<&'a mut RangeTree<'a>> = Vec::new();
       let mut chain: Vec<&'a mut RangeTree<'a>> = Vec::new();
       for child in tree.children.drain(..) {
-        let is_chain_end: bool = match chain.last().map(|tree| (tree.count, tree.end)) {
-          Some((count, chain_end)) => (count, chain_end) != (child.count, child.start),
+        let is_chain_end: bool = match chain.last().map(|tree| (tree.delta, tree.end)) {
+          Some((delta, chain_end)) => (delta, chain_end) != (child.delta, child.start),
           None => false,
         };
         if is_chain_end {
@@ -70,7 +70,10 @@ impl<'rt> RangeTree<'rt> {
           let mut head: &'a mut RangeTree<'a> = chain_iter.next().unwrap();
           for tree in chain_iter {
             head.end = tree.end;
-            head.children.extend(tree.children.drain(..));
+            for sub_child in tree.children.drain(..) {
+              sub_child.delta += tree.delta - head.delta;
+              head.children.push(sub_child);
+            }
           }
           children.push(RangeTree::normalize(rta, head));
         }
@@ -81,13 +84,18 @@ impl<'rt> RangeTree<'rt> {
         let mut head: &'a mut RangeTree<'a> = chain_iter.next().unwrap();
         for tree in chain_iter {
           head.end = tree.end;
-          head.children.extend(tree.children.drain(..));
+          for sub_child in tree.children.drain(..) {
+            sub_child.delta += tree.delta - head.delta;
+            head.children.push(sub_child);
+          }
         }
         children.push(RangeTree::normalize(rta, head));
       }
 
       if children.len() == 1 && children[0].start == tree.start && children[0].end == tree.end {
-        return children.remove(0);
+        let normalized = children.remove(0);
+        normalized.delta += tree.delta;
+        return normalized;
       }
 
       children
@@ -97,29 +105,27 @@ impl<'rt> RangeTree<'rt> {
   }
 
   pub fn add_count(&mut self, value: i64) -> () {
-    self.count += value;
-    for child in self.children.iter_mut() {
-      child.add_count(value);
-    }
+    self.delta += value;
   }
 
   pub fn to_ranges(&self) -> Vec<RangeCov> {
     let mut ranges: Vec<RangeCov> = Vec::new();
-    let mut stack: Vec<&RangeTree> = vec![self];
-    while let Some(ref cur) = stack.pop() {
-      ranges.push(RangeCov { start_offset: cur.start, end_offset: cur.end, count: cur.count });
+    let mut stack: Vec<(&RangeTree, i64)> = vec![(self, 0)];
+    while let Some((ref cur, parent_count)) = stack.pop() {
+      let count: i64 = parent_count + cur.delta;
+      ranges.push(RangeCov { start_offset: cur.start, end_offset: cur.end, count });
       for child in cur.children.iter().rev() {
-        stack.push(child)
+        stack.push((child, count))
       }
     }
     ranges
   }
 
   pub fn from_sorted_ranges<'a>(rta: &'a RangeTreeArena<'a>, ranges: &[RangeCov]) -> Option<&'a mut RangeTree<'a>> {
-    Self::from_sorted_ranges_inner(rta, &mut ranges.iter().peekable(), ::std::usize::MAX)
+    Self::from_sorted_ranges_inner(rta, &mut ranges.iter().peekable(), ::std::usize::MAX, 0)
   }
 
-  fn from_sorted_ranges_inner<'a, 'b, 'c: 'b>(rta: &'a RangeTreeArena<'a>, ranges: &'b mut Peekable<impl Iterator<Item=&'c RangeCov>>, parent_end: usize) -> Option<&'a mut RangeTree<'a>> {
+  fn from_sorted_ranges_inner<'a, 'b, 'c: 'b>(rta: &'a RangeTreeArena<'a>, ranges: &'b mut Peekable<impl Iterator<Item=&'c RangeCov>>, parent_end: usize, parent_count: i64) -> Option<&'a mut RangeTree<'a>> {
     let has_range: bool = match ranges.peek() {
       None => false,
       Some(ref range) => range.start_offset < parent_end,
@@ -131,11 +137,12 @@ impl<'rt> RangeTree<'rt> {
     let start: usize = range.start_offset;
     let end: usize = range.end_offset;
     let count: i64 = range.count;
+    let delta: i64 = count - parent_count;
     let mut children: Vec<&mut RangeTree> = Vec::new();
-    while let Some(child) = Self::from_sorted_ranges_inner(rta, ranges, end) {
+    while let Some(child) = Self::from_sorted_ranges_inner(rta, ranges, end, count) {
       children.push(child);
     }
-    Some(rta.alloc(RangeTree::new(start, end, count, children)))
+    Some(rta.alloc(RangeTree::new(start, end, delta, children)))
   }
 }
 
