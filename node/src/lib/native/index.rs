@@ -7,6 +7,8 @@ use neon::prelude::*;
 use v8_coverage::{FunctionCov, ProcessCov, RangeCov, ScriptCov};
 
 pub fn merge_process_cov_buffers_sync(mut cx: FunctionContext) -> JsResult<JsValue> {
+  let start = ::std::time::SystemTime::now();
+
   let buffers_js: Handle<JsArray> = cx.argument::<JsArray>(0)?;
 
   let processes: NeonResult<Vec<ProcessCov>> = buffers_js
@@ -24,14 +26,22 @@ pub fn merge_process_cov_buffers_sync(mut cx: FunctionContext) -> JsResult<JsVal
 
   let processes = processes?;
 
+  let parsed = ::std::time::SystemTime::now();
+
+  eprintln!("{:?}", parsed.duration_since(start));
+
   match v8_coverage::merge_processes(processes) {
     None => Ok(JsUndefined::new().as_value(&mut cx)),
     Some(merged) => {
+      let merged_time = ::std::time::SystemTime::now();
+      eprintln!("{:?}", merged_time.duration_since(parsed));
       let data = serde_json::to_vec(&merged).unwrap();
       let mut buffer: Handle<JsBuffer> = cx.buffer(data.len() as u32)?;
       cx.borrow_mut(&mut buffer, |bytes| {
         bytes.as_mut_slice().copy_from_slice(&data)
       });
+      let emitted = ::std::time::SystemTime::now();
+      eprintln!("{:?}", emitted.duration_since(merged_time));
       Ok(buffer.as_value(&mut cx))
     }
   }
