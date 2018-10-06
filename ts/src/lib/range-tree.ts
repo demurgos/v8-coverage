@@ -3,22 +3,19 @@ import { RangeCov } from "./types";
 export class RangeTree {
   start: number;
   end: number;
-  count: number;
+  delta: number;
   children: RangeTree[];
-  private lazyCount: number;
 
   constructor(
     start: number,
     end: number,
-    count: number,
+    delta: number,
     children: RangeTree[],
-    lazyCount: number,
   ) {
     this.start = start;
     this.end = end;
-    this.count = count;
+    this.delta = delta;
     this.children = children;
-    this.lazyCount = lazyCount;
   }
 
   /**
@@ -26,39 +23,34 @@ export class RangeTree {
    */
   static fromSortedRanges(ranges: ReadonlyArray<RangeCov>): RangeTree | undefined {
     let root: RangeTree | undefined;
-    const stack: RangeTree[] = [];
+    // Stack of parent trees and parent counts.
+    const stack: [RangeTree, number][] = [];
     for (const range of ranges) {
-      const node: RangeTree = new RangeTree(range.startOffset, range.endOffset, range.count, [], 0);
+      const node: RangeTree = new RangeTree(range.startOffset, range.endOffset, range.count, []);
       if (root === undefined) {
         root = node;
-        stack.push(node);
+        stack.push([node, range.count]);
         continue;
       }
-      let top: RangeTree;
+      let parent: RangeTree;
+      let parentCount: number;
       while (true) {
-        top = stack[stack.length - 1];
+        [parent, parentCount] = stack[stack.length - 1];
         // assert: `top !== undefined` (the ranges are sorted)
-        if (range.startOffset < top.end) {
+        if (range.startOffset < parent.end) {
           break;
         } else {
           stack.pop();
         }
       }
-      top.children.push(node);
-      stack.push(node);
+      node.delta -= parentCount;
+      parent.children.push(node);
+      stack.push([node, range.count]);
     }
     return root;
   }
 
   normalize(): void {
-    if (this.lazyCount !== 0) {
-      this.count += this.lazyCount;
-      for (const child of this.children) {
-        child.lazyCount += this.lazyCount;
-      }
-      this.lazyCount = 0;
-    }
-
     const children: RangeTree[] = [];
     let curEnd: number;
     let head: RangeTree | undefined;
@@ -66,7 +58,7 @@ export class RangeTree {
     for (const child of this.children) {
       if (head === undefined) {
         head = child;
-      } else if ((child.count + child.lazyCount) === (head.count + head.lazyCount) && child.start === curEnd!) {
+      } else if (child.delta === head.delta && child.start === curEnd!) {
         tail.push(child);
       } else {
         endChain();
@@ -81,7 +73,7 @@ export class RangeTree {
     if (children.length === 1) {
       const child: RangeTree = children[0];
       if (child.start === this.start && child.end === this.end) {
-        this.count = child.count;
+        this.delta += child.delta;
         this.children = child.children;
         // `.lazyCount` is zero for both (both are after normalization)
         return;
@@ -95,7 +87,7 @@ export class RangeTree {
         head!.end = tail[tail.length - 1].end;
         for (const tailTree of tail) {
           for (const subChild of tailTree.children) {
-            subChild.lazyCount += tailTree.lazyCount - head!.lazyCount;
+            subChild.delta += tailTree.delta - head!.delta;
             head!.children.push(subChild);
           }
         }
@@ -135,9 +127,8 @@ export class RangeTree {
     const result: RangeTree = new RangeTree(
       value,
       this.end,
-      this.count,
+      this.delta,
       rightChildren,
-      this.lazyCount,
     );
     this.end = value;
     return result;
@@ -150,12 +141,14 @@ export class RangeTree {
    */
   toRanges(): RangeCov[] {
     const ranges: RangeCov[] = [];
-    const stack: RangeTree[] = [this];
+    // Stack of parent trees and counts.
+    const stack: [RangeTree, number][] = [[this, 0]];
     while (stack.length > 0) {
-      const cur: RangeTree = stack.pop()!;
-      ranges.push({startOffset: cur.start, endOffset: cur.end, count: cur.count});
+      const [cur, parentCount]: [RangeTree, number] = stack.pop()!;
+      const count: number = parentCount + cur.delta;
+      ranges.push({startOffset: cur.start, endOffset: cur.end, count});
       for (let i: number = cur.children.length - 1; i >= 0; i--) {
-        stack.push(cur.children[i]);
+        stack.push([cur.children[i], count]);
       }
     }
     return ranges;
@@ -170,6 +163,6 @@ export class RangeTree {
    * @param n Value to add.
    */
   addCount(n: number): void {
-    this.lazyCount += n;
+    this.delta += n;
   }
 }

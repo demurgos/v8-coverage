@@ -159,12 +159,12 @@ function mergeRangeTrees(trees: ReadonlyArray<RangeTree>): RangeTree | undefined
     return trees[0];
   }
   const first: RangeTree = trees[0];
-  let count: number = 0;
+  let delta: number = 0;
   for (const tree of trees) {
-    count += tree.count;
+    delta += tree.delta;
   }
   const children: RangeTree[] = mergeRangeTreeChildren(trees);
-  return new RangeTree(first.start, first.end, count, children, 0);
+  return new RangeTree(first.start, first.end, delta, children);
 }
 
 function mergeRangeTreeChildren(parentTrees: ReadonlyArray<RangeTree>): RangeTree[] {
@@ -176,7 +176,6 @@ function mergeRangeTreeChildren(parentTrees: ReadonlyArray<RangeTree>): RangeTre
   for (let eventIndex: number = 0; eventIndex < events.length - 1; eventIndex++) {
     const event: number = events[eventIndex];
     const childTrees: RangeTree[] = [];
-    let parentAcc: number = 0;
     for (let parentIdx: number = 0; parentIdx < parentTrees.length; parentIdx++) {
       const parentTree: RangeTree = parentTrees[parentIdx];
       const nextTreeIndex: number = nextTreeIndexes[parentIdx];
@@ -184,13 +183,10 @@ function mergeRangeTreeChildren(parentTrees: ReadonlyArray<RangeTree>): RangeTre
       if (nextTree !== undefined && nextTree.start === event) {
         nextTreeIndexes[parentIdx] = nextTreeIndex + 1;
         childTrees.push(nextTree);
-      } else {
-        parentAcc += parentTree.count;
       }
     }
     const merged: RangeTree | undefined = mergeRangeTrees(childTrees);
     if (merged !== undefined) {
-      merged.addCount(parentAcc);
       result.push(merged);
     }
   }
@@ -227,9 +223,8 @@ function extendChildren(parentTrees: ReadonlyArray<RangeTree>): void {
       const wrapper: RangeTree = new RangeTree(
         superTree.start,
         superTree.end,
-        parentTrees[parentIndex].count,
-        nested,
         0,
+        nested,
       );
       wrappedChildren[parentIndex].push(wrapper);
     }
