@@ -31,8 +31,8 @@ pub fn merge_processes(mut processes: Vec<ProcessCov>) -> Option<ProcessCov> {
 
   let result: Vec<ScriptCov> = result
 //    .into_par_iter()
-//    .par_iter()
-    .into_iter()
+    .par_iter()
+//    .into_iter()
     .map(|(script_id, scripts)| {
       let mut merged: ScriptCov = merge_scripts(scripts.to_vec()).unwrap();
       merged.script_id = script_id.to_string();

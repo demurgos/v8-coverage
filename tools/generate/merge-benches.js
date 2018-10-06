@@ -8,7 +8,7 @@ const OUT_DIR = path.join(ROOT, "test-data", "merge", "benches");
 async function generateMergeBenches() {
   for await (const bench of getBenches()) {
     const name = path.basename(bench);
-    console.log(`Generating snapshot for: ${name}`);
+    console.error(`Generating snapshot for: ${name}`);
     const merged = await mergeBench(bench);
     const outPath = path.join(OUT_DIR, `${name}.json`);
     await writeJson(outPath, merged);

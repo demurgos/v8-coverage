@@ -17,14 +17,28 @@ async function* getBenches() {
 }
 
 async function mergeBench(dirOrName) {
+  const startTime = Date.now();
   const dir = path.isAbsolute(dirOrName) ? dirOrName : path.join(BENCHES_DIR, name);
   const names = await fs.promises.readdir(dir);
-  const processCovs = [];
+  const bufferPromises = [];
   for (const name of names) {
     const resolved = path.join(dir, name);
-    processCovs.push(JSON.parse(await fs.promises.readFile(resolved, {encoding: "UTF-8"})));
+    bufferPromises.push(fs.promises.readFile(resolved));
   }
-  return v8Coverage.mergeProcesses(processCovs);
+  const buffers = await Promise.all(bufferPromises);
+  const readTime = Date.now();
+  console.error(`Read: ${(readTime - startTime) / 1000}`);
+  // const processCovs = [];
+  // for (const buffer of buffers) {
+  //   processCovs.push(JSON.parse(buffer.toString("UTF-8")));
+  // }
+  // const parsedTime = Date.now();
+  // console.error(`Parse: ${(parsedTime - readTime) / 1000}`);
+  const merged = v8Coverage.mergeProcessCovBuffersSync(buffers);
+  const endTime = Date.now();
+  console.error(`Merge: ${(endTime - readTime) / 1000}`);
+  console.error(`All: ${(endTime - startTime) / 1000}`);
+  return merged;
 }
 
 module.exports = {getBenches, mergeBench};
