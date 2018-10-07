@@ -17,16 +17,42 @@ async function* getBenches() {
   }
 }
 
+async function* getBenchNames() {
+  for await (const benchPath of getBenches()) {
+    yield path.basename(benchPath);
+  }
+}
+
+function resolveBench(dirOrName) {
+  return path.isAbsolute(dirOrName) ? dirOrName : path.join(BENCHES_DIR, dirOrName);
+}
+
+async function* getBenchFiles(dirOrName) {
+  const dir = resolveBench(dirOrName);
+  const names = await fs.promises.readdir(dir);
+  for (const name of names) {
+    yield path.join(dir, name);
+  }
+}
+
+async function* getBenchBuffers(dirOrName) {
+  for await (const file of getBenchFiles(dirOrName)) {
+    yield fs.promises.readFile(file);
+  }
+}
+
+async function* getBenchProcessCovs(dirOrName) {
+  for await (const file of getBenchFiles(dirOrName)) {
+    yield fs.promises.readFile(file, {encoding: "UTF-8"}).then(JSON.parse);
+  }
+}
+
 async function mergeBench(dirOrName, lib = "ts", debug = false) {
   const startTime = Date.now();
-  const dir = path.isAbsolute(dirOrName) ? dirOrName : path.join(BENCHES_DIR, name);
-  const names = await fs.promises.readdir(dir);
-  const bufferPromises = [];
-  for (const name of names) {
-    const resolved = path.join(dir, name);
-    bufferPromises.push(fs.promises.readFile(resolved));
+  const buffers = [];
+  for await (const buffer of getBenchBuffers(dirOrName)) {
+    buffers.push(buffer);
   }
-  const buffers = await Promise.all(bufferPromises);
   const readTime = Date.now();
   if (debug) {
     console.error(`Read: ${(readTime - startTime) / 1000}s`);
@@ -70,4 +96,4 @@ async function mergeBench(dirOrName, lib = "ts", debug = false) {
   return merged;
 }
 
-module.exports = {getBenches, mergeBench};
+module.exports = {getBenches, mergeBench, getBenchBuffers, getBenchProcessCovs, getBenchNames};
