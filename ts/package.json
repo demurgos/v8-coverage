@@ -1,5 +1,5 @@
 {
-  "name": "v8-coverage",
+  "name": "@c88/v8-coverage",
   "version": "0.1.0",
   "description": "Helper functions for V8 coverage files.",
   "author": "Charles Samborski <demurgos@demurgos.net> (https://demurgos.net)",

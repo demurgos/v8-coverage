@@ -15,9 +15,9 @@ This repository contains helper functions to manipulate V8 coverage files.
     the other).
 
 There are three implementations:
-- **Typescript (`ts`)**: Reference implementation, available on npm as `c88/v8-coverage`.
+- **Typescript (`ts`)**: Reference implementation, available on npm as `@c88/v8-coverage`.
 - **Rust (`rs`)**: Available on crates.io as `v8-coverage`.
-- **Node native module (`node`)**: Not available yet, planned to be published on npm as `c88/v8-coverage-node`.
+- **Node native module (`node`)**: Not available yet, planned to be published on npm as `@c88/v8-coverage-node`.
 
 All the implementations expose the same API.
 
@@ -43,6 +43,14 @@ The lib assumes two scripts are matching if their "root range" (first range)
 has the same offsets.
 
 If the list is empty, returns `undefined`.
+
+### `cloneProcessCov(processCov: ProcessCov): ProcessCov`
+
+### `cloneScriptCov(functionCov: FunctionCov): FunctionCov`
+
+### `cloneFunctionCov(scriptCov: ScriptCov): ScriptCov`
+
+### `cloneRangeCov(rangeCov: RangeCov): RangeCov`
 
 ## Types
 
