@@ -19,4 +19,5 @@ before_script:
 script:
 - cd ts
 - npm test
-- coverage/lcov.info coverage.lcov && codecov
+- cp coverage/lcov.info coverage.lcov
+- codecov
