@@ -29,7 +29,7 @@ describe("merge", () => {
       const name: string = path.basename(bench);
 
       if (BENCHES_TO_SKIP.has(name)) {
-        it.skip(`${name} (skipped: too large)`, testBench);
+        it.skip(`${name} (skipped: too large for CI)`, testBench);
       } else {
         it(name, testBench);
       }

@@ -32,5 +32,18 @@
     "pre-commit": "^1.2.2",
     "ts-node": "^7.0.0",
     "turbo-gulp": "^0.17.1"
+  },
+  "nyc": {
+    "include": [
+      "build/test/lib/**/*.js",
+      "build/test/lib/**/*.mjs"
+    ],
+    "reporter": [
+      "text",
+      "html"
+    ],
+    "extension": [
+      ".mjs"
+    ]
   }
 }
