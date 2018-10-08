@@ -579,7 +579,7 @@ Some observations:
 This section gives an overview of the actual implementation of the algorithm.
 Check the code if you want to go into more details.
 
-The generale strategy to merge lists of `ranges` is the following:
+The general strategy to merge lists of `ranges` is the following:
 1. Convert each list to a range tree.
 2. Convert each range tree to a "delta" range tree. Instead of storing absolute
    `count` values, store the difference between the child count and parent count
