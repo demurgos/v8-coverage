@@ -19,8 +19,22 @@ interface MergeRangeItem {
 describe("merge", () => {
   describe("benches", () => {
     for (const bench of getBenches()) {
+      const BENCHES_TO_SKIP: Set<string> = new Set();
+      if (process.env.CI === "true") {
+        // Skip very large benchmarks when running continuous integration
+        BENCHES_TO_SKIP.add("node@10.11.0");
+        BENCHES_TO_SKIP.add("npm@6.4.1");
+      }
+
       const name: string = path.basename(bench);
-      it(name, async function (this: Mocha.Context) {
+
+      if (BENCHES_TO_SKIP.has(name)) {
+        it.skip(`${name} (skipped: too large)`, testBench);
+      } else {
+        it(name, testBench);
+      }
+
+      async function testBench(this: Mocha.Context) {
         this.timeout(BENCHES_TIMEOUT);
 
         const inputFileNames: string[] = await fs.promises.readdir(bench);
@@ -39,7 +53,7 @@ describe("merge", () => {
         console.error(`Time (${name}): ${(endTime - startTime) / 1000}`);
         chai.assert.deepEqual(actual, expected);
         console.error(`OK: ${name}`);
-      });
+      }
     }
   });
 
