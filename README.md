@@ -35,7 +35,7 @@ The lib assumes two scripts are matching if they have the same `url`.
 
 If the list is empty, returns `undefined`.
 
-### `mergeFunctionCovs(funcCovs: ScriptCov[]): ScriptCov | undefined`
+### `mergeFunctionCovs(funcCovs: FunctionCov[]): FunctionCov | undefined`
 
 Merges a list of matching function coverages into a single function coverage.
 
