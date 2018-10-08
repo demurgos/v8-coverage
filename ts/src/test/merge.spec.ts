@@ -1,7 +1,7 @@
 import chai from "chai";
 import fs from "fs";
 import path from "path";
-import { mergeProcessCovs, ProcessCov } from "../lib";
+import { FunctionCov, mergeFunctionCovs, mergeProcessCovs, mergeScriptCovs, ProcessCov, ScriptCov } from "../lib";
 
 const REPO_ROOT: string = path.join(__dirname, "..", "..", "..", "..");
 const BENCHES_INPUT_DIR: string = path.join(REPO_ROOT, "benches");
@@ -17,6 +17,162 @@ interface MergeRangeItem {
 }
 
 describe("merge", () => {
+  describe("Various", () => {
+    it("accepts empty arrays for `mergeProcessCovs`", () => {
+      const inputs: ProcessCov[] = [];
+      const expected: ProcessCov = {result: []};
+      const actual: ProcessCov = mergeProcessCovs(inputs);
+      chai.assert.deepEqual(actual, expected);
+    });
+
+    it("accepts empty arrays for `mergeScriptCovs`", () => {
+      const inputs: ScriptCov[] = [];
+      const expected: ScriptCov | undefined = undefined;
+      const actual: ScriptCov | undefined = mergeScriptCovs(inputs);
+      chai.assert.deepEqual(actual, expected);
+    });
+
+    it("accepts empty arrays for `mergeFunctionCovs`", () => {
+      const inputs: FunctionCov[] = [];
+      const expected: FunctionCov | undefined = undefined;
+      const actual: FunctionCov | undefined = mergeFunctionCovs(inputs);
+      chai.assert.deepEqual(actual, expected);
+    });
+
+    it("accepts arrays with a single item for `mergeProcessCovs`", () => {
+      const inputs: ProcessCov[] = [
+        {
+          result: [
+            {
+              scriptId: "123",
+              url: "/lib.js",
+              functions: [
+                {
+                  functionName: "test",
+                  isBlockCoverage: true,
+                  ranges: [
+                    {startOffset: 0, endOffset: 4, count: 2},
+                    {startOffset: 1, endOffset: 2, count: 1},
+                    {startOffset: 2, endOffset: 3, count: 1},
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      ];
+      const expected: ProcessCov = {
+        result: [
+          {
+            scriptId: "0",
+            url: "/lib.js",
+            functions: [
+              {
+                functionName: "test",
+                isBlockCoverage: true,
+                ranges: [
+                  {startOffset: 0, endOffset: 4, count: 2},
+                  {startOffset: 1, endOffset: 3, count: 1},
+                ],
+              },
+            ],
+          },
+        ],
+      };
+      const actual: ProcessCov = mergeProcessCovs(inputs);
+      chai.assert.deepEqual(actual, expected);
+    });
+
+    it("accepts arrays with a single item for `mergeScriptCovs`", () => {
+      const inputs: ScriptCov[] = [
+        {
+          scriptId: "123",
+          url: "/lib.js",
+          functions: [
+            {
+              functionName: "test",
+              isBlockCoverage: true,
+              ranges: [
+                {startOffset: 0, endOffset: 4, count: 2},
+                {startOffset: 1, endOffset: 2, count: 1},
+                {startOffset: 2, endOffset: 3, count: 1},
+              ],
+            },
+          ],
+        },
+      ];
+      const expected: ScriptCov | undefined = {
+        scriptId: "123",
+        url: "/lib.js",
+        functions: [
+          {
+            functionName: "test",
+            isBlockCoverage: true,
+            ranges: [
+              {startOffset: 0, endOffset: 4, count: 2},
+              {startOffset: 1, endOffset: 3, count: 1},
+            ],
+          },
+        ],
+      };
+      const actual: ScriptCov | undefined = mergeScriptCovs(inputs);
+      chai.assert.deepEqual(actual, expected);
+    });
+
+    it("accepts arrays with a single item for `mergeFunctionCovs`", () => {
+      const inputs: FunctionCov[] = [
+        {
+          functionName: "test",
+          isBlockCoverage: true,
+          ranges: [
+            {startOffset: 0, endOffset: 4, count: 2},
+            {startOffset: 1, endOffset: 2, count: 1},
+            {startOffset: 2, endOffset: 3, count: 1},
+          ],
+        },
+      ];
+      const expected: FunctionCov = {
+        functionName: "test",
+        isBlockCoverage: true,
+        ranges: [
+          {startOffset: 0, endOffset: 4, count: 2},
+          {startOffset: 1, endOffset: 3, count: 1},
+        ],
+      };
+      const actual: FunctionCov | undefined = mergeFunctionCovs(inputs);
+      chai.assert.deepEqual(actual, expected);
+    });
+  });
+
+  describe("ranges", () => {
+    for (const sourceFile of getSourceFiles()) {
+      const relPath: string = path.relative(RANGES_DIR, sourceFile);
+      describe(relPath, () => {
+        const content: string = fs.readFileSync(sourceFile, {encoding: "UTF-8"});
+        const items: MergeRangeItem[] = JSON.parse(content);
+        for (const item of items) {
+          const test: () => void = () => {
+            const actual: ProcessCov | undefined = mergeProcessCovs(item.inputs);
+            chai.assert.deepEqual(actual, item.expected);
+          };
+          switch (item.status) {
+            case "run":
+              it(item.name, test);
+              break;
+            case "only":
+              it.only(item.name, test);
+              break;
+            case "skip":
+              it.skip(item.name, test);
+              break;
+            default:
+              throw new Error(`Unexpected status: ${item.status}`);
+          }
+        }
+      });
+    }
+  });
+
   describe("benches", () => {
     for (const bench of getBenches()) {
       const BENCHES_TO_SKIP: Set<string> = new Set();
@@ -54,35 +210,6 @@ describe("merge", () => {
         chai.assert.deepEqual(actual, expected);
         console.error(`OK: ${name}`);
       }
-    }
-  });
-
-  describe("ranges", () => {
-    for (const sourceFile of getSourceFiles()) {
-      const relPath: string = path.relative(RANGES_DIR, sourceFile);
-      describe(relPath, () => {
-        const content: string = fs.readFileSync(sourceFile, {encoding: "UTF-8"});
-        const items: MergeRangeItem[] = JSON.parse(content);
-        for (const item of items) {
-          const test: () => void = () => {
-            const actual: ProcessCov | undefined = mergeProcessCovs(item.inputs);
-            chai.assert.deepEqual(actual, item.expected);
-          };
-          switch (item.status) {
-            case "run":
-              it(item.name, test);
-              break;
-            case "only":
-              it.only(item.name, test);
-              break;
-            case "skip":
-              it.skip(item.name, test);
-              break;
-            default:
-              throw new Error(`Unexpected status: ${item.status}`);
-          }
-        }
-      });
     }
   });
 });

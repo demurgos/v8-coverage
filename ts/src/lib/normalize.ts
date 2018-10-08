@@ -71,6 +71,9 @@ export function deepNormalizeScriptCov(scriptCov: ScriptCov): void {
  */
 export function normalizeFunctionCov(funcCov: FunctionCov): void {
   funcCov.ranges.sort(compareRangeCovs);
+  const tree: RangeTree = RangeTree.fromSortedRanges(funcCov.ranges)!;
+  normalizeRangeTree(tree);
+  funcCov.ranges = tree.toRanges();
 }
 
 /**

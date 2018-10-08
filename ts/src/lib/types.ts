@@ -14,6 +14,11 @@ export interface FunctionCov {
   isBlockCoverage: boolean;
 }
 
+export interface Range {
+  readonly start: number;
+  readonly end: number;
+}
+
 export interface RangeCov {
   startOffset: number;
   endOffset: number;

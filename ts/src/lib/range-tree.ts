@@ -153,16 +153,4 @@ export class RangeTree {
     }
     return ranges;
   }
-
-  /**
-   * Increases the count of the current tree and all its descendants.
-   *
-   * The tree and its descendants become invalidated: you need to normalize it
-   * before reading it.
-   *
-   * @param n Value to add.
-   */
-  addCount(n: number): void {
-    this.delta += n;
-  }
 }

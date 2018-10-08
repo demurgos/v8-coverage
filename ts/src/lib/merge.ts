@@ -1,6 +1,13 @@
-import { deepNormalizeProcessCov, deepNormalizeScriptCov, normalizeFunctionCov, normalizeProcessCov, normalizeRangeTree, normalizeScriptCov } from "./normalize";
+import {
+  deepNormalizeProcessCov,
+  deepNormalizeScriptCov,
+  normalizeFunctionCov,
+  normalizeProcessCov,
+  normalizeRangeTree,
+  normalizeScriptCov,
+} from "./normalize";
 import { RangeTree } from "./range-tree";
-import { FunctionCov, ProcessCov, RangeCov, ScriptCov } from "./types";
+import { FunctionCov, ProcessCov, Range, RangeCov, ScriptCov } from "./types";
 
 /**
  * Merges a list of process coverages.
@@ -259,16 +266,6 @@ class StartEventQueue {
         return nextEvent;
       }
     }
-  }
-}
-
-class Range {
-  readonly start: number;
-  readonly end: number;
-
-  constructor(start: number, end: number) {
-    this.start = start;
-    this.end = end;
   }
 }
 
