@@ -392,7 +392,7 @@ is important to understand the chosen "partial overlap" rule.
 The partially overlapping configuration is the only configuration where you
 need to introduce splits in the merged tree to get matching counts on AST nodes
 attached to the leafs of the tree.
-The next best solution introduces a single split. The chose rule (above) is
+The next best solution introduces a single split. The chosen rule (above) is
 the "left bias" variant because it favors the left range. The left range is
 untouched, but the right range is split in two. The "right bias" variant looks
 like this:
@@ -419,9 +419,9 @@ caused by elements such as `if`, `for`, `&&`, default function parameters,
 `return`, `throw`, etc.
 Out of those, the first tokens of the node is always executed, then there's a
 body and then an optional sequence of closing tokens. Because of this grammar,
-it's more common to have cases where parent/child ranges and at the same offset
-than start at the same offset. Two ranges starting at the same offset mean
-the start of a node gets a different count than its parent node.
+it's more common to have cases where parent/child ranges with the same
+`endOffset` rather than the same `startOffset`. Two ranges starting at the same
+offset mean the start of a node gets a different count than its parent.
 
 I found a few cases where two ranges (from the same tree) start at the same
 offset. Most of them were bugs (that I reported to the V8 team), but some may be
