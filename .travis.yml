@@ -13,8 +13,7 @@ before_install:
 - yarn global add codecov
 
 before_script:
-- cd ts
-- yarn install
+- (cd ts && yarn install)
 
 script:
 - cd ts
