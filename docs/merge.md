@@ -360,7 +360,7 @@ valid "nested" rule:
                              [3-----------)
 invalid "flat" rule:
 --30------------------------------------------------------
-                   [21------)[2-----------)[21-)
+                   [21------)[3-----------)[21-)
 ```
 
 The statement `if(bar) { ... }` is evaluated 21 times in total, but in the
