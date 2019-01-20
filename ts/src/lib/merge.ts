@@ -82,9 +82,17 @@ export function mergeScriptCovs(scriptCovs: ReadonlyArray<ScriptCov>): ScriptCov
     for (const funcCov of scriptCov.functions) {
       const rootRange: string = stringifyFunctionRootRange(funcCov);
       let funcCovs: FunctionCov[] | undefined = rangeToFuncs.get(rootRange);
-      if (funcCovs === undefined) {
+
+      if (funcCovs === undefined ||
+        // if the entry in rangeToFuncs is function-level granularity and
+        // the new coverage is block-level, prefer block-level.
+        (!funcCovs[0].isBlockCoverage && funcCov.isBlockCoverage)) {
         funcCovs = [];
         rangeToFuncs.set(rootRange, funcCovs);
+      } else if (funcCovs[0].isBlockCoverage && !funcCov.isBlockCoverage) {
+        // if the entry in rangeToFuncs is block-level granularity, we should
+        // not append function level granularity.
+        continue;
       }
       funcCovs.push(funcCov);
     }

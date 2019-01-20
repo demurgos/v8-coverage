@@ -1,6 +1,6 @@
 import { compareFunctionCovs, compareRangeCovs, compareScriptCovs } from "./compare";
-import { FunctionCov, ProcessCov, ScriptCov } from "./types";
 import { RangeTree } from "./range-tree";
+import { FunctionCov, ProcessCov, ScriptCov } from "./types";
 
 /**
  * Normalizes a process coverage.

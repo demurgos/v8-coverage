@@ -16,6 +16,15 @@ interface MergeRangeItem {
   expected: ProcessCov;
 }
 
+const FIXTURES_DIR: string = path.join(REPO_ROOT, "test-data", "bugs");
+function loadFixture(name: string) {
+  const content: string = fs.readFileSync(
+    path.resolve(FIXTURES_DIR, `${name}.json`),
+    {encoding: "UTF-8"},
+  );
+  return JSON.parse(content);
+}
+
 describe("merge", () => {
   describe("Various", () => {
     it("accepts empty arrays for `mergeProcessCovs`", () => {
@@ -81,6 +90,34 @@ describe("merge", () => {
       };
       const actual: ProcessCov = mergeProcessCovs(inputs);
       chai.assert.deepEqual(actual, expected);
+    });
+
+    describe("mergeProcessCovs", () => {
+      // see: https://github.com/demurgos/v8-coverage/issues/2
+      it("handles function coverage merged into block coverage", () => {
+        const blockCoverage: ProcessCov = loadFixture("issue-2-block-coverage");
+        const functionCoverage: ProcessCov = loadFixture("issue-2-func-coverage");
+        const inputs: ProcessCov[] = [
+          functionCoverage,
+          blockCoverage,
+        ];
+        const expected: ProcessCov = loadFixture("issue-2-expected");
+        const actual: ProcessCov = mergeProcessCovs(inputs);
+        chai.assert.deepEqual(actual, expected);
+      });
+
+      // see: https://github.com/demurgos/v8-coverage/issues/2
+      it("handles block coverage merged into function coverage", () => {
+        const blockCoverage: ProcessCov = loadFixture("issue-2-block-coverage");
+        const functionCoverage: ProcessCov = loadFixture("issue-2-func-coverage");
+        const inputs: ProcessCov[] = [
+          blockCoverage,
+          functionCoverage,
+        ];
+        const expected: ProcessCov = loadFixture("issue-2-expected");
+        const actual: ProcessCov = mergeProcessCovs(inputs);
+        chai.assert.deepEqual(actual, expected);
+      });
     });
 
     it("accepts arrays with a single item for `mergeScriptCovs`", () => {
