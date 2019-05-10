@@ -29886,7 +29886,7 @@
               "count": 0
             }
           ],
-          "isBlockCoverage": false
+          "isBlockCoverage": true
         },
         {
           "functionName": "module.exports.sync.mem",
@@ -63633,7 +63633,7 @@
               "count": 1167
             }
           ],
-          "isBlockCoverage": true
+          "isBlockCoverage": false
         },
         {
           "functionName": "createPool",
@@ -63644,7 +63644,7 @@
               "count": 221
             }
           ],
-          "isBlockCoverage": true
+          "isBlockCoverage": false
         },
         {
           "functionName": "alignPool",
@@ -65400,7 +65400,7 @@
               "count": 390
             }
           ],
-          "isBlockCoverage": true
+          "isBlockCoverage": false
         },
         {
           "functionName": "get",
@@ -65427,7 +65427,7 @@
               "count": 390
             }
           ],
-          "isBlockCoverage": true
+          "isBlockCoverage": false
         },
         {
           "functionName": "setMaxListeners",
@@ -65475,7 +65475,7 @@
               "count": 5395
             }
           ],
-          "isBlockCoverage": true
+          "isBlockCoverage": false
         },
         {
           "functionName": "_addListener",
@@ -65486,7 +65486,7 @@
               "count": 2603
             }
           ],
-          "isBlockCoverage": true
+          "isBlockCoverage": false
         },
         {
           "functionName": "addListener",
@@ -65497,7 +65497,7 @@
               "count": 2509
             }
           ],
-          "isBlockCoverage": true
+          "isBlockCoverage": false
         },
         {
           "functionName": "prependListener",
@@ -66763,7 +66763,7 @@
               "count": 18
             }
           ],
-          "isBlockCoverage": true
+          "isBlockCoverage": false
         },
         {
           "functionName": "",
@@ -66774,7 +66774,7 @@
               "count": 18
             }
           ],
-          "isBlockCoverage": true
+          "isBlockCoverage": false
         },
         {
           "functionName": "post",
@@ -66785,7 +66785,7 @@
               "count": 18
             }
           ],
-          "isBlockCoverage": true
+          "isBlockCoverage": false
         }
       ]
     },
@@ -67005,7 +67005,7 @@
               "count": 835
             }
           ],
-          "isBlockCoverage": true
+          "isBlockCoverage": false
         },
         {
           "functionName": "internalBinding",
@@ -67016,7 +67016,7 @@
               "count": 55
             }
           ],
-          "isBlockCoverage": true
+          "isBlockCoverage": false
         },
         {
           "functionName": "NativeModule",
@@ -67027,7 +67027,7 @@
               "count": 365
             }
           ],
-          "isBlockCoverage": true
+          "isBlockCoverage": false
         },
         {
           "functionName": "NativeModule.require",
@@ -67038,7 +67038,7 @@
               "count": 2357
             }
           ],
-          "isBlockCoverage": true
+          "isBlockCoverage": false
         },
         {
           "functionName": "NativeModule.getCached",
@@ -67049,7 +67049,7 @@
               "count": 2338
             }
           ],
-          "isBlockCoverage": true
+          "isBlockCoverage": false
         },
         {
           "functionName": "NativeModule.exists",
@@ -67060,7 +67060,7 @@
               "count": 14660
             }
           ],
-          "isBlockCoverage": true
+          "isBlockCoverage": false
         },
         {
           "functionName": "NativeModule.nonInternalExists",
@@ -67118,7 +67118,7 @@
               "count": 365
             }
           ],
-          "isBlockCoverage": true
+          "isBlockCoverage": false
         },
         {
           "functionName": "NativeModule.wrap",
@@ -67129,7 +67129,7 @@
               "count": 365
             }
           ],
-          "isBlockCoverage": true
+          "isBlockCoverage": false
         },
         {
           "functionName": "NativeModule.compile",
@@ -67140,7 +67140,7 @@
               "count": 365
             }
           ],
-          "isBlockCoverage": true
+          "isBlockCoverage": false
         },
         {
           "functionName": "update",
@@ -67195,7 +67195,7 @@
               "count": 365
             }
           ],
-          "isBlockCoverage": true
+          "isBlockCoverage": false
         }
       ]
     },
@@ -71072,7 +71072,7 @@
               "count": 23
             }
           ],
-          "isBlockCoverage": true
+          "isBlockCoverage": false
         },
         {
           "functionName": "",
@@ -71083,7 +71083,7 @@
               "count": 23
             }
           ],
-          "isBlockCoverage": true
+          "isBlockCoverage": false
         },
         {
           "functionName": "",
@@ -72303,7 +72303,7 @@
               "count": 109
             }
           ],
-          "isBlockCoverage": true
+          "isBlockCoverage": false
         },
         {
           "functionName": "deprecated",
@@ -72567,7 +72567,7 @@
               "count": 52
             }
           ],
-          "isBlockCoverage": true
+          "isBlockCoverage": false
         }
       ]
     },
@@ -73970,7 +73970,7 @@
               "count": 187427
             }
           ],
-          "isBlockCoverage": true
+          "isBlockCoverage": false
         },
         {
           "functionName": "isPosixPathSeparator",
@@ -73981,7 +73981,7 @@
               "count": 3478053
             }
           ],
-          "isBlockCoverage": true
+          "isBlockCoverage": false
         },
         {
           "functionName": "normalizeString",
@@ -73992,7 +73992,7 @@
               "count": 62570
             }
           ],
-          "isBlockCoverage": true
+          "isBlockCoverage": false
         },
         {
           "functionName": "resolve",
@@ -74003,7 +74003,7 @@
               "count": 37163
             }
           ],
-          "isBlockCoverage": true
+          "isBlockCoverage": false
         },
         {
           "functionName": "normalize",
@@ -75899,7 +75899,7 @@
               "count": 91
             }
           ],
-          "isBlockCoverage": true
+          "isBlockCoverage": false
         },
         {
           "functionName": "debug",
@@ -76507,7 +76507,7 @@
               "count": 18
             }
           ],
-          "isBlockCoverage": true
+          "isBlockCoverage": false
         },
         {
           "functionName": "inherits",
@@ -76518,7 +76518,7 @@
               "count": 108
             }
           ],
-          "isBlockCoverage": true
+          "isBlockCoverage": false
         },
         {
           "functionName": "_extend",

@@ -64,16 +64,16 @@ function parseRangeSourceFile(text) {
     const header = parseHeader();
     const offsetMap = parseOffsets(lineReader.next());
     const inputs = [];
-    inputs.push(rangesToProcessCov(parseRanges(offsetMap)));
+    inputs.push(functionCovToProcessCov(parseFunctionCov(offsetMap)));
     let expected;
     while (expected === undefined) {
       const op = lineReader.next().trim();
       switch (op) {
         case "+":
-          inputs.push(rangesToProcessCov(parseRanges(offsetMap)));
+          inputs.push(functionCovToProcessCov(parseFunctionCov(offsetMap)));
           break;
         case "=":
-          expected = rangesToProcessCov(parseRanges(offsetMap));
+          expected = functionCovToProcessCov(parseFunctionCov(offsetMap));
           break;
         default:
           throw new Error(`Unexpected operator: ${op}`);
@@ -100,6 +100,27 @@ function parseRangeSourceFile(text) {
     line = permutRes.line;
     const permut = permutRes.match;
     return {name: line.trim(), status, permut};
+  }
+
+  function parseFunctionCov(offsetMap) {
+    const count = parseFunctionCount();
+    const ranges = parseRanges(offsetMap);
+
+    const functionCov = {functionName: "test", isBlockCoverage: true, ranges};
+    if (count !== undefined) {
+      functionCov.count = count;
+    }
+
+    return functionCov;
+  }
+
+  function parseFunctionCount() {
+    const funcCountRe = /^\d+$/;
+    const line = lineReader.peek();
+    if (line === null || !funcCountRe.test(line.trim())) {
+      return undefined;
+    }
+    return parseInt(lineReader.next().trim(), 10);
   }
 
   function parseRanges(offsetMap) {
@@ -205,19 +226,13 @@ class LineReader {
   }
 }
 
-function rangesToProcessCov(ranges) {
+function functionCovToProcessCov(funcCov) {
   return {
     result: [
       {
         scriptId: "0",
         url: "/lib.js",
-        functions: [
-          {
-            functionName: "test",
-            isBlockCoverage: true,
-            ranges,
-          }
-        ]
+        functions: [funcCov]
       }]
   };
 }

@@ -6,23 +6,15 @@ import { FunctionCov, mergeFunctionCovs, mergeProcessCovs, mergeScriptCovs, Proc
 const REPO_ROOT: string = path.join(__dirname, "..", "..", "..", "..");
 const BENCHES_INPUT_DIR: string = path.join(REPO_ROOT, "benches");
 const BENCHES_DIR: string = path.join(REPO_ROOT, "test-data", "merge", "benches");
+const BUGS_DIR: string = path.join(REPO_ROOT, "test-data", "merge", "bugs");
 const RANGES_DIR: string = path.join(REPO_ROOT, "test-data", "merge", "ranges");
-const BENCHES_TIMEOUT: number = 20000; // 20sec
+const BENCHES_TIMEOUT: number = 30000; // 30sec
 
-interface MergeRangeItem {
+interface MergeTestItem {
   name: string;
   status: "run" | "skip" | "only";
   inputs: ProcessCov[];
   expected: ProcessCov;
-}
-
-const FIXTURES_DIR: string = path.join(REPO_ROOT, "test-data", "bugs");
-function loadFixture(name: string) {
-  const content: string = fs.readFileSync(
-    path.resolve(FIXTURES_DIR, `${name}.json`),
-    {encoding: "UTF-8"},
-  );
-  return JSON.parse(content);
 }
 
 describe("merge", () => {
@@ -92,34 +84,6 @@ describe("merge", () => {
       chai.assert.deepEqual(actual, expected);
     });
 
-    describe("mergeProcessCovs", () => {
-      // see: https://github.com/demurgos/v8-coverage/issues/2
-      it("handles function coverage merged into block coverage", () => {
-        const blockCoverage: ProcessCov = loadFixture("issue-2-block-coverage");
-        const functionCoverage: ProcessCov = loadFixture("issue-2-func-coverage");
-        const inputs: ProcessCov[] = [
-          functionCoverage,
-          blockCoverage,
-        ];
-        const expected: ProcessCov = loadFixture("issue-2-expected");
-        const actual: ProcessCov = mergeProcessCovs(inputs);
-        chai.assert.deepEqual(actual, expected);
-      });
-
-      // see: https://github.com/demurgos/v8-coverage/issues/2
-      it("handles block coverage merged into function coverage", () => {
-        const blockCoverage: ProcessCov = loadFixture("issue-2-block-coverage");
-        const functionCoverage: ProcessCov = loadFixture("issue-2-func-coverage");
-        const inputs: ProcessCov[] = [
-          blockCoverage,
-          functionCoverage,
-        ];
-        const expected: ProcessCov = loadFixture("issue-2-expected");
-        const actual: ProcessCov = mergeProcessCovs(inputs);
-        chai.assert.deepEqual(actual, expected);
-      });
-    });
-
     it("accepts arrays with a single item for `mergeScriptCovs`", () => {
       const inputs: ScriptCov[] = [
         {
@@ -181,12 +145,36 @@ describe("merge", () => {
     });
   });
 
+  describe("bugs", () => {
+    for (const sourceFile of getSourceFiles(BUGS_DIR)) {
+      const content: string = fs.readFileSync(sourceFile, {encoding: "UTF-8"});
+      const item: MergeTestItem = JSON.parse(content);
+      const test: () => void = () => {
+        const actual: ProcessCov | undefined = mergeProcessCovs(item.inputs);
+        chai.assert.deepEqual(actual, item.expected);
+      };
+      switch (item.status) {
+        case "run":
+          it(item.name, test);
+          break;
+        case "only":
+          it.only(item.name, test);
+          break;
+        case "skip":
+          it.skip(item.name, test);
+          break;
+        default:
+          throw new Error(`Unexpected status: ${item.status}`);
+      }
+    }
+  });
+
   describe("ranges", () => {
-    for (const sourceFile of getSourceFiles()) {
+    for (const sourceFile of getSourceFiles(RANGES_DIR)) {
       const relPath: string = path.relative(RANGES_DIR, sourceFile);
       describe(relPath, () => {
         const content: string = fs.readFileSync(sourceFile, {encoding: "UTF-8"});
-        const items: MergeRangeItem[] = JSON.parse(content);
+        const items: MergeTestItem[] = JSON.parse(content);
         for (const item of items) {
           const test: () => void = () => {
             const actual: ProcessCov | undefined = mergeProcessCovs(item.inputs);
@@ -251,8 +239,8 @@ describe("merge", () => {
   });
 });
 
-function getSourceFiles() {
-  return getSourcesFrom(RANGES_DIR);
+function getSourceFiles(rootDir: string) {
+  return getSourcesFrom(rootDir);
 
   function* getSourcesFrom(dir: string): Iterable<string> {
     const names: string[] = fs.readdirSync(dir);

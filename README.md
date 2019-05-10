@@ -130,21 +130,37 @@ interface FunctionCov {
 pub struct FunctionCov {
   pub function_name: String,
   pub ranges: Vec<RangeCocv>,
-  pub is_bloc_coverage: bool,
+  pub is_block_coverage: bool,
 }
 ```
 
 **Properties**:
 - `ranges` is always non-empty. The first range is called the "root range".
 - `isBlockCoverage` indicates if the function has block coverage information.
-  If this is `false`, it usually means that the functions was never called.
-  It seems to be equivalent to `ranges.length === 1 && ranges[0].count === 0`.
+  - `false` means that there is a single range and its count is the number of
+    times the function was called. **It does not say anything about what happens
+    inside the body of the function**, some blocks may be skipped or repeated
+    but this is not measured when `isBlockCoverage` is `false`. There's a single
+    range spanning the whole function and its count is just number of calls to
+    this function.
+  - `true` means that the ranges form a tree of blocks representing how many
+    times each statement or expression inside was executed. It detects skipped
+    or repeated statements. The root range counts the number of function calls.
 - The `functionName` can be an empty string. This is common for the
   `FunctionCov` representing the whole module.
 - Inside a single `FunctionCov`, the ranges form a tree based on their inclusion
   relation.
 - If you get matching `FunctionCov` values from different `ProcessCov`, the
   ranges may partially overlap (their number and offsets can vary per process).
+- Inside a `ScriptCov`, a `FunctionCov` is uniquely identified by the span of
+  its root range.
+
+**Hypothesis**:
+- A `ScriptCov` cannot contain two `FunctionCov` with the same span but
+  different `isBlockCoverage` values. This can happen across different
+  `ProcessCov`: a `FunctionCov` with `isBlockCoverage: true` in one `ProcessCov`
+  and a `FunctionCov` with the same span but with `isBlockCoverage: false` in
+  another `ProcessCov`.
 
 ### RangeCov
 

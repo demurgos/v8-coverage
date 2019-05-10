@@ -82,17 +82,9 @@ export function mergeScriptCovs(scriptCovs: ReadonlyArray<ScriptCov>): ScriptCov
     for (const funcCov of scriptCov.functions) {
       const rootRange: string = stringifyFunctionRootRange(funcCov);
       let funcCovs: FunctionCov[] | undefined = rangeToFuncs.get(rootRange);
-
-      if (funcCovs === undefined ||
-        // if the entry in rangeToFuncs is function-level granularity and
-        // the new coverage is block-level, prefer block-level.
-        (!funcCovs[0].isBlockCoverage && funcCov.isBlockCoverage)) {
+      if (funcCovs === undefined) {
         funcCovs = [];
         rangeToFuncs.set(rootRange, funcCovs);
-      } else if (funcCovs[0].isBlockCoverage && !funcCov.isBlockCoverage) {
-        // if the entry in rangeToFuncs is block-level granularity, we should
-        // not append function level granularity.
-        continue;
       }
       funcCovs.push(funcCov);
     }
@@ -146,22 +138,39 @@ export function mergeFunctionCovs(funcCovs: ReadonlyArray<FunctionCov>): Functio
     return merged;
   }
 
-  const functionName: string = funcCovs[0].functionName;
+  const first: FunctionCov = funcCovs[0];
+  const functionName: string = first.functionName;
+  // assert: `first.ranges.length > 0`
+  const startOffset: number = first.ranges[0].startOffset;
+  const endOffset: number = first.ranges[0].endOffset;
+  let count: number = 0;
 
   const trees: RangeTree[] = [];
   for (const funcCov of funcCovs) {
-    // assert: `fn.ranges.length > 0`
-    // assert: `fn.ranges` is sorted
-    trees.push(RangeTree.fromSortedRanges(funcCov.ranges)!);
+    // assert: `funcCov.ranges.length > 0`
+    // assert: `funcCov.ranges` is sorted
+    count += funcCov.count !== undefined ? funcCov.count : funcCov.ranges[0].count;
+    if (funcCov.isBlockCoverage) {
+      trees.push(RangeTree.fromSortedRanges(funcCov.ranges)!);
+    }
   }
 
-  // assert: `trees.length > 0`
-  const mergedTree: RangeTree = mergeRangeTrees(trees)!;
-  normalizeRangeTree(mergedTree);
-  const ranges: RangeCov[] = mergedTree.toRanges();
-  const isBlockCoverage: boolean = !(ranges.length === 1 && ranges[0].count === 0);
+  let isBlockCoverage: boolean;
+  let ranges: RangeCov[];
+  if (trees.length > 0) {
+    isBlockCoverage = true;
+    const mergedTree: RangeTree = mergeRangeTrees(trees)!;
+    normalizeRangeTree(mergedTree);
+    ranges = mergedTree.toRanges();
+  } else {
+    isBlockCoverage = false;
+    ranges = [{startOffset, endOffset, count}];
+  }
 
   const merged: FunctionCov = {functionName, ranges, isBlockCoverage};
+  if (count !== ranges[0].count) {
+    merged.count = count;
+  }
   // assert: `merged` is normalized
   return merged;
 }
