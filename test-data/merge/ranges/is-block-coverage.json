@@ -1,0 +1,2703 @@
+[
+  {
+    "name": "Identity preserves `isBlockCoverage: true`",
+    "status": "run",
+    "inputs": [
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 10
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "expected": {
+      "result": [
+        {
+          "scriptId": "0",
+          "url": "/lib.js",
+          "functions": [
+            {
+              "functionName": "test",
+              "isBlockCoverage": true,
+              "ranges": [
+                {
+                  "startOffset": 0,
+                  "endOffset": 9,
+                  "count": 10
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Identity preserves `isBlockCoverage: false`",
+    "status": "run",
+    "inputs": [
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": false,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 10
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "expected": {
+      "result": [
+        {
+          "scriptId": "0",
+          "url": "/lib.js",
+          "functions": [
+            {
+              "functionName": "test",
+              "isBlockCoverage": false,
+              "ranges": [
+                {
+                  "startOffset": 0,
+                  "endOffset": 9,
+                  "count": 10
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Merge two non-block coverages",
+    "status": "run",
+    "inputs": [
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": false,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 10
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": false,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 20
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "expected": {
+      "result": [
+        {
+          "scriptId": "0",
+          "url": "/lib.js",
+          "functions": [
+            {
+              "functionName": "test",
+              "isBlockCoverage": false,
+              "ranges": [
+                {
+                  "startOffset": 0,
+                  "endOffset": 9,
+                  "count": 30
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Merge two non-block coverages and a flat block-coverage (permutation 0)",
+    "status": "run",
+    "inputs": [
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": false,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 10
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": false,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 20
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 40
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "expected": {
+      "result": [
+        {
+          "scriptId": "0",
+          "url": "/lib.js",
+          "functions": [
+            {
+              "functionName": "test",
+              "isBlockCoverage": true,
+              "ranges": [
+                {
+                  "startOffset": 0,
+                  "endOffset": 9,
+                  "count": 40
+                }
+              ],
+              "count": 70
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Merge two non-block coverages and a flat block-coverage (permutation 1)",
+    "status": "run",
+    "inputs": [
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": false,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 20
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": false,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 10
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 40
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "expected": {
+      "result": [
+        {
+          "scriptId": "0",
+          "url": "/lib.js",
+          "functions": [
+            {
+              "functionName": "test",
+              "isBlockCoverage": true,
+              "ranges": [
+                {
+                  "startOffset": 0,
+                  "endOffset": 9,
+                  "count": 40
+                }
+              ],
+              "count": 70
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Merge two non-block coverages and a flat block-coverage (permutation 2)",
+    "status": "run",
+    "inputs": [
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 40
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": false,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 10
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": false,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 20
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "expected": {
+      "result": [
+        {
+          "scriptId": "0",
+          "url": "/lib.js",
+          "functions": [
+            {
+              "functionName": "test",
+              "isBlockCoverage": true,
+              "ranges": [
+                {
+                  "startOffset": 0,
+                  "endOffset": 9,
+                  "count": 40
+                }
+              ],
+              "count": 70
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Merge two non-block coverages and a flat block-coverage (permutation 3)",
+    "status": "run",
+    "inputs": [
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": false,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 10
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 40
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": false,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 20
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "expected": {
+      "result": [
+        {
+          "scriptId": "0",
+          "url": "/lib.js",
+          "functions": [
+            {
+              "functionName": "test",
+              "isBlockCoverage": true,
+              "ranges": [
+                {
+                  "startOffset": 0,
+                  "endOffset": 9,
+                  "count": 40
+                }
+              ],
+              "count": 70
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Merge two non-block coverages and a flat block-coverage (permutation 4)",
+    "status": "run",
+    "inputs": [
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": false,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 20
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 40
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": false,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 10
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "expected": {
+      "result": [
+        {
+          "scriptId": "0",
+          "url": "/lib.js",
+          "functions": [
+            {
+              "functionName": "test",
+              "isBlockCoverage": true,
+              "ranges": [
+                {
+                  "startOffset": 0,
+                  "endOffset": 9,
+                  "count": 40
+                }
+              ],
+              "count": 70
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Merge two non-block coverages and a flat block-coverage (permutation 5)",
+    "status": "run",
+    "inputs": [
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 40
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": false,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 20
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": false,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 10
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "expected": {
+      "result": [
+        {
+          "scriptId": "0",
+          "url": "/lib.js",
+          "functions": [
+            {
+              "functionName": "test",
+              "isBlockCoverage": true,
+              "ranges": [
+                {
+                  "startOffset": 0,
+                  "endOffset": 9,
+                  "count": 40
+                }
+              ],
+              "count": 70
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Merge two non-block coverages and a block-coverage with a child (permutation 0)",
+    "status": "run",
+    "inputs": [
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": false,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 10
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": false,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 20
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 40
+                  },
+                  {
+                    "startOffset": 2,
+                    "endOffset": 4,
+                    "count": 4
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "expected": {
+      "result": [
+        {
+          "scriptId": "0",
+          "url": "/lib.js",
+          "functions": [
+            {
+              "functionName": "test",
+              "isBlockCoverage": true,
+              "ranges": [
+                {
+                  "startOffset": 0,
+                  "endOffset": 9,
+                  "count": 40
+                },
+                {
+                  "startOffset": 2,
+                  "endOffset": 4,
+                  "count": 4
+                }
+              ],
+              "count": 70
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Merge two non-block coverages and a block-coverage with a child (permutation 1)",
+    "status": "run",
+    "inputs": [
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": false,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 20
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": false,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 10
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 40
+                  },
+                  {
+                    "startOffset": 2,
+                    "endOffset": 4,
+                    "count": 4
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "expected": {
+      "result": [
+        {
+          "scriptId": "0",
+          "url": "/lib.js",
+          "functions": [
+            {
+              "functionName": "test",
+              "isBlockCoverage": true,
+              "ranges": [
+                {
+                  "startOffset": 0,
+                  "endOffset": 9,
+                  "count": 40
+                },
+                {
+                  "startOffset": 2,
+                  "endOffset": 4,
+                  "count": 4
+                }
+              ],
+              "count": 70
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Merge two non-block coverages and a block-coverage with a child (permutation 2)",
+    "status": "run",
+    "inputs": [
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 40
+                  },
+                  {
+                    "startOffset": 2,
+                    "endOffset": 4,
+                    "count": 4
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": false,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 10
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": false,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 20
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "expected": {
+      "result": [
+        {
+          "scriptId": "0",
+          "url": "/lib.js",
+          "functions": [
+            {
+              "functionName": "test",
+              "isBlockCoverage": true,
+              "ranges": [
+                {
+                  "startOffset": 0,
+                  "endOffset": 9,
+                  "count": 40
+                },
+                {
+                  "startOffset": 2,
+                  "endOffset": 4,
+                  "count": 4
+                }
+              ],
+              "count": 70
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Merge two non-block coverages and a block-coverage with a child (permutation 3)",
+    "status": "run",
+    "inputs": [
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": false,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 10
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 40
+                  },
+                  {
+                    "startOffset": 2,
+                    "endOffset": 4,
+                    "count": 4
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": false,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 20
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "expected": {
+      "result": [
+        {
+          "scriptId": "0",
+          "url": "/lib.js",
+          "functions": [
+            {
+              "functionName": "test",
+              "isBlockCoverage": true,
+              "ranges": [
+                {
+                  "startOffset": 0,
+                  "endOffset": 9,
+                  "count": 40
+                },
+                {
+                  "startOffset": 2,
+                  "endOffset": 4,
+                  "count": 4
+                }
+              ],
+              "count": 70
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Merge two non-block coverages and a block-coverage with a child (permutation 4)",
+    "status": "run",
+    "inputs": [
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": false,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 20
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 40
+                  },
+                  {
+                    "startOffset": 2,
+                    "endOffset": 4,
+                    "count": 4
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": false,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 10
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "expected": {
+      "result": [
+        {
+          "scriptId": "0",
+          "url": "/lib.js",
+          "functions": [
+            {
+              "functionName": "test",
+              "isBlockCoverage": true,
+              "ranges": [
+                {
+                  "startOffset": 0,
+                  "endOffset": 9,
+                  "count": 40
+                },
+                {
+                  "startOffset": 2,
+                  "endOffset": 4,
+                  "count": 4
+                }
+              ],
+              "count": 70
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Merge two non-block coverages and a block-coverage with a child (permutation 5)",
+    "status": "run",
+    "inputs": [
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 40
+                  },
+                  {
+                    "startOffset": 2,
+                    "endOffset": 4,
+                    "count": 4
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": false,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 20
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": false,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 10
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "expected": {
+      "result": [
+        {
+          "scriptId": "0",
+          "url": "/lib.js",
+          "functions": [
+            {
+              "functionName": "test",
+              "isBlockCoverage": true,
+              "ranges": [
+                {
+                  "startOffset": 0,
+                  "endOffset": 9,
+                  "count": 40
+                },
+                {
+                  "startOffset": 2,
+                  "endOffset": 4,
+                  "count": 4
+                }
+              ],
+              "count": 70
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Merge a non-block coverage and two flat block-coverages (permutation 0)",
+    "status": "run",
+    "inputs": [
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": false,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 10
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 20
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 40
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "expected": {
+      "result": [
+        {
+          "scriptId": "0",
+          "url": "/lib.js",
+          "functions": [
+            {
+              "functionName": "test",
+              "isBlockCoverage": true,
+              "ranges": [
+                {
+                  "startOffset": 0,
+                  "endOffset": 9,
+                  "count": 60
+                }
+              ],
+              "count": 70
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Merge a non-block coverage and two flat block-coverages (permutation 1)",
+    "status": "run",
+    "inputs": [
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 20
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": false,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 10
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 40
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "expected": {
+      "result": [
+        {
+          "scriptId": "0",
+          "url": "/lib.js",
+          "functions": [
+            {
+              "functionName": "test",
+              "isBlockCoverage": true,
+              "ranges": [
+                {
+                  "startOffset": 0,
+                  "endOffset": 9,
+                  "count": 60
+                }
+              ],
+              "count": 70
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Merge a non-block coverage and two flat block-coverages (permutation 2)",
+    "status": "run",
+    "inputs": [
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 40
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": false,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 10
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 20
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "expected": {
+      "result": [
+        {
+          "scriptId": "0",
+          "url": "/lib.js",
+          "functions": [
+            {
+              "functionName": "test",
+              "isBlockCoverage": true,
+              "ranges": [
+                {
+                  "startOffset": 0,
+                  "endOffset": 9,
+                  "count": 60
+                }
+              ],
+              "count": 70
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Merge a non-block coverage and two flat block-coverages (permutation 3)",
+    "status": "run",
+    "inputs": [
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": false,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 10
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 40
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 20
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "expected": {
+      "result": [
+        {
+          "scriptId": "0",
+          "url": "/lib.js",
+          "functions": [
+            {
+              "functionName": "test",
+              "isBlockCoverage": true,
+              "ranges": [
+                {
+                  "startOffset": 0,
+                  "endOffset": 9,
+                  "count": 60
+                }
+              ],
+              "count": 70
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Merge a non-block coverage and two flat block-coverages (permutation 4)",
+    "status": "run",
+    "inputs": [
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 20
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 40
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": false,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 10
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "expected": {
+      "result": [
+        {
+          "scriptId": "0",
+          "url": "/lib.js",
+          "functions": [
+            {
+              "functionName": "test",
+              "isBlockCoverage": true,
+              "ranges": [
+                {
+                  "startOffset": 0,
+                  "endOffset": 9,
+                  "count": 60
+                }
+              ],
+              "count": 70
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Merge a non-block coverage and two flat block-coverages (permutation 5)",
+    "status": "run",
+    "inputs": [
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 40
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 20
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": false,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 10
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "expected": {
+      "result": [
+        {
+          "scriptId": "0",
+          "url": "/lib.js",
+          "functions": [
+            {
+              "functionName": "test",
+              "isBlockCoverage": true,
+              "ranges": [
+                {
+                  "startOffset": 0,
+                  "endOffset": 9,
+                  "count": 60
+                }
+              ],
+              "count": 70
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Merge a non-block coverages and two block-coverages with children (permutation 0)",
+    "status": "run",
+    "inputs": [
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": false,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 10
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 20
+                  },
+                  {
+                    "startOffset": 4,
+                    "endOffset": 8,
+                    "count": 2
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 40
+                  },
+                  {
+                    "startOffset": 2,
+                    "endOffset": 6,
+                    "count": 4
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "expected": {
+      "result": [
+        {
+          "scriptId": "0",
+          "url": "/lib.js",
+          "functions": [
+            {
+              "functionName": "test",
+              "isBlockCoverage": true,
+              "ranges": [
+                {
+                  "startOffset": 0,
+                  "endOffset": 9,
+                  "count": 60
+                },
+                {
+                  "startOffset": 2,
+                  "endOffset": 6,
+                  "count": 24
+                },
+                {
+                  "startOffset": 4,
+                  "endOffset": 6,
+                  "count": 6
+                },
+                {
+                  "startOffset": 6,
+                  "endOffset": 8,
+                  "count": 42
+                }
+              ],
+              "count": 70
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Merge a non-block coverages and two block-coverages with children (permutation 1)",
+    "status": "run",
+    "inputs": [
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 20
+                  },
+                  {
+                    "startOffset": 4,
+                    "endOffset": 8,
+                    "count": 2
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": false,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 10
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 40
+                  },
+                  {
+                    "startOffset": 2,
+                    "endOffset": 6,
+                    "count": 4
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "expected": {
+      "result": [
+        {
+          "scriptId": "0",
+          "url": "/lib.js",
+          "functions": [
+            {
+              "functionName": "test",
+              "isBlockCoverage": true,
+              "ranges": [
+                {
+                  "startOffset": 0,
+                  "endOffset": 9,
+                  "count": 60
+                },
+                {
+                  "startOffset": 2,
+                  "endOffset": 6,
+                  "count": 24
+                },
+                {
+                  "startOffset": 4,
+                  "endOffset": 6,
+                  "count": 6
+                },
+                {
+                  "startOffset": 6,
+                  "endOffset": 8,
+                  "count": 42
+                }
+              ],
+              "count": 70
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Merge a non-block coverages and two block-coverages with children (permutation 2)",
+    "status": "run",
+    "inputs": [
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 40
+                  },
+                  {
+                    "startOffset": 2,
+                    "endOffset": 6,
+                    "count": 4
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": false,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 10
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 20
+                  },
+                  {
+                    "startOffset": 4,
+                    "endOffset": 8,
+                    "count": 2
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "expected": {
+      "result": [
+        {
+          "scriptId": "0",
+          "url": "/lib.js",
+          "functions": [
+            {
+              "functionName": "test",
+              "isBlockCoverage": true,
+              "ranges": [
+                {
+                  "startOffset": 0,
+                  "endOffset": 9,
+                  "count": 60
+                },
+                {
+                  "startOffset": 2,
+                  "endOffset": 6,
+                  "count": 24
+                },
+                {
+                  "startOffset": 4,
+                  "endOffset": 6,
+                  "count": 6
+                },
+                {
+                  "startOffset": 6,
+                  "endOffset": 8,
+                  "count": 42
+                }
+              ],
+              "count": 70
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Merge a non-block coverages and two block-coverages with children (permutation 3)",
+    "status": "run",
+    "inputs": [
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": false,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 10
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 40
+                  },
+                  {
+                    "startOffset": 2,
+                    "endOffset": 6,
+                    "count": 4
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 20
+                  },
+                  {
+                    "startOffset": 4,
+                    "endOffset": 8,
+                    "count": 2
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "expected": {
+      "result": [
+        {
+          "scriptId": "0",
+          "url": "/lib.js",
+          "functions": [
+            {
+              "functionName": "test",
+              "isBlockCoverage": true,
+              "ranges": [
+                {
+                  "startOffset": 0,
+                  "endOffset": 9,
+                  "count": 60
+                },
+                {
+                  "startOffset": 2,
+                  "endOffset": 6,
+                  "count": 24
+                },
+                {
+                  "startOffset": 4,
+                  "endOffset": 6,
+                  "count": 6
+                },
+                {
+                  "startOffset": 6,
+                  "endOffset": 8,
+                  "count": 42
+                }
+              ],
+              "count": 70
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Merge a non-block coverages and two block-coverages with children (permutation 4)",
+    "status": "run",
+    "inputs": [
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 20
+                  },
+                  {
+                    "startOffset": 4,
+                    "endOffset": 8,
+                    "count": 2
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 40
+                  },
+                  {
+                    "startOffset": 2,
+                    "endOffset": 6,
+                    "count": 4
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": false,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 10
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "expected": {
+      "result": [
+        {
+          "scriptId": "0",
+          "url": "/lib.js",
+          "functions": [
+            {
+              "functionName": "test",
+              "isBlockCoverage": true,
+              "ranges": [
+                {
+                  "startOffset": 0,
+                  "endOffset": 9,
+                  "count": 60
+                },
+                {
+                  "startOffset": 2,
+                  "endOffset": 6,
+                  "count": 24
+                },
+                {
+                  "startOffset": 4,
+                  "endOffset": 6,
+                  "count": 6
+                },
+                {
+                  "startOffset": 6,
+                  "endOffset": 8,
+                  "count": 42
+                }
+              ],
+              "count": 70
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Merge a non-block coverages and two block-coverages with children (permutation 5)",
+    "status": "run",
+    "inputs": [
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 40
+                  },
+                  {
+                    "startOffset": 2,
+                    "endOffset": 6,
+                    "count": 4
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 20
+                  },
+                  {
+                    "startOffset": 4,
+                    "endOffset": 8,
+                    "count": 2
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": false,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 10
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "expected": {
+      "result": [
+        {
+          "scriptId": "0",
+          "url": "/lib.js",
+          "functions": [
+            {
+              "functionName": "test",
+              "isBlockCoverage": true,
+              "ranges": [
+                {
+                  "startOffset": 0,
+                  "endOffset": 9,
+                  "count": 60
+                },
+                {
+                  "startOffset": 2,
+                  "endOffset": 6,
+                  "count": 24
+                },
+                {
+                  "startOffset": 4,
+                  "endOffset": 6,
+                  "count": 6
+                },
+                {
+                  "startOffset": 6,
+                  "endOffset": 8,
+                  "count": 42
+                }
+              ],
+              "count": 70
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Merge a non-block coverage with a flat block-coverage with count (permutation 0)",
+    "status": "run",
+    "inputs": [
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": false,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 10
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 20
+                  }
+                ],
+                "count": 40
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "expected": {
+      "result": [
+        {
+          "scriptId": "0",
+          "url": "/lib.js",
+          "functions": [
+            {
+              "functionName": "test",
+              "isBlockCoverage": true,
+              "ranges": [
+                {
+                  "startOffset": 0,
+                  "endOffset": 9,
+                  "count": 20
+                }
+              ],
+              "count": 50
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Merge a non-block coverage with a flat block-coverage with count (permutation 1)",
+    "status": "run",
+    "inputs": [
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": true,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 20
+                  }
+                ],
+                "count": 40
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "result": [
+          {
+            "scriptId": "0",
+            "url": "/lib.js",
+            "functions": [
+              {
+                "functionName": "test",
+                "isBlockCoverage": false,
+                "ranges": [
+                  {
+                    "startOffset": 0,
+                    "endOffset": 9,
+                    "count": 10
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "expected": {
+      "result": [
+        {
+          "scriptId": "0",
+          "url": "/lib.js",
+          "functions": [
+            {
+              "functionName": "test",
+              "isBlockCoverage": true,
+              "ranges": [
+                {
+                  "startOffset": 0,
+                  "endOffset": 9,
+                  "count": 20
+                }
+              ],
+              "count": 50
+            }
+          ]
+        }
+      ]
+    }
+  }
+]

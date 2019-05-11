@@ -103,15 +103,25 @@ function parseRangeSourceFile(text) {
   }
 
   function parseFunctionCov(offsetMap) {
-    const count = parseFunctionCount();
+    const isBlockCoverage = parseFunctionIsBlockCoverage();
+    const count = isBlockCoverage ? parseFunctionCount() : undefined;
     const ranges = parseRanges(offsetMap);
 
-    const functionCov = {functionName: "test", isBlockCoverage: true, ranges};
+    const functionCov = {functionName: "test", isBlockCoverage, ranges};
     if (count !== undefined) {
       functionCov.count = count;
     }
 
     return functionCov;
+  }
+
+  function parseFunctionIsBlockCoverage() {
+    const line = lineReader.peek();
+    if (line !== null && line.trim() === "noBlock") {
+      lineReader.next();
+      return false;
+    }
+    return true; // Default to `true`
   }
 
   function parseFunctionCount() {
