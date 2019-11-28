@@ -29,19 +29,20 @@
     "start": "node build/main/main/main.js"
   },
   "devDependencies": {
-    "@types/chai": "^4.1.4",
-    "@types/gulp": "^4.0.5",
+    "@types/chai": "^4.2.5",
+    "@types/gulp": "^4.0.6",
     "@types/minimist": "^1.2.0",
-    "@types/mocha": "^5.2.2",
-    "@types/node": "^10.5.4",
-    "chai": "^4.1.2",
-    "codecov": "^3.0.2",
-    "gulp": "^4.0.0",
-    "gulp-cli": "^2.0.1",
+    "@types/mocha": "^5.2.7",
+    "@types/node": "^12.12.14",
+    "chai": "^4.2.0",
+    "codecov": "^3.6.1",
+    "gulp": "^4.0.2",
+    "gulp-cli": "^2.2.0",
     "minimist": "^1.2.0",
     "pre-commit": "^1.2.2",
-    "ts-node": "^7.0.0",
-    "turbo-gulp": "^0.20.1"
+    "ts-node": "^8.5.3",
+    "turbo-gulp": "^0.20.2",
+    "typescript": "^3.7.2"
   },
   "c88": {
     "match": [

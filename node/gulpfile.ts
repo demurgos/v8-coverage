@@ -4,41 +4,36 @@ import NeonCrate from "neon-cli/lib/crate";
 import NeonProject from "neon-cli/lib/project";
 import path from "path";
 import * as buildTools from "turbo-gulp";
-import { DistOptions } from "turbo-gulp/targets/lib";
+import { Project } from "turbo-gulp/project";
+import { DistOptions, LibTarget, LibTasks, registerLibTasks } from "turbo-gulp/targets/lib";
+import { MochaTarget, MochaTasks, registerMochaTasks } from "turbo-gulp/targets/mocha";
 import { npmPublish } from "turbo-gulp/utils/npm-publish";
 
 interface Options {
-  devDist?: string;
+  next?: string;
 }
 
 const options: Options & minimist.ParsedArgs = minimist(process.argv.slice(2), {
-  string: ["devDist"],
-  default: {devDist: undefined},
-  alias: {devDist: "dev-dist"},
+  string: ["next"],
+  default: {next: undefined},
 });
 
-const project: buildTools.Project = {
+const project: Project = {
   root: __dirname,
   packageJson: "package.json",
   buildDir: "build",
   distDir: "dist",
   srcDir: "src",
-  typescript: {
-    compilerOptions: {
-      allowSyntheticDefaultImports: true,
-      esModuleInterop: true,
-    },
-  },
   tslint: {
     configuration: {
       rules: {
-        "no-submodule-import": false,
+        whitespace: false,
       },
     },
   },
 };
 
-const lib: buildTools.LibTarget = {
+const lib: LibTarget = {
   project,
   name: "lib",
   srcDir: "src/lib",
@@ -46,7 +41,7 @@ const lib: buildTools.LibTarget = {
   mainModule: "index",
   dist: {
     packageJsonMap: (old: buildTools.PackageJson): buildTools.PackageJson => {
-      const version: string = options.devDist !== undefined ? `${old.version}-build.${options.devDist}` : old.version;
+      const version: string = options.next !== undefined ? `${old.version}-build.${options.next}` : old.version;
       return <any> {...old, version, scripts: undefined, private: false};
     },
     npmPublish: {
@@ -54,6 +49,7 @@ const lib: buildTools.LibTarget = {
     },
   },
   tscOptions: {
+    declaration: true,
     skipLibCheck: true,
   },
   typedoc: {
@@ -64,17 +60,12 @@ const lib: buildTools.LibTarget = {
       branch: "gh-pages",
     },
   },
-  copy: [
-    {
-      files: ["**/*.json"],
-    },
-  ],
   clean: {
     dirs: ["build/lib", "dist/lib"],
   },
 };
 
-const test: buildTools.MochaTarget = {
+const test: MochaTarget = {
   project,
   name: "test",
   srcDir: "src",
@@ -83,21 +74,20 @@ const test: buildTools.MochaTarget = {
   tscOptions: {
     skipLibCheck: true,
   },
-  copy: [{files: ["test/scrapping/**/*.html"]}],
   clean: {
     dirs: ["build/test"],
   },
 };
 
-const libTasks: any = buildTools.registerLibTasks(gulp, lib);
-const testTasks: any = buildTools.registerMochaTasks(gulp, test);
+const libTasks: LibTasks = registerLibTasks(gulp, lib);
+const testTasks: MochaTasks = registerMochaTasks(gulp, test);
 buildTools.projectTasks.registerAll(gulp, project);
 
 function generateNeonTask(nodeFile: string, release: boolean): gulp.TaskFunction {
-  return function buildNeon() {
+  return async function buildNeon() {
     // Crate root (with Cargo.toml) relative to project root
     const crateRoot: string = ".";
-    const neonProject: NeonProject = new NeonProject(project.root, {crate: crateRoot});
+    const neonProject: NeonProject = await NeonProject.create(project.root, {crate: crateRoot});
     const neonCrate: NeonCrate = new NeonCrate(neonProject, {subdirectory: crateRoot, nodefile: nodeFile});
     (neonProject as any).crate = neonCrate;
     return neonProject.build("stable", release);
@@ -108,7 +98,7 @@ const libBuildNeon: gulp.TaskFunction = generateNeonTask("build/lib/native/index
 const libDistNeon: gulp.TaskFunction = generateNeonTask("dist/lib/native/index.node", true);
 const testBuildNeon: gulp.TaskFunction = generateNeonTask("build/test/lib/native/index.node", true);
 const testBuild: gulp.TaskFunction = gulp.parallel(testTasks.build, testBuildNeon);
-const libDist: gulp.TaskFunction = gulp.parallel(libTasks.dist, libDistNeon);
+const libDist: gulp.TaskFunction = gulp.parallel(libTasks.dist!, libDistNeon);
 const npmPublishTask: gulp.TaskFunction = async () => {
   return npmPublish({
     ...(lib.dist as DistOptions).npmPublish,
@@ -123,7 +113,8 @@ gulp.task("lib:dist:publish", gulp.series(libDist, npmPublishTask));
 
 gulp.task("test:build:neon", testBuildNeon);
 gulp.task("test:build", testBuild);
-gulp.task("test", gulp.series(testTasks.clean, testBuild, testTasks.coverage));
+gulp.task("test", gulp.series(testTasks.clean!, testBuild, testTasks.coverageCjs!));
 
-gulp.task("tsconfig.json", gulp.parallel("lib:tsconfig.json", "test:tsconfig.json"));
-gulp.task("dist", libTasks.dist);
+gulp.task("all:tsconfig.json", gulp.parallel("lib:tsconfig.json", "test:tsconfig.json"));
+gulp.task("dist", libTasks.dist!);
+gulp.task("default", libTasks.dist!);

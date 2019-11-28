@@ -92,9 +92,25 @@ function emitTreeLayer(layer: ReadonlyRangeTree[], colMap: Map<number, number>):
   return line.join("");
 }
 
+/**
+ * Parses a single layer (line) of ascii range tree
+ *
+ * ```
+ * const text = "10  42  1337";
+ * const parsed = parseOffsets(text);
+ * const expected = new Map([
+ *   [0, 10],
+ *   [4, 42],
+ *   [8, 1337],
+ * ]);
+ * // `parsed` has the same content as `expected`
+ * ```
+ *
+ * @param text
+ */
 function parseTreeLayer(text: string, offsetMap: Map<number, number>): RangeCov[] {
   const result: RangeCov[] = [];
-  const regex: RegExp = /\[(\d+)-*\)/gs;
+  const regex: RegExp = /\[(\d+)-*\)/y;
   while (true) {
     const match: RegExpMatchArray | null = regex.exec(text);
     if (match === null) {
@@ -132,9 +148,25 @@ function emitOffsets(colMap: Map<number, number>): string {
   return line;
 }
 
+/**
+ * Parses a line of offsets to a map from ascii offsets to coverage offsets:
+ *
+ * ```
+ * const text = "10  42  1337";
+ * const parsed = parseOffsets(text);
+ * const expected = new Map([
+ *   [0, 10],
+ *   [4, 42],
+ *   [8, 1337],
+ * ]);
+ * // `parsed` has the same content as `expected`
+ * ```
+ *
+ * @param text Line to parse
+ */
 export function parseOffsets(text: string): Map<number, number> {
   const result: Map<number, number> = new Map();
-  const regex: RegExp = /\d+/gs;
+  const regex: RegExp = /\d+/y;
   while (true) {
     const match: RegExpExecArray | null = regex.exec(text);
     if (match === null) {

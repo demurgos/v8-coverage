@@ -35,7 +35,9 @@ describe("merge", () => {
         const expected: ProcessCov = JSON.parse(expectedContent);
         const startTime: number = Date.now();
         const actualBuffer: Buffer | undefined = mergeProcessCovBuffersSync(inputs);
-        const actual: ProcessCov | undefined = actualBuffer !== undefined ? JSON.parse(actualBuffer.toString("UTF-8")) : undefined;
+        const actual: ProcessCov | undefined = actualBuffer !== undefined
+          ? JSON.parse(actualBuffer.toString("UTF-8"))
+          : undefined;
         const endTime: number = Date.now();
         console.error(`Time (${name}): ${(endTime - startTime) / 1000}`);
         chai.assert.deepEqual(actual, expected);

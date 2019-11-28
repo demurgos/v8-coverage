@@ -11,10 +11,17 @@
   },
   "scripts": {
     "build": "gulp lib:build",
-    "prepare": "gulp tsconfig.json && gulp :tslint.json && gulp lib:dist",
-    "test": "gulp :lint && gulp test",
-    "prepublishOnly": "npm test",
-    "lint": "gulp :lint:fix"
+    "watch": "gulp lib:watch",
+    "test": "gulp test",
+    "lint": "gulp lint",
+    "format": "gulp format",
+    "typedoc": "gulp lib:typedoc",
+    "dist": "gulp lib:dist",
+    "prepare": "gulp all:tsconfig.json && gulp tslint.json && gulp dist",
+    "pretest": "gulp lint",
+    "prepublishOnly": "echo \"Use \\`gulp lib:publish\\`\" && exit 1",
+    "prestart": "gulp main:build",
+    "start": "node build/main/main/main.js"
   },
   "nyc": {
     "include": [
@@ -27,19 +34,26 @@
   "author": "Charles Samborski <demurgos@demurgos.net> (https://demurgos.net)",
   "license": "MIT",
   "devDependencies": {
-    "@types/chai": "^4.1.6",
+    "@types/chai": "^4.2.5",
+    "@types/gulp": "^4.0.6",
     "@types/minimist": "^1.2.0",
-    "@types/mocha": "^5.2.5",
-    "@types/node": "^10.11.3",
+    "@types/mocha": "^5.2.7",
+    "@types/node": "^12.12.14",
     "chai": "^4.2.0",
-    "codecov": "^3.1.0",
-    "gulp": "^4.0.0",
-    "gulp-cli": "^2.0.1",
+    "codecov": "^3.6.1",
+    "gulp": "^4.0.2",
+    "gulp-cli": "^2.2.0",
     "minimist": "^1.2.0",
-    "neon-cli": "^0.2.0",
+    "neon-cli": "^0.3.3",
     "pre-commit": "^1.2.2",
-    "ts-node": "^7.0.1",
-    "turbo-gulp": "^0.17.1",
-    "typescript": "^3.1.1"
+    "ts-node": "^8.5.3",
+    "turbo-gulp": "^0.20.2",
+    "typescript": "^3.7.2"
+  },
+  "c88": {
+    "match": [
+      "build/test/lib/*.{js,mjs}",
+      "build/test/lib/**/*.{js,mjs}"
+    ]
   }
 }
