@@ -1,24 +1,25 @@
 import chai from "chai";
 import fs from "fs";
+import sysPath from "path";
 import path from "path";
 import { FunctionCov, mergeFunctionCovs, mergeProcessCovs, mergeScriptCovs, ProcessCov, ScriptCov } from "../lib";
 
 const REPO_ROOT: string = path.join(__dirname, "..", "..", "..", "..");
-const BENCHES_INPUT_DIR: string = path.join(REPO_ROOT, "benches");
-const BENCHES_DIR: string = path.join(REPO_ROOT, "test-data", "merge", "benches");
-const BUGS_DIR: string = path.join(REPO_ROOT, "test-data", "merge", "bugs");
-const RANGES_DIR: string = path.join(REPO_ROOT, "test-data", "merge", "ranges");
-const BENCHES_TIMEOUT: number = 30000; // 30sec
+const MERGE_TESTS_DIR: string = path.join(REPO_ROOT, "tests", "merge");
+const MERGE_TIMEOUT: number = 30000; // 30sec
 
-interface MergeTestItem {
-  name: string;
-  status: "run" | "skip" | "only";
-  inputs: ProcessCov[];
-  expected: ProcessCov;
-}
+// `BLACKLIST` can be used to forcefully skip some tests.
+const BLACKLIST: ReadonlySet<string> = new Set([
+  ...["node-10.11.0", "npm-6.4.1", "yargs-12.0.2"],
+  // ...(process.env.CI === "true" ? ["node-10.11.0", "npm-6.4.1"] : []),
+]);
+// `WHITELIST` can be used to only enable a few tests.
+const WHITELIST: ReadonlySet<string> = new Set([
+  // "simple",
+]);
 
 describe("merge", () => {
-  describe("Various", () => {
+  describe("custom", () => {
     it("accepts empty arrays for `mergeProcessCovs`", () => {
       const inputs: ProcessCov[] = [];
       const expected: ProcessCov = {result: []};
@@ -145,124 +146,47 @@ describe("merge", () => {
     });
   });
 
-  describe("bugs", () => {
-    for (const sourceFile of getSourceFiles(BUGS_DIR)) {
-      const content: string = fs.readFileSync(sourceFile, {encoding: "UTF-8"});
-      const item: MergeTestItem = JSON.parse(content);
-      const test: () => void = () => {
-        const actual: ProcessCov | undefined = mergeProcessCovs(item.inputs);
+  for (const mergeTest of getMergeTests()) {
+    it(mergeTest.name, test);
+
+    function test(this: Mocha.Context) {
+      this.timeout(MERGE_TIMEOUT);
+      const items: MergeTestItem[] = JSON.parse(fs.readFileSync(mergeTest.testPath, {encoding: "UTF-8"}));
+      for (const item of items) {
+        const actual: ProcessCov = mergeProcessCovs(item.inputs);
         chai.assert.deepEqual(actual, item.expected);
-      };
-      switch (item.status) {
-        case "run":
-          it(item.name, test);
-          break;
-        case "only":
-          it.only(item.name, test);
-          break;
-        case "skip":
-          it.skip(item.name, test);
-          break;
-        default:
-          throw new Error(`Unexpected status: ${item.status}`);
-      }
-    }
-  });
-
-  describe("ranges", () => {
-    for (const sourceFile of getSourceFiles(RANGES_DIR)) {
-      const relPath: string = path.relative(RANGES_DIR, sourceFile);
-      describe(relPath, () => {
-        const content: string = fs.readFileSync(sourceFile, {encoding: "UTF-8"});
-        const items: MergeTestItem[] = JSON.parse(content);
-        for (const item of items) {
-          const test: () => void = () => {
-            const actual: ProcessCov | undefined = mergeProcessCovs(item.inputs);
-            chai.assert.deepEqual(actual, item.expected);
-          };
-          switch (item.status) {
-            case "run":
-              it(item.name, test);
-              break;
-            case "only":
-              it.only(item.name, test);
-              break;
-            case "skip":
-              it.skip(item.name, test);
-              break;
-            default:
-              throw new Error(`Unexpected status: ${item.status}`);
-          }
-        }
-      });
-    }
-  });
-
-  describe("benches", () => {
-    for (const bench of getBenches()) {
-      const BENCHES_TO_SKIP: Set<string> = new Set();
-      if (process.env.CI === "true") {
-        // Skip very large benchmarks when running continuous integration
-        BENCHES_TO_SKIP.add("node@10.11.0");
-        BENCHES_TO_SKIP.add("npm@6.4.1");
-      }
-
-      const name: string = path.basename(bench);
-
-      if (BENCHES_TO_SKIP.has(name)) {
-        it.skip(`${name} (skipped: too large for CI)`, testBench);
-      } else {
-        it(name, testBench);
-      }
-
-      async function testBench(this: Mocha.Context) {
-        this.timeout(BENCHES_TIMEOUT);
-
-        const inputFileNames: string[] = await fs.promises.readdir(bench);
-        const inputPromises: Promise<ProcessCov>[] = [];
-        for (const inputFileName of inputFileNames) {
-          const resolved: string = path.join(bench, inputFileName);
-          inputPromises.push(fs.promises.readFile(resolved).then(buffer => JSON.parse(buffer.toString("UTF-8"))));
-        }
-        const inputs: ProcessCov[] = await Promise.all(inputPromises);
-        const expectedPath: string = path.join(BENCHES_DIR, `${name}.json`);
-        const expectedContent: string = await fs.promises.readFile(expectedPath, {encoding: "UTF-8"}) as string;
-        const expected: ProcessCov = JSON.parse(expectedContent);
-        const startTime: number = Date.now();
-        const actual: ProcessCov | undefined = mergeProcessCovs(inputs);
-        const endTime: number = Date.now();
-        console.error(`Time (${name}): ${(endTime - startTime) / 1000}`);
-        chai.assert.deepEqual(actual, expected);
-        console.error(`OK: ${name}`);
-      }
-    }
-  });
-});
-
-function getSourceFiles(rootDir: string) {
-  return getSourcesFrom(rootDir);
-
-  function* getSourcesFrom(dir: string): Iterable<string> {
-    const names: string[] = fs.readdirSync(dir);
-    for (const name of names) {
-      const resolved: string = path.join(dir, name);
-      const stat: fs.Stats = fs.statSync(resolved);
-      if (stat.isDirectory()) {
-        yield* getSourcesFrom(dir);
-      } else {
-        yield resolved;
       }
     }
   }
+});
+
+interface MergeTest {
+  name: string;
+  testPath: string;
 }
 
-function* getBenches(): Iterable<string> {
-  const names: string[] = fs.readdirSync(BENCHES_INPUT_DIR);
-  for (const name of names) {
-    const resolved: string = path.join(BENCHES_INPUT_DIR, name);
-    const stat: fs.Stats = fs.statSync(resolved);
-    if (stat.isDirectory()) {
-      yield resolved;
+interface MergeTestItem {
+  name: string;
+  inputs: ProcessCov[];
+  expected: ProcessCov;
+}
+
+function* getMergeTests(): IterableIterator<MergeTest> {
+  for (const dirEnt of fs.readdirSync(MERGE_TESTS_DIR, {withFileTypes: true})) {
+    if (!dirEnt.isDirectory()) {
+      continue;
     }
+    const testName: string = dirEnt.name;
+    const testDir: string = sysPath.join(MERGE_TESTS_DIR, testName);
+
+    if (BLACKLIST.has(testName)) {
+      continue;
+    } else if (WHITELIST.size > 0 && !WHITELIST.has(testName)) {
+      continue;
+    }
+
+    const testPath: string = sysPath.join(testDir, "test.json");
+
+    yield {name: testName, testPath};
   }
 }
