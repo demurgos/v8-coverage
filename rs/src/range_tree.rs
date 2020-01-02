@@ -1,4 +1,4 @@
-use coverage::RangeCov;
+use crate::coverage::RangeCov;
 use std::iter::Peekable;
 use typed_arena::Arena;
 
@@ -148,7 +148,7 @@ impl<'rt> RangeTree<'rt> {
 
 #[cfg(test)]
 mod tests {
-  use coverage::RangeCov;
+  use crate::coverage::RangeCov;
   use super::RangeTree;
   use super::RangeTreeArena;
 

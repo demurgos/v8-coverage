@@ -1,3 +1,5 @@
+use serde::{Deserialize, Serialize};
+
 #[derive(Eq, PartialEq, Clone, Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ProcessCov {

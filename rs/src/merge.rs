@@ -1,8 +1,6 @@
-use coverage::{FunctionCov, ProcessCov};
-use coverage::RangeCov;
-use coverage::ScriptCov;
-use range_tree::RangeTree;
-use range_tree::RangeTreeArena;
+use crate::coverage::{FunctionCov, ProcessCov, RangeCov, ScriptCov};
+use crate::range_tree::RangeTree;
+use crate::range_tree::RangeTreeArena;
 use rayon::prelude::*;
 use std::collections::BTreeMap;
 use std::collections::BTreeSet;
@@ -378,10 +376,7 @@ fn merge_children_lists<'a>(a: Vec<&'a mut RangeTree<'a>>, b: Vec<&'a mut RangeT
 
 #[cfg(test)]
 mod tests {
-  use coverage::FunctionCov;
-  use coverage::ProcessCov;
-  use coverage::RangeCov;
-  use coverage::ScriptCov;
+  use crate::coverage::{FunctionCov, ProcessCov, RangeCov, ScriptCov};
   use super::merge_processes;
 
   #[test]

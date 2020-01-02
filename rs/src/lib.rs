@@ -1,8 +1,3 @@
-extern crate rayon;
-#[macro_use]
-extern crate serde_derive;
-extern crate typed_arena;
-
 pub use coverage::*;
 pub use merge::*;
 
