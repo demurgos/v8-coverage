@@ -378,6 +378,7 @@ fn merge_children_lists<'a>(a: Vec<&'a mut RangeTree<'a>>, b: Vec<&'a mut RangeT
 mod tests {
   use crate::coverage::{FunctionCov, ProcessCov, RangeCov, ScriptCov};
   use super::merge_processes;
+  use test_generator::test_resources;
 
   #[test]
   fn empty() {
@@ -701,5 +702,53 @@ mod tests {
     });
 
     assert_eq!(merge_processes(inputs), expected);
+  }
+
+  fn is_test_blacklisted(test_name: &str) -> bool {
+    match test_name {
+      "is-block-coverage" => true,
+      "issue-2-mixed-is-block-coverage" => true,
+      "node-10.11.0" => true,
+      "npm-6.4.1" => true,
+      "yargs-12.0.2" => true,
+      _ => false
+    }
+  }
+
+  #[test_resources("../tests/merge/*/")]
+  fn test_merge(path: &str) -> () {
+    use std::path::Path;
+    let path: &Path = Path::new(path);
+    let name = path
+      .components()
+      .last()
+      .unwrap()
+      .as_os_str()
+      .to_str()
+      .expect("Failed to retrieve test name");
+
+    if is_test_blacklisted(&name) {
+      eprintln!("Skipping blacklisted test");
+      return
+    }
+
+    let test_path = path.join("test.json");
+
+    let test_json = ::std::fs::read_to_string(test_path).expect("Failed to read test file");
+
+    let test: Vec<MergeTestItem> = serde_json::from_str(&test_json).expect("Failed to read test");
+
+    for item in test {
+      assert_eq!(merge_processes(item.inputs).unwrap(), item.expected);
+    }
+  }
+
+  use serde::{Deserialize, Serialize};
+
+  #[derive(Eq, PartialEq, Clone, Debug, Serialize, Deserialize)]
+  #[serde(rename_all = "camelCase")]
+  pub struct MergeTestItem {
+    pub inputs: Vec<ProcessCov>,
+    pub expected: ProcessCov,
   }
 }

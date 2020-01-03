@@ -20,6 +20,8 @@ pub struct FunctionCov {
   pub function_name: String,
   pub ranges: Vec<RangeCov>,
   pub is_block_coverage: bool,
+//  #[serde(skip_serializing_if = "Option::is_none")]
+//  pub count: Option<i64>,
 }
 
 #[derive(Eq, PartialEq, Copy, Clone, Debug, Serialize, Deserialize)]

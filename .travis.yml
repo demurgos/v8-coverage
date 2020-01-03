@@ -1,22 +1,39 @@
-language: node_js
-
-node_js:
-- 12
-
 cache:
   directories:
-  - "node_modules"
-  - "ts/node_modules"
+    - "node_modules"
+    - "ts/node_modules"
 
-before_install:
-- export PATH="$(yarn bin):${PATH}"
-- yarn global add codecov
+matrix:
+  include:
+    - language: node_js
+      os:
+        - linux
+      #- osx
+      #- windows
+      node_js:
+        - 12
+      before_script:
+        - export PATH="$(yarn bin):${PATH}"
+        - yarn global add codecov
+        - cd ts
+      script:
+        - yarn install
+        - npm test
+        - cp coverage/lcov.info coverage.lcov
+        - codecov
 
-before_script:
-- (cd ts && yarn install)
+    - language: rust
+      os:
+        - linux
+      #      rust:
+      #        - stable
+      before_script:
+        - cd rs
+#        - rustup component add rustfmt
+      script:
+#        - cargo fmt --all -- --check
+        - cargo build
+        - cargo test
 
-script:
-- cd ts
-- npm test
-- cp coverage/lcov.info coverage.lcov
-- codecov
+notifications:
+  email: false
