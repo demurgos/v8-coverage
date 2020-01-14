@@ -5,6 +5,7 @@ use typed_arena::Arena;
 pub struct RangeTreeArena<'a>(Arena<RangeTree<'a>>);
 
 impl<'a> RangeTreeArena<'a> {
+  #[allow(dead_code)]
   pub fn new() -> Self {
     RangeTreeArena(Arena::new())
   }
@@ -13,6 +14,7 @@ impl<'a> RangeTreeArena<'a> {
     RangeTreeArena(Arena::with_capacity(n))
   }
 
+  #[allow(clippy::mut_from_ref)]
   pub fn alloc(&'a self, value: RangeTree<'a>) -> &'a mut RangeTree<'a> {
     self.0.alloc(value)
   }
@@ -36,7 +38,11 @@ impl<'rt> RangeTree<'rt> {
     }
   }
 
-  pub fn split<'a>(rta: &'a RangeTreeArena<'a>, tree: &'a mut RangeTree<'a>, value: usize) -> (&'a mut RangeTree<'a>, &'a mut RangeTree<'a>) {
+  pub fn split<'a>(
+    rta: &'a RangeTreeArena<'a>,
+    tree: &'a mut RangeTree<'a>,
+    value: usize,
+  ) -> (&'a mut RangeTree<'a>, &'a mut RangeTree<'a>) {
     let mut left_children: Vec<&'a mut RangeTree<'a>> = Vec::new();
     let mut right_children: Vec<&'a mut RangeTree<'a>> = Vec::new();
     for child in tree.children.iter_mut() {
@@ -104,7 +110,8 @@ impl<'rt> RangeTree<'rt> {
     tree
   }
 
-  pub fn add_count(&mut self, value: i64) -> () {
+  #[allow(dead_code)]
+  pub fn add_count(&mut self, value: i64) {
     self.delta += value;
   }
 
@@ -113,7 +120,11 @@ impl<'rt> RangeTree<'rt> {
     let mut stack: Vec<(&RangeTree, i64)> = vec![(self, 0)];
     while let Some((ref cur, parent_count)) = stack.pop() {
       let count: i64 = parent_count + cur.delta;
-      ranges.push(RangeCov { start_offset: cur.start, end_offset: cur.end, count });
+      ranges.push(RangeCov {
+        start_offset: cur.start,
+        end_offset: cur.end,
+        count,
+      });
       for child in cur.children.iter().rev() {
         stack.push((child, count))
       }
@@ -125,7 +136,12 @@ impl<'rt> RangeTree<'rt> {
     Self::from_sorted_ranges_inner(rta, &mut ranges.iter().peekable(), ::std::usize::MAX, 0)
   }
 
-  fn from_sorted_ranges_inner<'a, 'b, 'c: 'b>(rta: &'a RangeTreeArena<'a>, ranges: &'b mut Peekable<impl Iterator<Item=&'c RangeCov>>, parent_end: usize, parent_count: i64) -> Option<&'a mut RangeTree<'a>> {
+  fn from_sorted_ranges_inner<'a, 'b, 'c: 'b>(
+    rta: &'a RangeTreeArena<'a>,
+    ranges: &'b mut Peekable<impl Iterator<Item = &'c RangeCov>>,
+    parent_end: usize,
+    parent_count: i64,
+  ) -> Option<&'a mut RangeTree<'a>> {
     let has_range: bool = match ranges.peek() {
       None => false,
       Some(ref range) => range.start_offset < parent_end,
@@ -148,16 +164,18 @@ impl<'rt> RangeTree<'rt> {
 
 #[cfg(test)]
 mod tests {
-  use crate::coverage::RangeCov;
   use super::RangeTree;
   use super::RangeTreeArena;
+  use crate::coverage::RangeCov;
 
   #[test]
   fn from_sorted_ranges_empty() {
     let rta = RangeTreeArena::new();
-    let inputs: Vec<RangeCov> = vec![
-      RangeCov { start_offset: 0, end_offset: 9, count: 1 },
-    ];
+    let inputs: Vec<RangeCov> = vec![RangeCov {
+      start_offset: 0,
+      end_offset: 9,
+      count: 1,
+    }];
     let actual: Option<&mut RangeTree> = RangeTree::from_sorted_ranges(&rta, &inputs);
     let expected: Option<&mut RangeTree> = Some(rta.alloc(RangeTree::new(0, 9, 1, Vec::new())));
 
