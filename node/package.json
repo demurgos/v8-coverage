@@ -43,7 +43,7 @@
     "codecov": "^3.6.1",
     "gulp": "^4.0.2",
     "gulp-cli": "^2.2.0",
-    "minimist": "^1.2.0",
+    "minimist": "^1.2.3",
     "neon-cli": "^0.3.3",
     "pre-commit": "^1.2.2",
     "ts-node": "^8.5.3",
