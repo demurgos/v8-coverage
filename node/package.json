@@ -40,7 +40,7 @@
     "@types/mocha": "^5.2.7",
     "@types/node": "^12.12.14",
     "chai": "^4.2.0",
-    "codecov": "^3.6.1",
+    "codecov": "^3.7.1",
     "gulp": "^4.0.2",
     "gulp-cli": "^2.2.0",
     "minimist": "^1.2.0",
