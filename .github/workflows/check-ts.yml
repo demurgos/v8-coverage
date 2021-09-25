@@ -1,10 +1,10 @@
-name: Check the Rust implementation
+name: Check the TypeScript implementation
 
 on:
   push:
-    branches: [ $default-branch ]
+    branches: [ master ]
   pull_request:
-    branches: [ $default-branch ]
+    branches: [ master ]
 
 jobs:
   build:
@@ -18,7 +18,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
           cache: "yarn"
@@ -28,5 +28,5 @@ jobs:
           cd ts
           yarn install
           yarn run test
-          cp coverage/lcov.info coverage.lcov
-          yarn run codecov
+#          cp coverage/lcov.info coverage.lcov
+#          yarn run codecov
