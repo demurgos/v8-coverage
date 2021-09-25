@@ -26,7 +26,8 @@
     "pretest": "gulp lint",
     "prepublishOnly": "echo \"Use \\`gulp lib:publish\\`\" && exit 1",
     "prestart": "gulp main:build",
-    "start": "node build/main/main/main.js"
+    "start": "node build/main/main/main.js",
+    "codecov": "codecov"
   },
   "devDependencies": {
     "@types/chai": "^4.2.5",

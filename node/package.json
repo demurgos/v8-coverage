@@ -2,7 +2,6 @@
   "name": "@c88/v8-coverage-node",
   "version": "0.0.1",
   "description": "Toolbox for V8 coverage files",
-  "private": false,
   "main": "dist/lib/index.js",
   "types": "dist/lib/index.d.ts",
   "repository": {

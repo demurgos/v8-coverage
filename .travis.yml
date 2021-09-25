@@ -12,15 +12,11 @@ matrix:
       #- windows
       node_js:
         - 12
-      before_script:
-        - export PATH="$(yarn bin):${PATH}"
-        - yarn global add codecov
-        - cd ts
       script:
         - yarn install
         - npm test
         - cp coverage/lcov.info coverage.lcov
-        - codecov
+        - yarn run codecov
 
     - language: rust
       os:
