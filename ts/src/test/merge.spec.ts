@@ -2,9 +2,10 @@ import chai from "chai";
 import fs from "fs";
 import sysPath from "path";
 import path from "path";
-import { FunctionCov, mergeFunctionCovs, mergeProcessCovs, mergeScriptCovs, ProcessCov, ScriptCov } from "../lib";
+import url from "url";
+import { FunctionCov, mergeFunctionCovs, mergeProcessCovs, mergeScriptCovs, ProcessCov, ScriptCov } from "../lib/index.js";
 
-const REPO_ROOT: string = path.join(__dirname, "..", "..", "..", "..");
+const REPO_ROOT: string = path.join(url.fileURLToPath(import.meta.url), "..", "..", "..");
 const MERGE_TESTS_DIR: string = path.join(REPO_ROOT, "tests", "merge");
 const MERGE_TIMEOUT: number = 30000; // 30sec
 
@@ -151,7 +152,7 @@ describe("merge", () => {
 
     function test(this: Mocha.Context) {
       this.timeout(MERGE_TIMEOUT);
-      const items: MergeTestItem[] = JSON.parse(fs.readFileSync(mergeTest.testPath, {encoding: "UTF-8"}));
+      const items: MergeTestItem[] = JSON.parse(fs.readFileSync(mergeTest.testPath, {encoding: "utf-8"}));
       for (const item of items) {
         const actual: ProcessCov = mergeProcessCovs(item.inputs);
         chai.assert.deepEqual(actual, item.expected);

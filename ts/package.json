@@ -1,55 +1,50 @@
 {
   "name": "@c88/v8-coverage",
   "version": "0.2.0",
-  "description": "Helper functions for V8 coverage files.",
+  "description": "Helpers for V8 coverage files.",
   "author": "Charles Samborski <demurgos@demurgos.net> (https://demurgos.net)",
   "license": "MIT",
-  "main": "dist/lib/index",
-  "types": "dist/lib/index.d.ts",
+  "keywords": [
+    "v8",
+    "coverage",
+    "c8"
+  ],
+  "homepage": "https://github.com/demurgos/v8-coverage",
   "repository": {
     "type": "git",
     "url": "git://github.com/demurgos/v8-coverage.git"
   },
-  "homepage": "https://demurgos.github.io/v8-coverage",
-  "engines": {
-    "node": ">=8"
+  "type": "module",
+  "files": [
+    "./lib/",
+    "./src/lib/"
+  ],
+  "exports": {
+    ".": "./lib/index.js",
+    "./*": "./lib/*.js"
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "./lib/*"
+      ]
+    }
   },
   "scripts": {
-    "build": "gulp lib:build",
-    "watch": "gulp lib:watch",
-    "test": "gulp test-no-coverage",
-    "lint": "gulp lint",
-    "format": "gulp format",
-    "typedoc": "gulp lib:typedoc",
-    "dist": "gulp lib:dist",
-    "prepare": "gulp all:tsconfig.json && gulp tslint.json && gulp dist",
-    "pretest": "gulp lint",
-    "prepublishOnly": "echo \"Use \\`gulp lib:publish\\`\" && exit 1",
-    "prestart": "gulp main:build",
-    "start": "node build/main/main/main.js",
-    "codecov": "codecov"
+    "build": "tsc --build src/lib/tsconfig.json",
+    "prepack": "yarn run build",
+    "test:build": "tsc --build src/test/tsconfig.json",
+    "test": "yarn run test:build && mocha \"test/**/*.spec.js\""
+  },
+  "engines": {
+    "node": ">=14.13.1"
   },
   "devDependencies": {
-    "@types/chai": "^4.2.5",
-    "@types/gulp": "^4.0.6",
-    "@types/minimist": "^1.2.0",
+    "@types/chai": "^4.2.22",
     "@types/mocha": "^9.0.0",
-    "@types/node": "^12.12.14",
-    "chai": "^4.2.0",
-    "codecov": "^3.6.1",
-    "gulp": "^4.0.2",
-    "gulp-cli": "^2.2.0",
-    "minimist": "^1.2.0",
+    "@types/node": "^16.10.1",
+    "chai": "^4.3.4",
     "mocha": "^9.1.2",
-    "pre-commit": "^1.2.2",
-    "ts-node": "^8.5.3",
-    "turbo-gulp": "^0.20.2",
-    "typescript": "^3.7.2"
-  },
-  "c88": {
-    "match": [
-      "build/test/lib/*.{js,mjs}",
-      "build/test/lib/**/*.{js,mjs}"
-    ]
+    "typescript": "^4.4.3"
   }
 }

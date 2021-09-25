@@ -1,5 +1,5 @@
-import { compareRangeCovs } from "./compare";
-import { RangeCov } from "./types";
+import { compareRangeCovs } from "./compare.js";
+import { RangeCov } from "./types.js";
 
 interface ReadonlyRangeTree {
   readonly start: number;
