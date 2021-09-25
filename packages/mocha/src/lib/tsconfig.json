@@ -1,5 +1,5 @@
 {
-  "extends": "../../../tsconfig.json",
+  "extends": "../../../../tsconfig.json",
   "compilerOptions": {
     "composite": true,
     "noEmit": false,
@@ -12,7 +12,7 @@
   "exclude": [],
   "references": [
     {
-      "path": "../../../packages/core/src/lib"
+      "path": "../../../core/src/lib"
     }
   ]
 }

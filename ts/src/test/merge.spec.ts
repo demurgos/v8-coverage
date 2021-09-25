@@ -3,7 +3,15 @@ import fs from "fs";
 import sysPath from "path";
 import path from "path";
 import url from "url";
-import { FunctionCov, mergeFunctionCovs, mergeProcessCovs, mergeScriptCovs, ProcessCov, ScriptCov } from "../lib/index.js";
+import {
+  FunctionCov,
+  mergeFunctionCovs,
+  mergeProcessCovs,
+  mergeScriptCovs,
+  ProcessCov,
+  ScriptCov
+} from "../lib/index.js";
+import { testImpl } from "@v8-coverage-tools/mocha";
 
 const REPO_ROOT: string = path.join(url.fileURLToPath(import.meta.url), "..", "..", "..");
 const MERGE_TESTS_DIR: string = path.join(REPO_ROOT, "tests", "merge");
@@ -19,29 +27,10 @@ const WHITELIST: ReadonlySet<string> = new Set([
   // "simple",
 ]);
 
+testImpl({mergeProcessCovs, mergeScriptCovs, mergeFunctionCovs});
+
 describe("merge", () => {
   describe("custom", () => {
-    it("accepts empty arrays for `mergeProcessCovs`", () => {
-      const inputs: ProcessCov[] = [];
-      const expected: ProcessCov = {result: []};
-      const actual: ProcessCov = mergeProcessCovs(inputs);
-      chai.assert.deepEqual(actual, expected);
-    });
-
-    it("accepts empty arrays for `mergeScriptCovs`", () => {
-      const inputs: ScriptCov[] = [];
-      const expected: ScriptCov | undefined = undefined;
-      const actual: ScriptCov | undefined = mergeScriptCovs(inputs);
-      chai.assert.deepEqual(actual, expected);
-    });
-
-    it("accepts empty arrays for `mergeFunctionCovs`", () => {
-      const inputs: FunctionCov[] = [];
-      const expected: FunctionCov | undefined = undefined;
-      const actual: FunctionCov | undefined = mergeFunctionCovs(inputs);
-      chai.assert.deepEqual(actual, expected);
-    });
-
     it("accepts arrays with a single item for `mergeProcessCovs`", () => {
       const inputs: ProcessCov[] = [
         {

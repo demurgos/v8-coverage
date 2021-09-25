@@ -8,3 +8,4 @@
 ## Node-TypeScript
 
 - **Breaking change**: Migrate to ES modules.
+- **Breaking change**: Split into smaller packages.

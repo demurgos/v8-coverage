@@ -12,6 +12,9 @@
   "references": [
     {
       "path": "../lib"
+    },
+    {
+      "path": "../../../packages/mocha/src/lib"
     }
   ]
 }

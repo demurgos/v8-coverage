@@ -180,6 +180,8 @@ __metadata:
     "@types/chai": ^4.2.22
     "@types/mocha": ^9.0.0
     "@types/node": ^16.10.1
+    "@v8-coverage-tools/core": "workspace:*"
+    "@v8-coverage-tools/mocha": "workspace:*"
     chai: ^4.3.4
     mocha: ^9.1.2
     typescript: ^4.4.3
@@ -786,6 +788,33 @@ __metadata:
   checksum: 08d37fdfa23a6fe8139f1305313562ebad973f3fac01bcce2773b2bda5bcb0146dfdcf3cb6a722cf0a5f2ca0bc56a827eac8f1e7b3beddc548f654addf1fc34c
   languageName: node
   linkType: hard
+
+"@v8-coverage-tools/core@workspace:*, @v8-coverage-tools/core@workspace:packages/core":
+  version: 0.0.0-use.local
+  resolution: "@v8-coverage-tools/core@workspace:packages/core"
+  dependencies:
+    "@types/chai": ^4.2.22
+    "@types/mocha": ^9.0.0
+    "@types/node": ^16.10.1
+    chai: ^4.3.4
+    mocha: ^9.1.2
+    typescript: ^4.4.3
+  languageName: unknown
+  linkType: soft
+
+"@v8-coverage-tools/mocha@workspace:*, @v8-coverage-tools/mocha@workspace:packages/mocha":
+  version: 0.0.0-use.local
+  resolution: "@v8-coverage-tools/mocha@workspace:packages/mocha"
+  dependencies:
+    "@types/chai": ^4.2.22
+    "@types/mocha": ^9.0.0
+    "@types/node": ^16.10.1
+    "@v8-coverage-tools/core": "workspace:*"
+    chai: ^4.3.4
+    mocha: ^9.1.2
+    typescript: ^4.4.3
+  languageName: unknown
+  linkType: soft
 
 "abab@npm:^2.0.3":
   version: 2.0.5
