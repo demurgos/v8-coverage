@@ -715,10 +715,10 @@ mod tests {
     }
   }
 
-  #[test_resources("../tests/merge/*/")]
+  #[test_resources("./tests/merge/*/")]
   fn test_merge(path: &str) -> () {
-    use std::path::Path;
-    let path: &Path = Path::new(path);
+    use std::path::{Path, PathBuf};
+    let path: PathBuf = Path::join(Path::new(".."), path);
     let name = path
       .components()
       .last()

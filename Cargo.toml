@@ -1,0 +1,7 @@
+[workspace]
+members = [
+  "rust",
+]
+
+[patch.crates-io]
+v8_coverage_tools = { path = "./rust" }
