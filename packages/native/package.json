@@ -1,0 +1,55 @@
+{
+  "name": "@v8-coverage-tools/native",
+  "version": "1.0.0",
+  "description": "Native Node module for v8-coverage-tools",
+  "author": "Charles Samborski <demurgos@demurgos.net>",
+  "license": "MIT",
+  "scripts": {
+    "lint": "eslint \"./src/**/*.ts\"",
+    "format": "eslint --fix \"./src/**/*.ts\"",
+    "clean": "rimraf \"./@(bin|lib|test)\" \"native/@(artifacts.json|Cargo.lock|build|index.node|target)\"",
+    "native:build": "cd native && cargo build ${CARGO_FLAGS:-\"--lib\"}",
+    "lib:build": "tsc --build src/lib/tsconfig.json",
+    "build": "yarn run native:build && yarn run lib:build",
+    "//install": "node bin/install.js",
+    "crossbuild:linux64": "ETWIN_NEON_TARGET=x86_64-unknown-linux-gnu yarn run crossbuild:_internal",
+    "crossbuild:mac64": "ETWIN_NEON_TARGET=x86_64-apple-darwin yarn run crossbuild:_internal",
+    "crossbuild:windows64": "ETWIN_NEON_TARGET=x86_64-pc-windows-msvc yarn run crossbuild:_internal",
+    "crossbuild:_internal": "cd native && cross build --lib --release --target ${ETWIN_NEON_TARGET}",
+    "prepack": "yarn run lib:build && yarn run bin:build && yarn run crossbuild:linux64 && yarn run crossbuild:windows64",
+    "test:build": "yarn run native:build && tsc --build src/test/tsconfig.json",
+    "test": "yarn run test:build && mocha \"test/**/*.spec.js\"",
+    "bin:build": "tsc --build src/bin/tsconfig.json"
+  },
+  "dependencies": {
+    "@v8-coverage-tools/core": "workspace:^"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.3.0",
+    "@types/mocha": "^9.1.0",
+    "@types/node": "^17.0.15",
+    "chai": "^4.3.6",
+    "eslint": "^8.8.0",
+    "mocha": "^9.2.0",
+    "rimraf": "^3.0.2",
+    "typescript": "^4.5.5"
+  },
+  "type": "module",
+  "main": "./native/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./*": "./lib/*.js"
+  },
+  "files": [
+    "./bin/",
+    "./lib/",
+    "./native/src/**/*",
+    "./native/build.rs",
+    "./native/build/**/*.node",
+    "./native/Cargo.lock",
+    "./native/Cargo.toml",
+    "./native/index.d.ts",
+    "./native/index.js",
+    "./native/package.json"
+  ]
+}

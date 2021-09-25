@@ -1,6 +1,6 @@
 [package]
 name = "v8_coverage_tools"
-version = "0.1.0"
+version = "1.0.0"
 authors = ["Charles Samborski <demurgos@demurgos.net>"]
 license = "MIT"
 edition = "2021"

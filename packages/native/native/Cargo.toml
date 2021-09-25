@@ -1,0 +1,27 @@
+[package]
+name = "v8_coverage_tools_native"
+version = "1.0.0"
+authors = ["Charles Samborski <demurgos@demurgos.net>"]
+description = "Native node bindings for v8-coverage-tools"
+license = "MIT"
+build = "build.rs"
+edition = "2018"
+exclude = ["artifacts.json", "index.node"]
+publish = false
+
+[lib]
+name = "v8_coverage_tools_native"
+crate-type = ["cdylib"]
+test = false
+
+[build-dependencies]
+neon-build = "0.9.1"
+
+[dependencies]
+v8_coverage_tools = { version = "1.0.0" }
+neon = { version = "0.9.1", default-features = false, features = ["event-queue-api", "napi-6"] }
+serde = { version = "1.0.130", features = ["derive"] }
+serde_json = "1.0.67"
+
+# When publishing, uncomment the following line (so it does not interfere with outer Rust workspaces in consumers)
+# [workspace]

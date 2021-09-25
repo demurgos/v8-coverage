@@ -1,0 +1,4 @@
+[build.env]
+passthrough = [
+  "ETWIN_NEON_TARGET",
+]

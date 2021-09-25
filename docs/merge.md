@@ -12,7 +12,7 @@ You can actually do an experiment to see what the merged result should look
 like. Write a library and multiple entry points using this library. First run
 each entry point in its own process. Then create a "super" entry point that
 requires all the other ones and run it. The process coverage you get there
-corresponds to the merged coverages obtained from the individual entry points. 
+corresponds to the merged coverages obtained from the individual entry points.
 
 The algorithm in this repo only depends on the individual process coverages: it
 does not use the source text or Abstract Syntax Tree (AST). This means that the
@@ -79,7 +79,7 @@ dynamically loaded modules (optional dependencies, conditional dependencies,
 etc.) affects it.
 
 Then, for each set of matching script coverages, the functions are matched
-based on their span. The functions are charecterized by their root range:
+based on their span. The functions are characterized by their root range:
 `ranges[0]`. `ranges[0].count` is the number of times the function was called
 and the offsets correspond the whole function: from the first token (e.g.
 the `function` keyword) to the last one (e.g. the final closing brace `}`).
@@ -252,7 +252,7 @@ Each family describes a configuration between two children nodes (for example,
 we want to merge the first child of each root range).
 The merge algorithm can be defined based on how these 4 configurations are
 handled.
-For each of these configuration, there is a "merge rule": a description of how
+For each of these configurations, there is a "merge rule": a description of how
 the counts in the result are related to the inputs. These depend on the count
 of the two child nodes we are merging (`a` and `b`) and the counts of their
 parent (`A` and `B`). The rules are given as ASCII diagrams.
@@ -410,7 +410,7 @@ like this:
 ```
 
 If the merge algorithm was working in a vacuum, there would be no way to decide
-which which variant to use. Without the AST, you don't know which of the splits
+which variant to use. Without the AST, you don't know which of the splits
 are safe and which break new AST nodes. But we're no working on some
 imaginary trees: they come from JS code.
 
