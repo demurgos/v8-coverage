@@ -12,7 +12,8 @@ jobs:
 
     strategy:
       matrix:
-        rust-version: ["1.55.0"]
+        # TODO: Use `["1.56.0", "stable"]` once Rust 1.56 is released.
+        rust-version: ["beta"]
 
     steps:
       - uses: actions/checkout@v2

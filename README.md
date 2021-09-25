@@ -1,4 +1,4 @@
-# V8 coverage 
+# V8 coverage
 
 This repository contains helper functions to manipulate V8 coverage files.
 - Stable features:
@@ -20,6 +20,14 @@ There are three implementations:
 - **Node native module (`node`)**: Not available yet, planned to be published on npm as `@c88/v8-coverage-node`.
 
 All the implementations expose the same API.
+
+## Rust
+
+Support policy: Rust version 1.56.0 or later.
+
+## Node
+
+Support policy: Node version 14.13.1 or later.
 
 ## API
 

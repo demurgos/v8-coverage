@@ -12,7 +12,8 @@ jobs:
 
     strategy:
       matrix:
-        node-version: ["14.13.1", "16"]
+        # TODO: Use `["14.13.1, "current"]` once 12.x is EOL and the `current` alias is supported.
+        node-version: ["12.20.0", "14.13.1", "16"]
 
     steps:
       - uses: actions/checkout@v2
