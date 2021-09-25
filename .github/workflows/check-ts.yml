@@ -28,3 +28,10 @@ jobs:
         run: |
           yarn install
           yarn run test
+
+      - name: Upload coverage report to codecov.io
+        uses: codecov/codecov-action@v2
+        with:
+          # It's important to set this field otherwiser it will try to upload
+          # our test resources.
+          files: "./coverage/lcov.info"

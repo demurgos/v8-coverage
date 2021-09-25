@@ -12,7 +12,7 @@
   "scripts": {
     "clean": "rimraf \"./@(ts|node)/@(lib|main|test)\"",
     "build:test": "tsc --build test.tsconfig.json",
-    "test": "yarn run build:test && mocha \"./@(ts|node)/test/**/*.spec.js\"",
+    "test": "yarn run build:test && c8 -- mocha \"./@(ts|node)/test/**/*.spec.js\"",
     "test:rust": "cargo tarpaulin --count --out lcov --out html --output-dir ./coverage/rust || cargo test"
   },
   "engines": {
@@ -23,6 +23,7 @@
     "@typescript-eslint/eslint-plugin": "^4.28.0",
     "@typescript-eslint/parser": "^4.28.0",
     "benchmark": "^2.1.4",
+    "c8": "^7.9.0",
     "codecov": "^3.8.3",
     "eslint": "^7.29.0",
     "eslint-plugin-simple-import-sort": "^7.0.0",
@@ -36,6 +37,12 @@
     "packages": [
       "node",
       "ts"
+    ]
+  },
+  "c8": {
+    "reporter": [
+      "lcovonly",
+      "text"
     ]
   }
 }
