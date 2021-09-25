@@ -11,8 +11,9 @@
   },
   "scripts": {
     "clean": "rimraf \"./@(ts|node)/@(lib|main|test)\"",
-    "test:build": "tsc --build test.tsconfig.json",
-    "test": "yarn run test:build && mocha \"./@(ts|node)/test/**/*.spec.js\""
+    "build:test": "tsc --build test.tsconfig.json",
+    "test": "yarn run build:test && mocha \"./@(ts|node)/test/**/*.spec.js\"",
+    "test:rust": "cargo tarpaulin --count --out lcov --out html --output-dir ./coverage/rust || cargo test"
   },
   "engines": {
     "node": "^12.20.0 || >=14.13.1"
