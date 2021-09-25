@@ -1,0 +1,30 @@
+name: Check the Rust implementation
+
+on:
+  push:
+    branches: [ $default-branch ]
+  pull_request:
+    branches: [ $default-branch ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        rust-version: ["1.55.0"]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Use Rust ${{ matrix.rust-version }}
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: ${{ matrix.rust-version }}
+          components: rustfmt, clippy
+
+      - name: Build and test
+        uses: actions-rs/cargo@v1
+        with:
+          command: test
+          args: --manifest-path ./rs/Cargo.toml
