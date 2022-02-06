@@ -1,4 +1,5 @@
 use crate::coverage::{FunctionCov, ProcessCov, RangeCov, ScriptCov};
+use crate::normalize::{deep_normalize_proces_cov, deep_normalize_script_cov, normalize_function_cov};
 use crate::range_tree::RangeTree;
 use crate::range_tree::RangeTreeArena;
 use rayon::prelude::*;
@@ -9,7 +10,10 @@ use std::iter::Peekable;
 
 pub fn merge_processes(mut processes: Vec<ProcessCov>) -> Option<ProcessCov> {
   if processes.len() <= 1 {
-    return processes.pop();
+    return processes.pop().map(|mut cov| {
+      deep_normalize_proces_cov(&mut cov);
+      cov
+    });
   }
   let mut url_to_scripts: BTreeMap<String, Vec<ScriptCov>> = BTreeMap::new();
   for process_cov in processes {
@@ -43,7 +47,10 @@ pub fn merge_processes(mut processes: Vec<ProcessCov>) -> Option<ProcessCov> {
 
 pub fn merge_scripts(mut scripts: Vec<ScriptCov>) -> Option<ScriptCov> {
   if scripts.len() <= 1 {
-    return scripts.pop();
+    return scripts.pop().map(|mut cov| {
+      deep_normalize_script_cov(&mut cov);
+      cov
+    });
   }
   let (script_id, url) = {
     let first: &ScriptCov = &scripts[0];
@@ -103,7 +110,10 @@ impl PartialOrd for Range {
 
 pub fn merge_functions(mut funcs: Vec<FunctionCov>) -> Option<FunctionCov> {
   if funcs.len() <= 1 {
-    return funcs.pop();
+    return funcs.pop().map(|mut cov| {
+      normalize_function_cov(&mut cov);
+      cov
+    });
   }
   let function_name = funcs[0].function_name.clone();
   let rta_capacity: usize = funcs.iter().fold(0, |acc, func| acc + func.ranges.len());

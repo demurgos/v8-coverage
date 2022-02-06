@@ -4,12 +4,10 @@ import sysPath from "path";
 import path from "path";
 import url from "url";
 import {
-  FunctionCov,
   mergeFunctionCovs,
   mergeProcessCovs,
   mergeScriptCovs,
   ProcessCov,
-  ScriptCov
 } from "../lib/index.js";
 import { testImpl } from "@v8-coverage-tools/mocha";
 
@@ -30,112 +28,6 @@ const WHITELIST: ReadonlySet<string> = new Set([
 testImpl({mergeProcessCovs, mergeScriptCovs, mergeFunctionCovs});
 
 describe("merge", () => {
-  describe("custom", () => {
-    it("accepts arrays with a single item for `mergeProcessCovs`", () => {
-      const inputs: ProcessCov[] = [
-        {
-          result: [
-            {
-              scriptId: "123",
-              url: "/lib.js",
-              functions: [
-                {
-                  functionName: "test",
-                  isBlockCoverage: true,
-                  ranges: [
-                    {startOffset: 0, endOffset: 4, count: 2},
-                    {startOffset: 1, endOffset: 2, count: 1},
-                    {startOffset: 2, endOffset: 3, count: 1},
-                  ],
-                },
-              ],
-            },
-          ],
-        },
-      ];
-      const expected: ProcessCov = {
-        result: [
-          {
-            scriptId: "0",
-            url: "/lib.js",
-            functions: [
-              {
-                functionName: "test",
-                isBlockCoverage: true,
-                ranges: [
-                  {startOffset: 0, endOffset: 4, count: 2},
-                  {startOffset: 1, endOffset: 3, count: 1},
-                ],
-              },
-            ],
-          },
-        ],
-      };
-      const actual: ProcessCov = mergeProcessCovs(inputs);
-      chai.assert.deepEqual(actual, expected);
-    });
-
-    it("accepts arrays with a single item for `mergeScriptCovs`", () => {
-      const inputs: ScriptCov[] = [
-        {
-          scriptId: "123",
-          url: "/lib.js",
-          functions: [
-            {
-              functionName: "test",
-              isBlockCoverage: true,
-              ranges: [
-                {startOffset: 0, endOffset: 4, count: 2},
-                {startOffset: 1, endOffset: 2, count: 1},
-                {startOffset: 2, endOffset: 3, count: 1},
-              ],
-            },
-          ],
-        },
-      ];
-      const expected: ScriptCov | undefined = {
-        scriptId: "123",
-        url: "/lib.js",
-        functions: [
-          {
-            functionName: "test",
-            isBlockCoverage: true,
-            ranges: [
-              {startOffset: 0, endOffset: 4, count: 2},
-              {startOffset: 1, endOffset: 3, count: 1},
-            ],
-          },
-        ],
-      };
-      const actual: ScriptCov | undefined = mergeScriptCovs(inputs);
-      chai.assert.deepEqual(actual, expected);
-    });
-
-    it("accepts arrays with a single item for `mergeFunctionCovs`", () => {
-      const inputs: FunctionCov[] = [
-        {
-          functionName: "test",
-          isBlockCoverage: true,
-          ranges: [
-            {startOffset: 0, endOffset: 4, count: 2},
-            {startOffset: 1, endOffset: 2, count: 1},
-            {startOffset: 2, endOffset: 3, count: 1},
-          ],
-        },
-      ];
-      const expected: FunctionCov = {
-        functionName: "test",
-        isBlockCoverage: true,
-        ranges: [
-          {startOffset: 0, endOffset: 4, count: 2},
-          {startOffset: 1, endOffset: 3, count: 1},
-        ],
-      };
-      const actual: FunctionCov | undefined = mergeFunctionCovs(inputs);
-      chai.assert.deepEqual(actual, expected);
-    });
-  });
-
   for (const mergeTest of getMergeTests()) {
     it(mergeTest.name, test);
 

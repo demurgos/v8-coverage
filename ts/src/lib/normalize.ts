@@ -3,6 +3,21 @@ import { RangeTree } from "./range-tree.js";
 import { FunctionCov, ProcessCov, ScriptCov } from "./types.js";
 
 /**
+ * Normalizes a process coverage deeply.
+ *
+ * Normalizes the script coverages deeply, then normalizes the process coverage
+ * itself.
+ *
+ * @param processCov Process coverage to normalize.
+ */
+export function deepNormalizeProcessCov(processCov: ProcessCov): void {
+  for (const scriptCov of processCov.result) {
+    deepNormalizeScriptCov(scriptCov);
+  }
+  normalizeProcessCov(processCov);
+}
+
+/**
  * Normalizes a process coverage.
  *
  * Sorts the scripts alphabetically by `url`.
@@ -20,33 +35,6 @@ export function normalizeProcessCov(processCov: ProcessCov): void {
 }
 
 /**
- * Normalizes a process coverage deeply.
- *
- * Normalizes the script coverages deeply, then normalizes the process coverage
- * itself.
- *
- * @param processCov Process coverage to normalize.
- */
-export function deepNormalizeProcessCov(processCov: ProcessCov): void {
-  for (const scriptCov of processCov.result) {
-    deepNormalizeScriptCov(scriptCov);
-  }
-  normalizeProcessCov(processCov);
-}
-
-/**
- * Normalizes a script coverage.
- *
- * Sorts the function by root range (pre-order sort).
- * This does not normalize the function coverages.
- *
- * @param scriptCov Script coverage to normalize.
- */
-export function normalizeScriptCov(scriptCov: ScriptCov): void {
-  scriptCov.functions.sort(compareFunctionCovs);
-}
-
-/**
  * Normalizes a script coverage deeply.
  *
  * Normalizes the function coverages deeply, then normalizes the script coverage
@@ -59,6 +47,18 @@ export function deepNormalizeScriptCov(scriptCov: ScriptCov): void {
     normalizeFunctionCov(funcCov);
   }
   normalizeScriptCov(scriptCov);
+}
+
+/**
+ * Normalizes a script coverage.
+ *
+ * Sorts the function by root range (pre-order sort).
+ * This does not normalize the function coverages.
+ *
+ * @param scriptCov Script coverage to normalize.
+ */
+export function normalizeScriptCov(scriptCov: ScriptCov): void {
+  scriptCov.functions.sort(compareFunctionCovs);
 }
 
 /**

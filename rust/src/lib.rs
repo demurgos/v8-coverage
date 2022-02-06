@@ -3,6 +3,7 @@ pub use merge::*;
 
 mod coverage;
 mod merge;
+mod normalize;
 mod range_tree;
 
 #[cfg(test)]
