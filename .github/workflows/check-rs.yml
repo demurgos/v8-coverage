@@ -12,8 +12,7 @@ jobs:
 
     strategy:
       matrix:
-        # TODO: Use `["1.56.0", "stable"]` once Rust 1.56 is released.
-        rust-version: ["beta"]
+        rust-version: ["1.56.0", "stable"]
 
     steps:
       - uses: actions/checkout@v2
@@ -33,6 +32,6 @@ jobs:
       - name: Upload coverage report to codecov.io
         uses: codecov/codecov-action@v2
         with:
-          # It's important to set this field otherwiser it will try to upload
+          # It's important to set this field otherwise it will try to upload
           # our test resources.
           files: "./lcov.info"
