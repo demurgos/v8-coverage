@@ -47,7 +47,7 @@
     "pre-commit": "^1.2.2",
     "ts-node": "^10.4.0",
     "turbo-gulp": "^0.22.1",
-    "typescript": "^4.5.5"
+    "typescript": "^4.6.0-dev.20220206"
   },
   "c88": {
     "match": [

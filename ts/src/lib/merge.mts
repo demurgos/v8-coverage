@@ -5,9 +5,9 @@ import {
   normalizeProcessCov,
   normalizeRangeTree,
   normalizeScriptCov,
-} from "./normalize.js";
-import { RangeTree } from "./range-tree.js";
-import { FunctionCov, ProcessCov, Range, RangeCov, ScriptCov } from "./types.js";
+} from "./normalize.mjs";
+import { RangeTree } from "./range-tree.mjs";
+import { FunctionCov, ProcessCov, Range, RangeCov, ScriptCov } from "./types.mjs";
 
 /**
  * Merges a list of process coverages.

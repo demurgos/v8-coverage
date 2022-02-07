@@ -1,4 +1,4 @@
-import { RangeCov } from "./types.js";
+import { RangeCov } from "./types.mjs";
 
 export class RangeTree {
   start: number;

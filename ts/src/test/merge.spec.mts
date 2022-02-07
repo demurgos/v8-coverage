@@ -8,7 +8,7 @@ import {
   mergeProcessCovs,
   mergeScriptCovs,
   ProcessCov,
-} from "../lib/index.js";
+} from "../lib/index.mjs";
 import { testImpl } from "@v8-coverage-tools/mocha";
 
 const REPO_ROOT: string = path.join(url.fileURLToPath(import.meta.url), "..", "..", "..");

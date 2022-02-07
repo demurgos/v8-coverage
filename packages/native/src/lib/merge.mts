@@ -1,4 +1,4 @@
-import native from "../native/index.js";
+import { default as native } from "#native";
 import { FunctionCov, ProcessCov, ScriptCov } from "@v8-coverage-tools/core";
 
 export function mergeProcessCovsSync(covs: readonly ProcessCov[]): ProcessCov {

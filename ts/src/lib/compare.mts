@@ -1,4 +1,4 @@
-import { FunctionCov, RangeCov, ScriptCov } from "./types.js";
+import { FunctionCov, RangeCov, ScriptCov } from "./types.mjs";
 
 /**
  * Compares two script coverages.

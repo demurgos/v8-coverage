@@ -1,13 +1,12 @@
 {
   "extends": "../../../../tsconfig.json",
   "compilerOptions": {
-    "composite": true,
     "noEmit": false,
     "rootDir": ".",
-    "outDir": "../../lib"
+    "outDir": "../../bin"
   },
   "include": [
-    "./**/*.mts"
+    "**/*.mts"
   ],
   "exclude": [],
   "references": []

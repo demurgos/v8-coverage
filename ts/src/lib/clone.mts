@@ -1,4 +1,4 @@
-import { FunctionCov, ProcessCov, RangeCov, ScriptCov } from "./types.js";
+import { FunctionCov, ProcessCov, RangeCov, ScriptCov } from "./types.mjs";
 
 /**
  * Creates a deep copy of a process coverage.

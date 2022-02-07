@@ -1,6 +1,6 @@
 # v8-coverage-tools-native
 
-Native module for Eternal-Twin.
+Native module for `v8-coverage`.
 
 Requires Cargo and Rust. Prebuilt binaries may be provided but are not guaranteed.
 

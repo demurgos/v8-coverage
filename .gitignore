@@ -8,6 +8,8 @@ coverage/
 target/
 packages/*/lib/
 packages/*/test/
+ts/lib/
+ts/test/
 
 ################################################################################
 # Dependencies                                                                 #
