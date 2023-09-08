@@ -34,7 +34,7 @@ export class RangeTree {
       }
       let parent: RangeTree;
       let parentCount: number;
-      while (true) {
+      while (stack.length) {
         [parent, parentCount] = stack[stack.length - 1];
         // assert: `top !== undefined` (the ranges are sorted)
         if (range.startOffset < parent.end) {
